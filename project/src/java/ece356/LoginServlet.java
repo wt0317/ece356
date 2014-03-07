@@ -8,18 +8,16 @@ package ece356;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * @author Wilson
  */
-public class QueryServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,26 +30,18 @@ public class QueryServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Servlet QueryServlet</title>");            
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>Servlet QueryServlet at " + request.getContextPath() + "</h1>");
+        String url;
         try {
-            DBAO.testConnection();
-            out.println("Test DB Connection: Passed");
+            int username = Integer.parseInt(request.getParameter("username"));
+            String password = request.getParameter("password");
+            Directory user = DBAO.Login(username, password);
+            request.setAttribute("userObject", user);
+            url="/success.jsp";
         } catch (Exception e) {
-            out.println("<p>Test DB Connection: Failed</p>");
-            out.println(e.getMessage());
-        } finally {
-            out.println("</body>");
-            out.println("</html>");
-            out.close();
+            request.setAttribute("exception", e);
+            url="/error.jsp";
         }
+        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

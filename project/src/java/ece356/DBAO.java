@@ -42,32 +42,20 @@ public class DBAO {
         }
         return con;
     }
-
     
-
-    public static ArrayList<Employee> query1()
+    public static Directory Login(int username, String password)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
-        ArrayList<Employee> ret = null;
         try {
             con = getConnection();
             stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery(
-                    
-                    
-                    "SELECT * FROM Employee WHERE job = 'engineer' AND salary >= 10000;");
-            ret = new ArrayList<Employee>();
-            while (resultSet.next()) {
-                Employee e = new Employee(
-                        resultSet.getInt("empID"),
-                        resultSet.getString("empName"),
-                        resultSet.getString("job"),
-                        resultSet.getInt("deptID"),
-                        resultSet.getInt("salary"));
-                ret.add(e);
-            }
-            return ret;
+            String query = String.format("SELECT * FROM Directory WHERE username = '%d' AND password = '%s'", username, password);
+            ResultSet resultSet = stmt.executeQuery(query);
+            resultSet.next();
+            Directory user = new Directory(resultSet.getInt("username"));
+            user.setName(resultSet.getString("name"));
+            return user;
         } finally {
             if (stmt != null) {
                 stmt.close();
@@ -77,7 +65,5 @@ public class DBAO {
             }
         }
     }
-       
-     
 
 }
