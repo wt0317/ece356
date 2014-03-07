@@ -9,14 +9,22 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
+        <title>Signin</title>
+        
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/signin.css">
     </head>
     <body>
-        <h1>Welcome! Please log in</h1>
-        <form action="LoginServlet" method="post">
-            Username: <input name="username"/><br>
-            Password: <input type="password" name="password"/><br>
-            <input type="submit" value="Login"/>
-        </form>
+        <div class="container">
+            <form class="form-signin" role="form" action="LoginServlet" method="post">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <input name="username" type="input" class="form-control" placeholder="Username" required="" autofocus="">
+                <input name="password" type="password" class="form-control" placeholder="Password" required="">
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+        </div>
     </body>
 </html>
