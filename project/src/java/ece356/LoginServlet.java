@@ -36,7 +36,11 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             Directory user = DBAO.Login(username, password);
             request.setAttribute("userObject", user);
-            url="/success.jsp";
+            if (user.getRole().equals("patient")) {
+                url="/patient.jsp";
+            } else {
+                url="/success.jsp";
+            }            
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";

@@ -55,6 +55,7 @@ public class DBAO {
             resultSet.next();
             Directory user = new Directory(resultSet.getInt("username"));
             user.setName(resultSet.getString("name"));
+            user.setRole(resultSet.getString("role"));
             return user;
         } finally {
             if (stmt != null) {
