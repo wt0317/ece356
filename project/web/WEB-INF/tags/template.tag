@@ -40,7 +40,7 @@
     </head>
     
     <%! Directory user;%>
-    <% user = (Directory) request.getAttribute("userObject");%>
+    <% user = (Directory) session.getAttribute("userObject");%>
     
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

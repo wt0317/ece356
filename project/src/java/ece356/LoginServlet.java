@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -31,11 +32,17 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url;
-        try {
+        try {    
+            //Create a new session object
+            HttpSession session = request.getSession();
             int username = Integer.parseInt(request.getParameter("username"));
             String password = request.getParameter("password");
             Directory user = DBAO.Login(username, password);
-            request.setAttribute("userObject", user);
+            
+            //Set attributes of session object
+            session.setAttribute("userObject", user);
+            
+            //Redirect to appropriate page
             if (user.getRole().equals("patient")) {
                 url="/patient.jsp";
             } else {
@@ -44,7 +51,9 @@ public class LoginServlet extends HttpServlet {
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";
+            System.out.println("Hello!!");
         }
+        
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
