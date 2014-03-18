@@ -11,13 +11,13 @@ body {
     border-radius:25px;
     background: #666666;
     padding: 60px;
-    width: 115%;
+    width: 130%;
 }
 
 .form-signin {
   padding: 15px;
   position:absolute; top:40%; height:auto; margin-top:-120px;
-  left: 50%;
+  left: 45%;
   margin-left: -175px;
   float: left;
 
@@ -29,7 +29,7 @@ body {
 .form-signin .checkbox {
   font-weight: normal;
   color: whitesmoke;
-  
+    
 }
 .form-signin .form-control {
   position: relative;
