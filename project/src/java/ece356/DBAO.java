@@ -3,6 +3,7 @@ package ece356;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,105 +12,46 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author Wojciech Golab
  */
 public class DBAO {
-
-    public static final String url = "jdbc:mysql://sql3.freemysqlhosting.net:3306/";
-    public static final String user = "sql332230";
-    public static final String pwd = "mJ7!yB9!";
     
-    @PersistenceUnit(unitName = "projectPU")
-    private static EntityManagerFactory emf;
-    @PersistenceContext(unitName = "projectPU")
-    private static EntityManager em;
-    
-    public static void testConnection()
-            throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        try {
-            con = getConnection();
-        } finally {
-            if (con != null) {
-                con.close();
-            }
-        }
-    }
-
-    public static Connection getConnection()
-            throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection(url, user, pwd);
-        Statement stmt = null;
-        try {
-            con.createStatement();
-            stmt = con.createStatement();
-            stmt.execute("USE sql332230;");
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-        }
-        return con;
-    }
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory( "projectPU" );;
+    private static EntityManager em = emf.createEntityManager();
     
     public static Directory Login(int username, String password)
             throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        Statement stmt = null;
-        
-        try {
-            emf = Persistence.createEntityManagerFactory( "projectPU" );
-            EntityManager em = emf.createEntityManager();
-            
-            Query query = em.createQuery("SELECT e FROM Directory e WHERE e.username = :username AND e.password = :password");
-            query.setParameter("username", username);
-            query.setParameter("password", password);
-            Directory user = (Directory)query.getSingleResult();
-            
-            return user;
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
+         
+        Query query = em.createQuery("SELECT e FROM Directory e WHERE e.username = :username AND e.password = :password");
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        Directory user = (Directory)query.getSingleResult();
+
+        return user;
     }
     
     public static String createAccount(String name, String role, String password)
             throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        PreparedStatement stmt = null;
-        try {
-            con = getConnection();
-            
-            String insertTableSQL = "INSERT INTO Directory"
-				+ "(name, password, role) VALUES"
-				+ "(?,?,?)";
-            
-            stmt = con.prepareStatement(insertTableSQL);
- 
-            stmt.setString(1, name);
-            stmt.setString(2, password);
-            stmt.setString(3, role);
-
-            if (stmt.executeUpdate() == 0) {
-                return "No rows updated";
-            }
-            return null;
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+        Query query = em.createQuery("INSERT INTO Directory (name, password, role) VALUES (:name, :password, :role)");
+        query.setParameter("name", name);
+        query.setParameter("password", password);
+        query.setParameter("role", role);
+                
+        if (query.executeUpdate() == 0) {
+            return "No rows updated";
         }
+        return null;
+    }
+    
+    public static List<Doctors> getAllDoctors()
+            throws ClassNotFoundException, SQLException {
+         
+        TypedQuery<Doctors> query = em.createNamedQuery("Doctors.findAll", Doctors.class);
+        return query.getResultList();
     }
 
 }

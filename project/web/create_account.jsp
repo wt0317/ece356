@@ -4,12 +4,16 @@
     Author     : Wilson
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="ece356.Doctors"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%! boolean success; %>
 <% success = (request.getAttribute("success") != null) ? (Boolean) request.getAttribute("success") : false; %>  
+<%! List<Doctors> doctors; %>
+<% doctors = (List<Doctors>) request.getAttribute("doctors"); %>  
 
 <t:template>
     <jsp:attribute name="pagetitle">
@@ -88,10 +92,14 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="Default Doctor" class="col-sm-2 control-label">Default Doctor</label>
+                <label for="doctor" class="col-sm-2 control-label">Default Doctor</label>
                 <div class="col-sm-10">
-                    <input class="form-control" id="doctor" name="doctor" placeholder="Default Doctor" required/>
-                </div>
+                    <select class="form-control" id="doctor" name="doctor">
+                        <c:forEach items="${doctors}" var="item">
+                            <option>${item.getDirectory().getName()}</option>
+                        </c:forEach>
+                    </select>
+                  </div>
               </div>
               <div class="form-group">
                 <label for="Health" class="col-sm-2 control-label">Health</label>

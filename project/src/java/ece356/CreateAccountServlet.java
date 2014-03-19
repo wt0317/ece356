@@ -64,19 +64,22 @@ public class CreateAccountServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url;
+        String url = "/create_account.jsp";
         try {
-            String name = request.getParameter("name");
-            String role = request.getParameter("role");
-            String hashedPW = hashPW(request.getParameter("password"));
+            request.setAttribute("doctors", DBAO.getAllDoctors());
             
-            String error = DBAO.createAccount(name, role, hashedPW);
-            if (error == null) {
-                request.setAttribute("success", true);
-                url="/create_account.jsp";
-            } else {
-                throw new Exception(error);
-            }            
+            if (request.getParameter("submit") != null) {
+                String name = request.getParameter("name");
+                String role = request.getParameter("role");
+                String hashedPW = hashPW(request.getParameter("password"));
+
+                String error = DBAO.createAccount(name, role, hashedPW);
+                if (error == null) {
+                    request.setAttribute("success", true);
+                } else {
+                    throw new Exception(error);
+                }            
+            }
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";
