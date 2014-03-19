@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Wilson
+ * @author Johnny
  */
 @Entity
 @Table(name = "Patients")
@@ -34,8 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Patients.findAll", query = "SELECT p FROM Patients p"),
     @NamedQuery(name = "Patients.findByUsername", query = "SELECT p FROM Patients p WHERE p.username = :username"),
-    @NamedQuery(name = "Patients.findByAddress", query = "SELECT p FROM Patients p WHERE p.address = :address"),
-    @NamedQuery(name = "Patients.findByPhoneNumber", query = "SELECT p FROM Patients p WHERE p.phoneNumber = :phoneNumber"),
     @NamedQuery(name = "Patients.findByHealthCard", query = "SELECT p FROM Patients p WHERE p.healthCard = :healthCard"),
     @NamedQuery(name = "Patients.findBySocialInsuranceNumber", query = "SELECT p FROM Patients p WHERE p.socialInsuranceNumber = :socialInsuranceNumber"),
     @NamedQuery(name = "Patients.findByNumberOfVisits", query = "SELECT p FROM Patients p WHERE p.numberOfVisits = :numberOfVisits")})
@@ -45,10 +43,6 @@ public class Patients implements Serializable {
     @Basic(optional = false)
     @Column(name = "username")
     private Integer username;
-    @Column(name = "address")
-    private String address;
-    @Column(name = "phone_number")
-    private String phoneNumber;
     @Column(name = "health_card")
     private String healthCard;
     @Column(name = "social_insurance_number")
@@ -87,22 +81,6 @@ public class Patients implements Serializable {
 
     public void setUsername(Integer username) {
         this.username = username;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getHealthCard() {
