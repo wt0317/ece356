@@ -7,12 +7,10 @@
 package ece356;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Map;
+import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -66,19 +64,48 @@ public class CreateAccountServlet extends HttpServlet {
             throws ServletException, IOException {
         String url = "/create_account.jsp";
         try {
-            request.setAttribute("doctors", DBAO.getAllDoctors());
+            List<Doctors> doctors = DBAO.getAllDoctors();
+            request.setAttribute("doctors", doctors);
             
             if (request.getParameter("submit") != null) {
-                String name = request.getParameter("name");
                 String role = request.getParameter("role");
-                String hashedPW = hashPW(request.getParameter("password"));
-
-                String error = DBAO.createAccount(name, role, hashedPW);
-                if (error == null) {
-                    request.setAttribute("success", true);
-                } else {
-                    throw new Exception(error);
-                }            
+                
+                Directory directory = new Directory();
+                directory.setName(request.getParameter("name"));
+                directory.setRole(role);
+                directory.setPassword(hashPW(request.getParameter("password")));
+                directory.setAddress(request.getParameter("address"));
+                directory.setPhoneNumber(request.getParameter("phone"));
+                
+                if (role.equals("Patient")) {
+                    Patients patient = new Patients();
+                    patient.setHealthCard(request.getParameter("healthCard"));
+                    patient.setSocialInsuranceNumber(request.getParameter("sin"));
+                    patient.setCurrentHealth(request.getParameter("health"));
+                    for (Doctors d : doctors) {
+                        if (d.getUsername() == Integer.parseInt(request.getParameter("doctor"))) {
+                            patient.setDefaultDoctor(d);
+                            break;
+                        }
+                    }
+                    patient.setDirectory(directory);
+                    DBAO.createPatient(directory, patient);
+                } else if (role.equals("Doctor")) {
+                    
+                }
+                
+                
+                
+//                String name = request.getParameter("name");
+//                String role = request.getParameter("role");
+//                String hashedPW = hashPW(request.getParameter("password"));
+//
+//                String error = DBAO.createAccount(name, role, hashedPW);
+//                if (error == null) {
+//                    request.setAttribute("success", true);
+//                } else {
+//                    throw new Exception(error);
+//                }            
             }
         } catch (Exception e) {
             request.setAttribute("exception", e);

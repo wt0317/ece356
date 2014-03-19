@@ -96,7 +96,7 @@
                 <div class="col-sm-10">
                     <select class="form-control" id="doctor" name="doctor">
                         <c:forEach items="${doctors}" var="item">
-                            <option>${item.getDirectory().getName()}</option>
+                            <option value="${item.getUsername()}">${item.getDirectory().getName()}</option>
                         </c:forEach>
                     </select>
                   </div>
@@ -126,7 +126,7 @@
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-default">Create Account</button>
+              <button type="submit" class="btn btn-default" name="submit">Create Account</button>
             </div>
           </div>
         </form>

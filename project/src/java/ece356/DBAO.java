@@ -34,6 +34,18 @@ public class DBAO {
         return user;
     }
     
+    public static String createPatient(Directory directory, Patients patient)
+            throws ClassNotFoundException, SQLException {
+        em.getTransaction().begin();
+        
+        em.persist(directory);
+        em.persist(patient);
+        
+        em.getTransaction().commit();
+        
+        return null;
+    }
+    
     public static String createAccount(String name, String role, String password)
             throws ClassNotFoundException, SQLException {
         Query query = em.createQuery("INSERT INTO Directory (name, password, role) VALUES (:name, :password, :role)");
@@ -48,8 +60,7 @@ public class DBAO {
     }
     
     public static List<Doctors> getAllDoctors()
-            throws ClassNotFoundException, SQLException {
-         
+            throws ClassNotFoundException, SQLException {         
         TypedQuery<Doctors> query = em.createNamedQuery("Doctors.findAll", Doctors.class);
         return query.getResultList();
     }
