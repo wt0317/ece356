@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -31,13 +32,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Permissions.findByAccessibility", query = "SELECT p FROM Permissions p WHERE p.accessibility = :accessibility"),
     @NamedQuery(name = "Permissions.findByEnabled", query = "SELECT p FROM Permissions p WHERE p.enabled = :enabled")})
 public class Permissions implements Serializable {
+    @Lob
+    @Column(name = "accessibility")
+    private byte[] accessibility;
+    @Lob
+    @Column(name = "enabled")
+    private byte[] enabled;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected PermissionsPK permissionsPK;
-    @Column(name = "accessibility")
-    private Character accessibility;
-    @Column(name = "enabled")
-    private Boolean enabled;
     @JoinColumn(name = "patient", referencedColumnName = "username", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Patients patients;
@@ -62,22 +65,6 @@ public class Permissions implements Serializable {
 
     public void setPermissionsPK(PermissionsPK permissionsPK) {
         this.permissionsPK = permissionsPK;
-    }
-
-    public Character getAccessibility() {
-        return accessibility;
-    }
-
-    public void setAccessibility(Character accessibility) {
-        this.accessibility = accessibility;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
     }
 
     public Patients getPatients() {
@@ -119,6 +106,22 @@ public class Permissions implements Serializable {
     @Override
     public String toString() {
         return "ece356.Permissions[ permissionsPK=" + permissionsPK + " ]";
+    }
+
+    public byte[] getAccessibility() {
+        return accessibility;
+    }
+
+    public void setAccessibility(byte[] accessibility) {
+        this.accessibility = accessibility;
+    }
+
+    public byte[] getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(byte[] enabled) {
+        this.enabled = enabled;
     }
     
 }
