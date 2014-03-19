@@ -66,5 +66,36 @@ public class DBAO {
             }
         }
     }
+    
+    public static String createAccount(String name, String role, String password)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            con = getConnection();
+            
+            String insertTableSQL = "INSERT INTO Directory"
+				+ "(name, password, role) VALUES"
+				+ "(?,?,?)";
+            
+            stmt = con.prepareStatement(insertTableSQL);
+ 
+            stmt.setString(1, name);
+            stmt.setString(2, password);
+            stmt.setString(3, role);
+
+            if (stmt.executeUpdate() == 0) {
+                return "No rows updated";
+            }
+            return null;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
 
 }

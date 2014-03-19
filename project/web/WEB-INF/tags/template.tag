@@ -12,6 +12,7 @@
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="leftmenu" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
+<%@attribute name="script" fragment="true"%>
 
 <%-- any content can be specified here e.g.: --%>
 <!DOCTYPE html>
@@ -75,7 +76,7 @@
             <div class="col-sm-3 col-md-2 sidebar">
               <jsp:invoke fragment="leftmenu"/>
             </div>
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="main-content col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
               <jsp:invoke fragment="content"/>
             </div>
           </div>
@@ -87,5 +88,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
+        <!--<script src="js/jquery.validate.min.js"></script>-->
+        <jsp:invoke fragment="script"/>
     </body>
 </html>

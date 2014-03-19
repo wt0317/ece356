@@ -5,27 +5,36 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Create Account</title>
-        
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-          body {
-            background: #CCCCCC;
-          }
-        </style>
-    </head>
-    <body>
-      <div class="container">
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%! boolean success; %>
+<% success = (request.getAttribute("success") != null) ? (Boolean) request.getAttribute("success") : false; %>  
+
+<t:template>
+    <jsp:attribute name="pagetitle">
+      Project Zero
+    </jsp:attribute>
+    <jsp:attribute name="leftmenu">
+    <ul class="nav nav-sidebar">
+      <li class="active"><a href="#">Overview</a></li>
+      <li><a href="#">Past Appointments</a></li>
+    </ul>
+    <ul class="nav nav-sidebar">
+      <li><a href="">Update Address and Phone</a></li>
+      <li><a href="">Change Password</a></li>
+    </ul>
+    </jsp:attribute>
+    <jsp:attribute name="content">
+          <c:if test="${success}">
+              <div class="alert alert-success alert-dismissable">Account created!</div>
+          </c:if>
         <form class="form-horizontal" role="form" action="CreateAccountServlet" method="post">
           <h1 class="form-heading">Create Account</h2>
           <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
-              <input class="form-control" id="name" name="name" placeholder="Name">
+              <input class="form-control" id="name" name="name" placeholder="Name" required/>
             </div>
           </div>
           <div class="form-group">
@@ -43,13 +52,13 @@
           <div class="form-group">
             <label for="password" class="col-sm-2 control-label">Password</label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required/>
             </div>
           </div>
           <div class="form-group">
             <label for="confirm_password" class="col-sm-2 control-label">Confirm Password</label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" id="confirm_password" name=confirm_password placeholder="Confirm Password">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" data-validation-matches-match="email" />
             </div>
           </div>
           <div class="form-group">
@@ -58,6 +67,20 @@
             </div>
           </div>
         </form>
-      </div>
-    </body>
-</html>
+    </jsp:attribute>
+    <jsp:attribute name="script">
+        <script>
+        $(function(){
+           alert("okay"); 
+        });
+        $(".form-horizontal").validate({
+            rules : {
+                password : "required",
+                confirm_password : {
+                    equalTo : "#password"
+                }
+            }
+        });
+        </script>
+    </jsp:attribute>
+</t:template>
