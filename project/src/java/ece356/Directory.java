@@ -13,6 +13,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -36,6 +37,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Directory.findByRole", query = "SELECT d FROM Directory d WHERE d.role = :role"),
     @NamedQuery(name = "Directory.findByEnabled", query = "SELECT d FROM Directory d WHERE d.enabled = :enabled")})
 public class Directory implements Serializable {
+    @Lob
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Basic(optional = false)
+    @Column(name = "enabled")
+    private boolean enabled;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -47,8 +56,6 @@ public class Directory implements Serializable {
     private String password;
     @Column(name = "role")
     private String role;
-    @Column(name = "enabled")
-    private Boolean enabled;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "directory")
     private Doctors doctors;
     @OneToMany(mappedBy = "createdBy")
@@ -99,14 +106,6 @@ public class Directory implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
     }
 
     public Doctors getDoctors() {
@@ -184,6 +183,30 @@ public class Directory implements Serializable {
     @Override
     public String toString() {
         return "ece356.Directory[ username=" + username + " ]";
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
 }

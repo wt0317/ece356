@@ -41,7 +41,15 @@
     </head>
     
     <%! Directory user;%>
-    <% user = (Directory) session.getAttribute("userObject");%>
+    <% 
+         if (session.getAttribute("userObject") != null){
+            user = (Directory) session.getAttribute("userObject");
+        } else {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+       
+    %>
     
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

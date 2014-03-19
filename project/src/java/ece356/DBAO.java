@@ -3,6 +3,14 @@ package ece356;
 
 import java.sql.*;
 import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 
 /**
  *
@@ -13,7 +21,12 @@ public class DBAO {
     public static final String url = "jdbc:mysql://sql3.freemysqlhosting.net:3306/";
     public static final String user = "sql332230";
     public static final String pwd = "mJ7!yB9!";
-
+    
+    @PersistenceUnit(unitName = "projectPU")
+    private static EntityManagerFactory emf;
+    @PersistenceContext(unitName = "projectPU")
+    private static EntityManager em;
+    
     public static void testConnection()
             throws ClassNotFoundException, SQLException {
         Connection con = null;
@@ -47,15 +60,16 @@ public class DBAO {
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
+        
         try {
-            con = getConnection();
-            stmt = con.createStatement();
-            String query = String.format("SELECT * FROM Directory WHERE username = '%d' AND password = '%s'", username, password);
-            ResultSet resultSet = stmt.executeQuery(query);
-            resultSet.next();
-            Directory user = new Directory(resultSet.getInt("username"));
-            user.setName(resultSet.getString("name"));
-            user.setRole(resultSet.getString("role"));
+            emf = Persistence.createEntityManagerFactory( "projectPU" );
+            EntityManager em = emf.createEntityManager();
+            
+            Query query = em.createQuery("SELECT e FROM Directory e WHERE e.username = :username AND e.password = :password");
+            query.setParameter("username", username);
+            query.setParameter("password", password);
+            Directory user = (Directory)query.getSingleResult();
+            
             return user;
         } finally {
             if (stmt != null) {
