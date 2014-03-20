@@ -45,13 +45,16 @@ public class LoginServlet extends HttpServlet {
             //Redirect to appropriate page
             if (user.getRole().equals("patient")) {
                 url="/patient.jsp";
-            } else {
+            } 
+            else if (user.getRole().equals("finance")) {
+                url="/finance.jsp";
+            }
+            else {
                 url="/success.jsp";
             }            
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";
-            System.out.println("Hello!!");
         }
         
         getServletContext().getRequestDispatcher(url).forward(request, response);
