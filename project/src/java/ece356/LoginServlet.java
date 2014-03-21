@@ -43,15 +43,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("userObject", user);
             
             //Redirect to appropriate page
-            if (user.getRole().equals("patient")) {
-                url="/patient.jsp";
-            } 
-            else if (user.getRole().equals("finance")) {
-                url="/finance.jsp";
-            }
-            else {
-                url="/success.jsp";
-            }            
+            url="/welcome.jsp";       
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";

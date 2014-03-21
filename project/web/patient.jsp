@@ -5,16 +5,7 @@
     <jsp:attribute name="pagetitle">
       Project Zero
     </jsp:attribute>
-    <jsp:attribute name="leftmenu">
-    <ul class="nav nav-sidebar">
-      <li class="active"><a href="#">Overview</a></li>
-      <li><a href="#">Past Appointments</a></li>
-    </ul>
-    <ul class="nav nav-sidebar">
-      <li><a href="">Update Address and Phone</a></li>
-      <li><a href="">Change Password</a></li>
-    </ul>
-    </jsp:attribute>
+
     <jsp:attribute name="content">
       <h1 class="page-header">Overview</h1>
       <div class="row placeholders">
