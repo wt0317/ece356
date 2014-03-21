@@ -15,23 +15,7 @@
     <jsp:attribute name="pagetitle">
       Finance
     </jsp:attribute>
-
- 
-     <jsp:attribute name="leftmenu">
-       
-         <%-- FINANCE MENU --%>
-        <c:if role="finance">       
-            <ul class="nav nav-sidebar">
-            <li class="active"><a href="finance.jsp">Overview</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-            <li><a href="#">Lookup Doctor Summary</a></li>
-            <li><a href="">Lookup Patient Summary</a></li>
-            <li><a href="">Account Settings</a></li>
-            </ul>
-        </c:if>  
-
-    </jsp:attribute>
+    
     <jsp:attribute name="content">
       <h1 class="page-header">Lookup Patient Summary</h1>
       <div class="row placeholders">

@@ -10,8 +10,10 @@
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="pagetitle" fragment="true"%>
-<%@attribute name="leftmenu" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
+
+<%! String role; %>
+<% role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
 
 <%-- any content can be specified here e.g.: --%>
 <!DOCTYPE html>
@@ -81,7 +83,68 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-              <jsp:invoke fragment="leftmenu"/>
+              
+            
+            <%-- DOCTOR MENU --%>
+            <%                 
+             if (role.equals("doctor"))      {
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li class=\"active\"><a href=\"#\">Overview</a></li>");
+                    out.print("</ul>");
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
+                    out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
+                    out.print("<li><a href=\"#\">Manage Appointments</a></li>");
+                    out.print("<li><a href=\"#\">Account Settings</a></li>");
+                    out.print("</ul>");
+            }
+            %>    
+            
+            
+               <%-- PATIENT MENU --%>
+            <%                 
+             if (role.equals("patient"))      {
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li class=\"active\"><a href=\"patient.jsp\">Overview</a></li>");
+                    out.print("</ul>");
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
+                    out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
+                    out.print("<li><a href=\"#\">Account Settings</a></li>");
+                    out.print("</ul>");
+            }
+            %>  
+            
+               <%-- STAFF MENU --%>
+            <%                 
+             if (role.equals("staff"))      {
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li class=\"active\"><a href=\"#\">Overview</a></li>");
+                    out.print("</ul>");
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
+                    out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
+                    out.print("<li><a href=\"#\">Manage Appointments</a></li>");
+                    out.print("<li><a href=\"#\">Create Account</a></li>");
+                    out.print("<li><a href=\"#\">Account Settings</a></li>");
+                    out.print("</ul>");
+            }
+            %>  
+            
+            <%-- FINANCE MENU --%>
+            <%                 
+             if (role.equals("finance"))      {
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li class=\"active\"><a href=\"finance.jsp\">Overview</a></li>");
+                    out.print("</ul>");
+                    out.print("<ul class=\"nav nav-sidebar\">");
+                    out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
+                    out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
+                    out.print("<li><a href=\"#\">Account Settings</a></li>");
+                    out.print("</ul>");
+            }
+            %>
+                
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
               <jsp:invoke fragment="content"/>
