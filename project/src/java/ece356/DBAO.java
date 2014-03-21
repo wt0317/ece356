@@ -3,6 +3,7 @@ package ece356;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -80,5 +81,72 @@ public class DBAO {
             }
         }
     }
+   /**
+     *
+     * @param username
+     * @param password
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public static Patients getUserInfo(int username, String password)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
 
+        try {
+            emf = Persistence.createEntityManagerFactory( "projectPU" );
+            EntityManager em = emf.createEntityManager();
+            
+            Query query = em.createQuery("SELECT p FROM Patients as p WHERE p.username = :username");
+            query.setParameter("username", username);
+            Patients patient = (Patients)query.getSingleResult();
+            
+            return patient;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+
+    public static List<String> getAllPatients()
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        List<String> patientList = new ArrayList<String>();
+        try {
+                   
+            con = DriverManager.getConnection(url, user, pwd);  
+            PreparedStatement pst = con.prepareStatement("SELECT username FROM sql332230.Patients;");
+            rs = pst.executeQuery();  
+            System.out.println(rs.toString());
+            while (rs.next()) {
+                patientList.add(rs.getString("username"));   
+            } 
+            return patientList;
+            /*emf = Persistence.createEntityManagerFactory( "projectPU" );
+            EntityManager em = emf.createEntityManager();
+            
+            Query query = em.createQuery("SELECT username FROM Patients");
+            System.out.println("singleresult : " + query.getResultList());
+            patientList = query.getResultList();
+            System.out.println("patient list: " + patientList);
+            return patientList;
+        */} finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+        }
+    }
 }

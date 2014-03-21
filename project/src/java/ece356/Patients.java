@@ -7,11 +7,17 @@
 package ece356;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -20,7 +26,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.Table;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -67,10 +77,11 @@ public class Patients implements Serializable {
     private Collection<Visitations> visitationsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patients")
     private Collection<Permissions> permissionsCollection;
+    private static EntityManagerFactory emf;
 
-    public Patients() {
+   public Patients() {
+      
     }
-
     public Patients(Integer username) {
         this.username = username;
     }
@@ -190,5 +201,15 @@ public class Patients implements Serializable {
     public String toString() {
         return "ece356.Patients[ username=" + username + " ]";
     }
-    
+        
+  /*  public void generatePage(HttpSession session)
+            throws ClassNotFoundException, SQLException {
+        Directory user = (Directory) session.getAttribute("userObject");
+
+        Patients patient = DBAO.getUserInfo(user.getUsername(), user.getPassword());
+        
+        session.setAttribute("name", user.getName());
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/patient.jsp");
+        rd.forward(request, response);
+    }*/
 }
