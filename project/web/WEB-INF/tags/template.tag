@@ -4,7 +4,7 @@
     Author     : rkn24
 --%>
 
-<%@tag import="ece356.Directory"%>
+<%@tag import="ece356.User"%>
 
 <%@tag description="Template" pageEncoding="UTF-8"%>
 
@@ -12,8 +12,10 @@
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
 
+<%! User user; %>
+<% user = (session.getAttribute("userObject") != null) ? (User) session.getAttribute("userObject") : null; %>
 <%! String role; %>
-<% role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
+<% role = user.getRole(); %>  
 
 <%-- any content can be specified here e.g.: --%>
 <!DOCTYPE html>
@@ -40,16 +42,12 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    
-    <%! Directory user;%>
+
     <% 
-         if (session.getAttribute("userObject") != null){
-            user = (Directory) session.getAttribute("userObject");
-        } else {
+        if (user == null) {
             response.sendRedirect("index.jsp");
             return;
         }
-       
     %>
     
     <body>
@@ -86,39 +84,31 @@
               <ul class="nav nav-sidebar">
                 <li><a href="welcome.jsp">Home</a></li>
                 
-                <%-- DOCTOR MENU --%>
                 <%
+                /* DOCTOR MENU */
+                
                  if (role.equals("doctor"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-                %>    
-
-                   <%-- PATIENT MENU --%>
-                <%                 
-                 if (role.equals("patient"))      {
+                /*  PATIENT MENU */
+                else if (role.equals("patient"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-                %>  
-
-                <%-- STAFF MENU --%>
-                <%                 
-                 if (role.equals("staff"))      {
+                /* STAFF MENU */   
+                else if (role.equals("staff"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Create Account</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-                %>  
-
-                <%-- FINANCE MENU --%>
-                <%                 
-                 if (role.equals("finance"))      {
+                /* FINANCE MENU */ 
+                else if (role.equals("finance"))      {
                         out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
