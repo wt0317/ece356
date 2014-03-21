@@ -148,5 +148,32 @@ public class DBAO {
                 rs.close();
             }
         }
+        
+    }
+      public static String getName(int userid)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String name = null;
+        try {
+            emf = Persistence.createEntityManagerFactory( "projectPU" );
+            EntityManager em = emf.createEntityManager();
+            
+            Query query = em.createQuery("SELECT d.name FROM Directory as d WHERE d.username = :username");
+            query.setParameter("username", userid);
+            name = (String) query.getSingleResult();
+            
+            return name;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        
+        
     }
 }

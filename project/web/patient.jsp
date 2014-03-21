@@ -20,6 +20,8 @@
     request.setAttribute("address", user.getAddress());
     request.setAttribute("patientList", patientList);
     request.setAttribute("role",role);
+    request.setAttribute("sin", patient.getSocialInsuranceNumber());
+    request.setAttribute("defaultDoctor", DBAO.getName(patient.getDefaultDoctor().getUsername()));
     
     //Patients patient = new Patients(user.getUsername());
     //patient.queryUserInfo();
@@ -66,36 +68,15 @@
               <p>Phone Number: 
                   <input name="phonenum" type="input" class="form-control" value="${phonenum}" required="" autofocus="">
               </p>
+              <p>Social Insurance Number: 
+                  <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="">
+              </p>
+              <p>Default Doctor: 
+                  <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="">
+              </p>
               <p><a class="btn" href="#">View details &raquo;</a></p>
             </div><!--/span-->
-            <div class="span4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-              <p><a class="btn" href="#">View details &raquo;</a></p>
-            </div><!--/span-->
-            <div class="span4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-              <p><a class="btn" href="#">View details &raquo;</a></p>
-            </div><!--/span-->
-          </div><!--/row-->
-          <div class="row-fluid">
-            <div class="span4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-              <p><a class="btn" href="#">View details &raquo;</a></p>
-            </div><!--/span-->
-            <div class="span4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-              <p><a class="btn" href="#">View details &raquo;</a></p>
-            </div><!--/span-->
-            <div class="span4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-              <p><a class="btn" href="#">View details &raquo;</a></p>
-            </div><!--/span-->
-          </div><!--/row-->
+
         </div><!--/span-->
       </div><!--/row-->
       
