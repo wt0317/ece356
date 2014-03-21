@@ -8,16 +8,18 @@
 
 <% 
     Directory user = (Directory) session.getAttribute("userObject");
-
+    String role = user.getRole();
+    
     Patients patient = DBAO.getUserInfo(user.getUsername(), user.getPassword());
     
     List<String> patientList = DBAO.getAllPatients();
     
     request.setAttribute("hin", patient.getHealthCard());
-    request.setAttribute("usermane", user.getUsername());
+    request.setAttribute("username", user.getUsername());
     request.setAttribute("name", user.getName());
     request.setAttribute("address", user.getAddress());
-    
+    request.setAttribute("patientList", patientList);
+    request.setAttribute("role",role);
     
     //Patients patient = new Patients(user.getUsername());
     //patient.queryUserInfo();
@@ -29,7 +31,6 @@
     <jsp:attribute name="pagetitle">
       Patient Homepage
     </jsp:attribute>
-
     <jsp:attribute name="content">
     
         <div class="container-fluid">
@@ -43,11 +44,18 @@
             <div class="span4">
               <h2>Personal Information</h2>
               <p>User ID: 
-                  <select class="form-control" id="patientList" name="patientList">
-                    <c:forEach items="${patientList}" var="item">
-                       <option>${item}</option>
-                    </c:forEach>
-                  </select>
+                    
+                  <c:if test="${role == 'patient'}">
+                       <input name="name" type="input" class="form-control" value="${username}" required="" autofocus="">
+                 </c:if>
+                 <c:if test="${role != 'patient'}">
+                    <select class="form-control" name="patient" value="${username}">
+                      <c:forEach items="${patientList}" var="item">
+                         <option>${item}</option>
+                      </c:forEach>
+                    </select>
+                 </c:if>
+                    
               </p>
               <p>Name: 
                   <input name="name" type="input" class="form-control" value="${name}" required="" autofocus="">

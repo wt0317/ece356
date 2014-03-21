@@ -29,7 +29,8 @@
         </title>
         
         <!-- Bootstrap core CSS -->
-        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="css/patient.css" rel="stylesheet">
+        <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
@@ -85,7 +86,7 @@
           <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
               <ul class="nav nav-sidebar">
-                <li><a href="welcome.jsp">Home</a></li>
+                <li class="active"><a href="welcome.jsp">Home</a></li>
                 
                 <%-- DOCTOR MENU --%>
                 <%
@@ -100,15 +101,14 @@
                    <%-- PATIENT MENU --%>
                 <%                 
                  if (role.equals("patient"))      {
-                        out.print("<ul class=\"nav nav-sidebar\">");
-                        out.print(" <li class=\"active\"><a href=\"#\">Summary</a></li>");
+                        
+                        out.print(" <li><a href=\"patient.jsp\">Summary</a></li>");
                         out.print(" <li><a href=\"#\">Update Personal Information</a></li>");
                         out.print(" <li><a href=\"#\">Change Password</a></li>");
-                        out.print("</ul>");
-                        out.print("<ul class=\"nav nav-sidebar\">");
+                        out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"\">Past Appointments</a></li>");
-                        out.print("</ul>");
+                        
                 }
                 %>  
 
