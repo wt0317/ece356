@@ -20,6 +20,27 @@ import javax.persistence.TypedQuery;
  */
 public class DBAO {
     
+    private static final String url = "jdbc:mysql://sql3.freemysqlhosting.net:3306/";
+    private static final String user = "sql332230";
+    private static final String pwd = "mJ7!yB9!";
+    
+    public static Connection getConnection()
+            throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, pwd);
+        Statement stmt = null;
+        try {
+            con.createStatement();
+            stmt = con.createStatement();
+            stmt.execute("USE sql332230;");
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+        return con;
+    }
+    
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory( "projectPU" );;
     private static EntityManager em = emf.createEntityManager();
     
@@ -32,37 +53,6 @@ public class DBAO {
         Directory user = (Directory)query.getSingleResult();
 
         return user;
-    }
-    
-    public static String createPatient(Directory directory, Patients patient)
-            throws ClassNotFoundException, SQLException {
-        em.getTransaction().begin();
-        
-        em.persist(directory);
-        em.persist(patient);
-        
-        em.getTransaction().commit();
-        
-        return null;
-    }
-    
-    public static String createAccount(String name, String role, String password)
-            throws ClassNotFoundException, SQLException {
-        Query query = em.createQuery("INSERT INTO Directory (name, password, role) VALUES (:name, :password, :role)");
-        query.setParameter("name", name);
-        query.setParameter("password", password);
-        query.setParameter("role", role);
-                
-        if (query.executeUpdate() == 0) {
-            return "No rows updated";
-        }
-        return null;
-    }
-    
-    public static List<Doctors> getAllDoctors()
-            throws ClassNotFoundException, SQLException {         
-        TypedQuery<Doctors> query = em.createNamedQuery("Doctors.findAll", Doctors.class);
-        return query.getResultList();
     }
 
 }

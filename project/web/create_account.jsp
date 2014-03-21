@@ -4,16 +4,15 @@
     Author     : Wilson
 --%>
 
-<%@page import="java.util.List"%>
-<%@page import="ece356.Doctors"%>
+<%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%! boolean success; %>
 <% success = (request.getAttribute("success") != null) ? (Boolean) request.getAttribute("success") : false; %>  
-<%! List<Doctors> doctors; %>
-<% doctors = (List<Doctors>) request.getAttribute("doctors"); %>  
+<%! HashMap<String,String> doctors; %>
+<% doctors = (HashMap<String,String>) request.getAttribute("doctors"); %>  
 
 <t:template>
     <jsp:attribute name="pagetitle">
@@ -95,16 +94,22 @@
                 <label for="doctor" class="col-sm-2 control-label">Default Doctor</label>
                 <div class="col-sm-10">
                     <select class="form-control" id="doctor" name="doctor">
-                        <c:forEach items="${doctors}" var="item">
-                            <option value="${item.getUsername()}">${item.getDirectory().getName()}</option>
+                        <c:forEach items="${doctors.entrySet()}" var="d">
+                            <option value="${d.getKey()}">${d.getValue()}</option>
                         </c:forEach>
                     </select>
                   </div>
               </div>
               <div class="form-group">
-                <label for="Health" class="col-sm-2 control-label">Health</label>
+                <label for="health" class="col-sm-2 control-label">Health</label>
                 <div class="col-sm-10">
                     <input class="form-control" id="health" name="health" placeholder="Health"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="comments" class="col-sm-2 control-label">Comments</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="comments" name="comments" placeholder="Comments"/>
                 </div>
               </div>
           </div>

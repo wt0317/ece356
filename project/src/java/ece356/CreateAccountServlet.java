@@ -9,7 +9,12 @@ package ece356;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -62,54 +67,74 @@ public class CreateAccountServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Connection con = null;
+        PreparedStatement stmt = null;
         String url = "/create_account.jsp";
         try {
-            List<Doctors> doctors = DBAO.getAllDoctors();
-            request.setAttribute("doctors", doctors);
-            
-            if (request.getParameter("submit") != null) {
-                String role = request.getParameter("role");
-                
-                Directory directory = new Directory();
-                directory.setName(request.getParameter("name"));
-                directory.setRole(role);
-                directory.setPassword(hashPW(request.getParameter("password")));
-                directory.setAddress(request.getParameter("address"));
-                directory.setPhoneNumber(request.getParameter("phone"));
-                
-                if (role.equals("Patient")) {
-                    Patients patient = new Patients();
-                    patient.setHealthCard(request.getParameter("healthCard"));
-                    patient.setSocialInsuranceNumber(request.getParameter("sin"));
-                    patient.setCurrentHealth(request.getParameter("health"));
-                    for (Doctors d : doctors) {
-                        if (d.getUsername() == Integer.parseInt(request.getParameter("doctor"))) {
-                            patient.setDefaultDoctor(d);
-                            break;
-                        }
-                    }
-                    patient.setDirectory(directory);
-                    DBAO.createPatient(directory, patient);
-                } else if (role.equals("Doctor")) {
-                    
+            try {
+                con = DBAO.getConnection();
+
+                String selectAllDoctors = "SELECT username, name FROM Directory WHERE role = 'Doctor'";
+                stmt = con.prepareStatement(selectAllDoctors);
+                ResultSet rsDoctors = stmt.executeQuery();
+                HashMap<String,String> doctors = new HashMap<String,String>();
+                while (rsDoctors.next()) {
+                    doctors.put(rsDoctors.getString(1), rsDoctors.getString(2));
                 }
-                
-                
-                
-//                String name = request.getParameter("name");
-//                String role = request.getParameter("role");
-//                String hashedPW = hashPW(request.getParameter("password"));
-//
-//                String error = DBAO.createAccount(name, role, hashedPW);
-//                if (error == null) {
-//                    request.setAttribute("success", true);
-//                } else {
-//                    throw new Exception(error);
-//                }            
+                request.setAttribute("doctors", doctors);
+
+                if (request.getParameter("submit") != null) {
+                    String role = request.getParameter("role");
+
+                    String insertDirectory = "INSERT INTO Directory"
+                            + "(name, password, role, address, phone_number) VALUES"
+                            + "(?,?,?,?,?)";                
+                    stmt = con.prepareStatement(insertDirectory, Statement.RETURN_GENERATED_KEYS);                
+                    stmt.setString(1, request.getParameter("name"));
+                    stmt.setString(2, hashPW(request.getParameter("password")));
+                    stmt.setString(3, role);
+                    stmt.setString(4, request.getParameter("address"));
+                    stmt.setString(5, request.getParameter("phone"));
+
+                    if (stmt.executeUpdate() > 0) {
+                        int username = 0;
+                        ResultSet pk = stmt.getGeneratedKeys();
+                        if (pk.next()) {
+                            username = pk.getInt(1);
+                        }
+                        if (role.equals("Patient")) {
+                            String insertPatient = "INSERT INTO Patients"
+                                    + "(username, health_card, social_insurance_number, default_doctor, current_health, comment) VALUES"
+                                    + "(?,?,?,?,?,?)";                
+                            stmt = con.prepareStatement(insertPatient);                
+                            stmt.setInt(1, username);
+                            stmt.setString(2, request.getParameter("healthCard"));
+                            stmt.setString(3, request.getParameter("sin"));
+                            stmt.setString(4, request.getParameter("doctor"));
+                            stmt.setString(5, request.getParameter("health"));
+                            stmt.setString(6, request.getParameter("comments"));                            
+                        } else if (role.equals("Doctor")) {
+
+                        }
+                        stmt.executeUpdate();
+                    }
+
+                    request.setAttribute("success", true);     
+                }
+            } catch (ClassNotFoundException e) {
+                request.setAttribute("exception", e);
+                url = "/error.jsp";
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             request.setAttribute("exception", e);
-            url="/error.jsp";
+            url = "/error.jsp";
         }
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
