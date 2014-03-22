@@ -30,7 +30,7 @@ public class CreateAccountServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(CreateAccountServlet.class.getName());
     
-    private static String hashPW(String password) {
+    public static String hashPW(String password) {
         String generatedPassword = null;
         try {
             // Create MessageDigest instance for MD5
@@ -72,6 +72,8 @@ public class CreateAccountServlet extends HttpServlet {
         String url = "/createAccount.jsp";
         try {
             try {
+                int username = -1;
+                
                 con = DBAO.getConnection();
 
                 String selectAllDoctors = "SELECT username, name FROM Directory WHERE role = 'Doctor'";
@@ -95,9 +97,9 @@ public class CreateAccountServlet extends HttpServlet {
                     stmt.setString(3, role);
                     stmt.setString(4, request.getParameter("address"));
                     stmt.setString(5, request.getParameter("phone"));
-
+                    
+                    
                     if (stmt.executeUpdate() > 0) {
-                        int username = 0;
                         ResultSet pk = stmt.getGeneratedKeys();
                         if (pk.next()) {
                             username = pk.getInt(1);
@@ -129,9 +131,9 @@ public class CreateAccountServlet extends HttpServlet {
                         }
                         stmt.executeUpdate();
                     }
-
-                    request.setAttribute("success", true);     
                 }
+                
+                request.setAttribute("username", username);  
             } catch (ClassNotFoundException e) {
                 request.setAttribute("exception", e);
                 url = "/error.jsp";

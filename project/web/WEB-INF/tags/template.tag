@@ -14,7 +14,12 @@
 <%@attribute name="script" fragment="true"%>
 
 <%! User user; %>
-<% user = (session.getAttribute("userObject") != null) ? (User) session.getAttribute("userObject") : null; %>
+<% if (session.getAttribute("userObject") == null) {
+    response.sendRedirect("index.jsp");
+    return;
+  } else {
+    user = (User) session.getAttribute("userObject");
+} %>
 <%! String role; %>
 <% role = user.getRole(); %>  
 
@@ -43,13 +48,6 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-
-    <% 
-        if (user == null) {
-            response.sendRedirect("index.jsp");
-            return;
-        }
-    %>
     
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

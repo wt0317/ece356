@@ -9,8 +9,8 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%! boolean success; %>
-<% success = (request.getAttribute("success") != null) ? (Boolean) request.getAttribute("success") : false; %>  
+<%! int username; %>
+<% username = (Integer) request.getAttribute("username"); %>  
 <%! HashMap<String,String> doctors; %>
 <% doctors = (HashMap<String,String>) request.getAttribute("doctors"); %>  
 
@@ -19,8 +19,8 @@
       Project Zero
     </jsp:attribute>
     <jsp:attribute name="content">
-          <c:if test="${success}">
-              <div class="alert alert-success alert-dismissable">Account created!</div>
+          <c:if test="${username != -1}">
+              <div class="alert alert-success">Account created! Username: <c:out value="${username}"/></div>
           </c:if>
         <form class="form-horizontal" role="form" action="CreateAccountServlet" method="post">
           <h1 class="form-heading">Create Account</h1>
@@ -150,7 +150,7 @@
                 },
                 phone : {
                     digits : true,
-                    rangelength : [9,9]
+                    rangelength : [10,10]
                 },
                 sin : {
                     digits : true,
@@ -159,7 +159,7 @@
             },
             messages : {
                 phone : {
-                    rangelength : "Phone number must be 9 digits, no hyphen, no spaces"
+                    rangelength : "Phone number must be 10 digits, no hyphen, no spaces"
                 },
                 sin : {
                     rangelength : "SIN must be 6 digits, no hyphen, no spaces"
