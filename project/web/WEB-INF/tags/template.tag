@@ -65,14 +65,9 @@
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
-<!--                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>-->
                 <li><a href="#">Welcome! <% out.print(user.getName()); %></a></li>
-<!--                <li><a href="#">Help</a></li>-->
+                <li><a href="LogoutServlet">Logout</a></li>
               </ul>
-<!--              <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-              </form>-->
             </div>
           </div>
         </div>
@@ -86,20 +81,20 @@
                 <%
                 /* DOCTOR MENU */
                 
-                 if (role.equals("doctor"))      {
+                 if (role.equals("Doctor"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /*  PATIENT MENU */
-                else if (role.equals("patient"))      {
+                else if (role.equals("Patient"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /* STAFF MENU */   
-                else if (role.equals("staff"))      {
+                else if (role.equals("Staff"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
@@ -107,7 +102,7 @@
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /* FINANCE MENU */ 
-                else if (role.equals("finance"))      {
+                else if (role.equals("Finance"))      {
                         out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");

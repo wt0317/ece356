@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Wilson
  */
-public class LoginServlet extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,31 +31,9 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url;
-        try {    
-            //Create a new session object
-            HttpSession session = request.getSession();
-            int username = Integer.parseInt(request.getParameter("username"));
-            String password = CreateAccountServlet.hashPW(request.getParameter("password"));
-            
-            User user = DBAO.Login(username, password);
-            
-            if (user != null) {
-                //Set attributes of session object
-                session.setAttribute("userObject", user);            
-                //Redirect to appropriate page
-                response.sendRedirect("welcome.jsp");
-                return;
-            } else {
-                session.setAttribute("loginFailed", true);
-                url="/index.jsp";
-            }
-        } catch (Exception e) {
-            request.setAttribute("exception", e);
-            url="/error.jsp";
-        }
-        
-        getServletContext().getRequestDispatcher(url).forward(request, response);
+        HttpSession session = request.getSession();
+        session.invalidate();
+        response.sendRedirect("index.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
