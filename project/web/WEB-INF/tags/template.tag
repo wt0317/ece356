@@ -109,8 +109,8 @@
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"\">Past Appointments</a></li>");
                         
-                }
-                %>  
+
+                }%>
 
                 <%-- STAFF MENU --%>
                 <%                 

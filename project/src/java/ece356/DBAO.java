@@ -129,15 +129,8 @@ public class DBAO {
                 patientList.add(rs.getString("username"));   
             } 
             return patientList;
-            /*emf = Persistence.createEntityManagerFactory( "projectPU" );
-            EntityManager em = emf.createEntityManager();
-            
-            Query query = em.createQuery("SELECT username FROM Patients");
-            System.out.println("singleresult : " + query.getResultList());
-            patientList = query.getResultList();
-            System.out.println("patient list: " + patientList);
-            return patientList;
-        */} finally {
+
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
@@ -165,6 +158,35 @@ public class DBAO {
             name = (String) query.getSingleResult();
             
             return name;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        
+        
+    }
+      
+    public static User updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
+    throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+
+        try {
+            emf = Persistence.createEntityManagerFactory( "projectPU" );
+            EntityManager em = emf.createEntityManager();
+            
+            Query query = em.createQuery("UPDATE Patients SET health_card=:hin, social_insurance_number=:sin WHERE username=:username;");
+            query.setParameter("username", username);
+            query.setParameter("hin", hin);
+            query.setParameter("sin", sin);
+            
+           Directory user = new User;
+            
+            return user;
         } finally {
             if (stmt != null) {
                 stmt.close();

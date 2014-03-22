@@ -43,38 +43,43 @@
             <p>You have no notifications at this time</p>
           </div>
           <div class="row-fluid">
-            <div class="span4">
-              <h2>Personal Information</h2>
-              <p>User ID: 
-                    
-                  <c:if test="${role == 'patient'}">
-                       <input name="name" type="input" class="form-control" value="${username}" required="" autofocus="">
-                 </c:if>
-                 <c:if test="${role != 'patient'}">
-                    <select class="form-control" name="patient" value="${username}">
-                      <c:forEach items="${patientList}" var="item">
-                         <option>${item}</option>
-                      </c:forEach>
-                    </select>
-                 </c:if>
-                    
-              </p>
-              <p>Name: 
-                  <input name="name" type="input" class="form-control" value="${name}" required="" autofocus="">
-              </p>
-              <p>Address: 
-                  <input name="address" type="input" class="form-control" value="${address}" required="" autofocus="">
-              </p>
-              <p>Phone Number: 
-                  <input name="phonenum" type="input" class="form-control" value="${phonenum}" required="" autofocus="">
-              </p>
-              <p>Social Insurance Number: 
-                  <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="">
-              </p>
-              <p>Default Doctor: 
-                  <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="">
-              </p>
-              <p><a class="btn" href="#">View details &raquo;</a></p>
+            <div class="panel-heading">
+               <h2>Personal Information</h2>
+               <form role="form" action="Patient" method="post">
+                <p>User ID: 
+
+                    <c:if test="${role == 'patient'}">
+                         <input name="name" type="input" class="form-control" value="${username}" required="" autofocus="">
+                   </c:if>
+                   <c:if test="${role != 'patient'}">
+                      <select class="form-control" name="patient" value="${username}">
+                        <c:forEach items="${patientList}" var="item">
+                           <option>${item}</option>
+                        </c:forEach>
+                      </select>
+                   </c:if>
+
+                </p>
+                <p>Name: 
+                    <input name="name" type="input" class="form-control disabled" value="${name}" required="" autofocus="">
+                </p>
+                <p>Address: 
+                    <input name="address" type="input" class="form-control" id="disabledInput" value="${address}" required="" autofocus="">
+                </p>
+                <p>Phone Number: 
+                    <input name="phonenum" type="input" class="form-control disabled" value="${phonenum}" required="" autofocus="">
+                </p>
+                <p>Health Card Number: 
+                    <input name="hin" type="input" class="form-control" value="${hin}" required="" autofocus="">
+                </p>
+                <p>Social Insurance Number: 
+                    <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="">
+                </p>
+                <p>Default Doctor: 
+                    <input name="defaultDoctor" type="input" class="form-control disabled" value="${defaultDoctor}" required="" autofocus="">
+                </p>
+                <button class="btn btn-lg btn-primary btn-block" type="save">Save</button>
+              </form>
             </div><!--/span-->
 
         </div><!--/span-->
