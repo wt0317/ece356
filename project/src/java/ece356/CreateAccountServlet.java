@@ -67,85 +67,30 @@ public class CreateAccountServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection con = null;
-        PreparedStatement stmt = null;
         String url = "/createAccount.jsp";
         try {
-            try {
-                int username = -1;
-                
-                con = DBAO.getConnection();
+            int username = -1;
 
-                String selectAllDoctors = "SELECT username, name FROM Directory WHERE role = 'Doctor'";
-                stmt = con.prepareStatement(selectAllDoctors);
-                ResultSet rsDoctors = stmt.executeQuery();
-                HashMap<String,String> doctors = new HashMap<String,String>();
-                while (rsDoctors.next()) {
-                    doctors.put(rsDoctors.getString(1), rsDoctors.getString(2));
-                }
-                request.setAttribute("doctors", doctors);
+            HashMap<String,String> doctors = UserDAO.getDoctorsUsernameAndName();
+            request.setAttribute("doctors", doctors);
 
-                if (request.getParameter("submit") != null) {
-                    String role = request.getParameter("role");
+            if (request.getParameter("submit") != null) {
+                String role = request.getParameter("role");
 
-                    String insertDirectory = "INSERT INTO Directory"
-                            + "(name, password, role, address, phone_number) VALUES"
-                            + "(?,?,?,?,?)";                
-                    stmt = con.prepareStatement(insertDirectory, Statement.RETURN_GENERATED_KEYS);                
-                    stmt.setString(1, request.getParameter("name"));
-                    stmt.setString(2, hashPW(request.getParameter("password")));
-                    stmt.setString(3, role);
-                    stmt.setString(4, request.getParameter("address"));
-                    stmt.setString(5, request.getParameter("phone"));
-                    
-                    
-                    if (stmt.executeUpdate() > 0) {
-                        ResultSet pk = stmt.getGeneratedKeys();
-                        if (pk.next()) {
-                            username = pk.getInt(1);
-                        }
-                        if (role.equals("Patient")) {
-                            String insertPatient = "INSERT INTO Patients"
-                                    + "(username, health_card, social_insurance_number, default_doctor, current_health, comment) VALUES"
-                                    + "(?,?,?,?,?,?)";                
-                            stmt = con.prepareStatement(insertPatient);                
-                            stmt.setInt(1, username);
-                            stmt.setString(2, request.getParameter("healthCard"));
-                            stmt.setString(3, request.getParameter("sin"));
-                            stmt.setString(4, request.getParameter("doctor"));
-                            stmt.setString(5, request.getParameter("health"));
-                            stmt.setString(6, request.getParameter("comments"));                            
-                        } else if (role.equals("Doctor")) {
-                            String insertLicense = "INSERT INTO Licenses (license_id, license_issue_date, license_expiry_date) VALUES (?,?,?)";
-                            stmt = con.prepareStatement(insertLicense);
-                            stmt.setString(1, request.getParameter("license"));
-                            stmt.setString(2, request.getParameter("licenseIssue"));
-                            stmt.setString(3, request.getParameter("licenseExpiry"));
-                            stmt.executeUpdate();
-                            
-                            String insertDoctor = "INSERT INTO Doctors (username, license_id, date_hired) VALUES (?,?,?)";
-                            stmt = con.prepareStatement(insertDoctor);
-                            stmt.setInt(1, username);
-                            stmt.setString(2, request.getParameter("license"));
-                            stmt.setString(3, request.getParameter("dateHired"));
-                        }
-                        stmt.executeUpdate();
+                username = UserDAO.insertUser(request.getParameter("name"), hashPW(request.getParameter("password")), role, request.getParameter("address"), request.getParameter("phone"));
+
+                if (username != -1) {
+                    if (role.equals("Patient")) {
+                        PatientDAO.insertPatient(username, request.getParameter("healthCard"), request.getParameter("sin"), request.getParameter("doctor"), request.getParameter("health"), request.getParameter("comments"));
+                    } else if (role.equals("Doctor")) {
+                        LicenseDAO.insertLicense(request.getParameter("license"), request.getParameter("licenseIssue"), request.getParameter("licenseExpiry"));   
+                        DoctorDAO.insertDoctor(username, request.getParameter("license"), request.getParameter("dateHired"));
                     }
                 }
-                
-                request.setAttribute("username", username);  
-            } catch (ClassNotFoundException e) {
-                request.setAttribute("exception", e);
-                url = "/error.jsp";
-            } finally {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
             }
-        } catch (SQLException e) {
+
+            request.setAttribute("username", username);  
+        } catch (Exception e) {
             request.setAttribute("exception", e);
             url = "/error.jsp";
         }
