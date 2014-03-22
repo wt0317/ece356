@@ -7,8 +7,16 @@
 package ece356;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +28,34 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CreateAccountServlet extends HttpServlet {
 
+    private static final Logger logger = Logger.getLogger(CreateAccountServlet.class.getName());
+    
+    public static String hashPW(String password) {
+        String generatedPassword = null;
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //Add password bytes to digest
+            md.update(password.getBytes());
+            //Get the hash's bytes 
+            byte[] bytes = md.digest();
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
+        } 
+        catch (NoSuchAlgorithmException e) 
+        {
+             logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+        return generatedPassword;
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,27 +67,89 @@ public class CreateAccountServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        Connection con = null;
+        PreparedStatement stmt = null;
+        String url = "/createAccount.jsp";
         try {
-            /* TODO output your page here. You may use following sample code. */
-            Map<String,String[]> params = request.getParameterMap();
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateAccountServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateAccountServlet at " + request.getContextPath() + "</h1>");
-            for (Map.Entry<String,String[]> entry : params.entrySet()) {
-              out.println(entry.getKey() + ": " + entry.getValue()[0]);
-              out.println("<br><br>");
+            try {
+                int username = -1;
+                
+                con = DBAO.getConnection();
+
+                String selectAllDoctors = "SELECT username, name FROM Directory WHERE role = 'Doctor'";
+                stmt = con.prepareStatement(selectAllDoctors);
+                ResultSet rsDoctors = stmt.executeQuery();
+                HashMap<String,String> doctors = new HashMap<String,String>();
+                while (rsDoctors.next()) {
+                    doctors.put(rsDoctors.getString(1), rsDoctors.getString(2));
+                }
+                request.setAttribute("doctors", doctors);
+
+                if (request.getParameter("submit") != null) {
+                    String role = request.getParameter("role");
+
+                    String insertDirectory = "INSERT INTO Directory"
+                            + "(name, password, role, address, phone_number) VALUES"
+                            + "(?,?,?,?,?)";                
+                    stmt = con.prepareStatement(insertDirectory, Statement.RETURN_GENERATED_KEYS);                
+                    stmt.setString(1, request.getParameter("name"));
+                    stmt.setString(2, hashPW(request.getParameter("password")));
+                    stmt.setString(3, role);
+                    stmt.setString(4, request.getParameter("address"));
+                    stmt.setString(5, request.getParameter("phone"));
+                    
+                    
+                    if (stmt.executeUpdate() > 0) {
+                        ResultSet pk = stmt.getGeneratedKeys();
+                        if (pk.next()) {
+                            username = pk.getInt(1);
+                        }
+                        if (role.equals("Patient")) {
+                            String insertPatient = "INSERT INTO Patients"
+                                    + "(username, health_card, social_insurance_number, default_doctor, current_health, comment) VALUES"
+                                    + "(?,?,?,?,?,?)";                
+                            stmt = con.prepareStatement(insertPatient);                
+                            stmt.setInt(1, username);
+                            stmt.setString(2, request.getParameter("healthCard"));
+                            stmt.setString(3, request.getParameter("sin"));
+                            stmt.setString(4, request.getParameter("doctor"));
+                            stmt.setString(5, request.getParameter("health"));
+                            stmt.setString(6, request.getParameter("comments"));                            
+                        } else if (role.equals("Doctor")) {
+                            String insertLicense = "INSERT INTO Licenses (license_id, license_issue_date, license_expiry_date) VALUES (?,?,?)";
+                            stmt = con.prepareStatement(insertLicense);
+                            stmt.setString(1, request.getParameter("license"));
+                            stmt.setString(2, request.getParameter("licenseIssue"));
+                            stmt.setString(3, request.getParameter("licenseExpiry"));
+                            stmt.executeUpdate();
+                            
+                            String insertDoctor = "INSERT INTO Doctors (username, license_id, date_hired) VALUES (?,?,?)";
+                            stmt = con.prepareStatement(insertDoctor);
+                            stmt.setInt(1, username);
+                            stmt.setString(2, request.getParameter("license"));
+                            stmt.setString(3, request.getParameter("dateHired"));
+                        }
+                        stmt.executeUpdate();
+                    }
+                }
+                
+                request.setAttribute("username", username);  
+            } catch (ClassNotFoundException e) {
+                request.setAttribute("exception", e);
+                url = "/error.jsp";
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             }
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
+        } catch (SQLException e) {
+            request.setAttribute("exception", e);
+            url = "/error.jsp";
         }
+        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
