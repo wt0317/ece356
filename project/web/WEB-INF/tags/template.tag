@@ -9,6 +9,7 @@
 <%@tag description="Template" pageEncoding="UTF-8"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
+<%@attribute name="style" fragment="true"%>
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
 <%@attribute name="script" fragment="true"%>
@@ -41,6 +42,9 @@
 
         <!-- Custom styles for this template -->
         <link href="css/dashboard.css" rel="stylesheet">
+        
+        <!-- Page specific css-->
+        <jsp:invoke fragment="style"/>
         
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -83,7 +87,7 @@
                 if (role.equals("Doctor"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
-                        out.print("<li><a href=\"#\">Manage Appointments</a></li>");
+                        out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /*  PATIENT MENU */
@@ -122,6 +126,7 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
         <script src="js/jquery.validate.min.js"></script>
+        <!-- Page specific js-->
         <jsp:invoke fragment="script"/>
     </body>
 </html>
