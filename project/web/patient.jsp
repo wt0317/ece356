@@ -18,6 +18,7 @@
     request.setAttribute("username", user.getUsername());
     request.setAttribute("name", user.getName());
     request.setAttribute("address", user.getAddress());
+    request.setAttribute("phonenum", user.getPhoneNumber());
     request.setAttribute("patientList", patientList);
     request.setAttribute("role",role);
     request.setAttribute("sin", patient.getSocialInsuranceNumber());
@@ -45,7 +46,7 @@
           <div class="row-fluid">
             <div class="panel-heading">
                <h2>Personal Information</h2>
-               <form role="form" action="Patient" method="post">
+               <form role="form" action="PatientServlet" method="post">
                 <p>User ID: 
 
                     <c:if test="${role == 'patient'}">

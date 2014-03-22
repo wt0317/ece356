@@ -170,7 +170,7 @@ public class DBAO {
         
     }
       
-    public static User updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
+    public static Directory updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
     throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
@@ -183,9 +183,19 @@ public class DBAO {
             query.setParameter("username", username);
             query.setParameter("hin", hin);
             query.setParameter("sin", sin);
+            query.getSingleResult();
             
-           Directory user = new User;
+            query = em.createQuery("UPDATE Directory SET name=:name, address=:address, phone_number=:phoneNum WHERE username=:username;");
+            query.setParameter("username", username);
+            query.setParameter("name", name);
+            query.setParameter("address", address);
+            query.setParameter("phoneNum", phoneNum);
+            query.getSingleResult();
             
+            Directory user = new Directory();
+            user.setAddress(address);
+            user.setName(name);
+            user.setPhoneNumber(phoneNum);
             return user;
         } finally {
             if (stmt != null) {
