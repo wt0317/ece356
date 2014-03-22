@@ -69,7 +69,7 @@ public class CreateAccountServlet extends HttpServlet {
             throws ServletException, IOException {
         Connection con = null;
         PreparedStatement stmt = null;
-        String url = "/create_account.jsp";
+        String url = "/createAccount.jsp";
         try {
             try {
                 con = DBAO.getConnection();
@@ -114,7 +114,18 @@ public class CreateAccountServlet extends HttpServlet {
                             stmt.setString(5, request.getParameter("health"));
                             stmt.setString(6, request.getParameter("comments"));                            
                         } else if (role.equals("Doctor")) {
-
+                            String insertLicense = "INSERT INTO Licenses (license_id, license_issue_date, license_expiry_date) VALUES (?,?,?)";
+                            stmt = con.prepareStatement(insertLicense);
+                            stmt.setString(1, request.getParameter("license"));
+                            stmt.setString(2, request.getParameter("licenseIssue"));
+                            stmt.setString(3, request.getParameter("licenseExpiry"));
+                            stmt.executeUpdate();
+                            
+                            String insertDoctor = "INSERT INTO Doctors (username, license_id, date_hired) VALUES (?,?,?)";
+                            stmt = con.prepareStatement(insertDoctor);
+                            stmt.setInt(1, username);
+                            stmt.setString(2, request.getParameter("license"));
+                            stmt.setString(3, request.getParameter("dateHired"));
                         }
                         stmt.executeUpdate();
                     }

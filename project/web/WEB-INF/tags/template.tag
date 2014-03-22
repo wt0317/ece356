@@ -11,6 +11,7 @@
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
+<%@attribute name="script" fragment="true"%>
 
 <%! User user; %>
 <% user = (session.getAttribute("userObject") != null) ? (User) session.getAttribute("userObject") : null; %>
@@ -128,5 +129,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <jsp:invoke fragment="script"/>
     </body>
 </html>

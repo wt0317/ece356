@@ -18,16 +18,6 @@
     <jsp:attribute name="pagetitle">
       Project Zero
     </jsp:attribute>
-    <jsp:attribute name="leftmenu">
-    <ul class="nav nav-sidebar">
-      <li class="active"><a href="#">Overview</a></li>
-      <li><a href="#">Past Appointments</a></li>
-    </ul>
-    <ul class="nav nav-sidebar">
-      <li><a href="">Update Address and Phone</a></li>
-      <li><a href="">Change Password</a></li>
-    </ul>
-    </jsp:attribute>
     <jsp:attribute name="content">
           <c:if test="${success}">
               <div class="alert alert-success alert-dismissable">Account created!</div>
@@ -72,7 +62,7 @@
           <div class="form-group">
             <label for="Phone Number" class="col-sm-2 control-label">Phone Number</label>
             <div class="col-sm-10">
-                <input class="form-control" id="phone" name="phone" placeholder="519-555-1234" required/>
+                <input class="form-control" id="phone" name="phone" placeholder="5195551234" required/>
             </div>
           </div>
           <!--Patient-->
@@ -81,7 +71,7 @@
               <div class="form-group">
                 <label for="healthCard" class="col-sm-2 control-label">Health Card</label>
                 <div class="col-sm-10">
-                    <input class="form-control" id="healthCard" name="healthCard" placeholder="12345678ab" required/>
+                    <input class="form-control" id="healthCard" name="healthCard" placeholder="1234-567-890-AB" required/>
                 </div>
               </div>
               <div class="form-group">
@@ -123,6 +113,18 @@
                 </div>
               </div>
               <div class="form-group">
+                <label for="licenseIssue" class="col-sm-2 control-label">License Issue Date</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="licenseIssue" name="licenseIssue" required/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="licenseExpiry" class="col-sm-2 control-label">License Expiry Date</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="licenseExpiry" name="licenseExpiry" required/>
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="dateHired" class="col-sm-2 control-label">Date Hired</label>
                 <div class="col-sm-10">
                     <input type="date" class="form-control" id="dateHired" name="dateHired" required/>
@@ -145,6 +147,22 @@
             rules : {
                 confirm_password : {
                     equalTo : "#password"
+                },
+                phone : {
+                    digits : true,
+                    rangelength : [9,9]
+                },
+                sin : {
+                    digits : true,
+                    rangelength : [6,6]
+                }
+            },
+            messages : {
+                phone : {
+                    rangelength : "Phone number must be 9 digits, no hyphen, no spaces"
+                },
+                sin : {
+                    rangelength : "SIN must be 6 digits, no hyphen, no spaces"
                 }
             }
         });
