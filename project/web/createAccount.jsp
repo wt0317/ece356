@@ -4,10 +4,20 @@
     Author     : Wilson
 --%>
 
+<%@page import="ece356.User"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%! User user; %>
+<% 
+    user = (User) session.getAttribute("userObject");
+    if (!user.getRole().equals("Admin") && !user.getRole().equals("Staff")) {
+        response.sendRedirect("welcome.jsp");
+        return;
+    }
+%>
 
 <%! int username; %>
 <% username = (Integer) request.getAttribute("username"); %>  
@@ -35,9 +45,11 @@
             <div class="col-sm-10">
               <select class="form-control" id="role" name="role">
                 <option>Patient</option>
-                <option>Doctor</option>
-                <option>Staff</option>
-                <option>Finance</option>            
+                <c:if test="${user.getRole().equals('Admin')}">
+                    <option>Doctor</option>
+                    <option>Staff</option>
+                    <option>Finance</option>
+                </c:if>
               </select>
             </div>
           </div>
