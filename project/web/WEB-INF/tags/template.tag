@@ -4,7 +4,7 @@
     Author     : rkn24
 --%>
 
-<%@tag import="ece356.User"%>
+<%@tag import="ece356.Directory"%>
 
 <%@tag description="Template" pageEncoding="UTF-8"%>
 
@@ -12,10 +12,8 @@
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
 
-<%! User user; %>
-<% user = (session.getAttribute("userObject") != null) ? (User) session.getAttribute("userObject") : null; %>
 <%! String role; %>
-<% role = user.getRole(); %>  
+<% role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
 
 <%-- any content can be specified here e.g.: --%>
 <!DOCTYPE html>
@@ -31,6 +29,8 @@
         </title>
         
         <!-- Bootstrap core CSS -->
+        <link href="css/patient.css" rel="stylesheet">
+        <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
@@ -42,12 +42,16 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-
+    
+    <%! Directory user;%>
     <% 
-        if (user == null) {
+         if (session.getAttribute("userObject") != null){
+            user = (Directory) session.getAttribute("userObject");
+        } else {
             response.sendRedirect("index.jsp");
             return;
         }
+       
     %>
     
     <body>
@@ -82,33 +86,46 @@
           <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
               <ul class="nav nav-sidebar">
-                <li><a href="welcome.jsp">Home</a></li>
+                <li class="active"><a href="welcome.jsp">Home</a></li>
                 
+                <%-- DOCTOR MENU --%>
                 <%
-                /* DOCTOR MENU */
-                
                  if (role.equals("doctor"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-                /*  PATIENT MENU */
-                else if (role.equals("patient"))      {
-                        out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
-                        out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
-                        out.print("<li><a href=\"#\">Account Settings</a></li>");
+                %>    
+
+                   <%-- PATIENT MENU --%>
+                <%                 
+                 if (role.equals("patient"))      {
+                        
+                        out.print(" <li><a href=\"patient.jsp\">Summary</a></li>");
+                        out.print(" <li><a href=\"#\">Update Personal Information</a></li>");
+                        out.print(" <li><a href=\"#\">Change Password</a></li>");
+                        out.print("<br>");
+                        out.print(" <li><a href=\"\">Future Appointments</a></li>");
+                        out.print(" <li><a href=\"\">Past Appointments</a></li>");
+                        
                 }
-                /* STAFF MENU */   
-                else if (role.equals("staff"))      {
+                %>  
+
+                <%-- STAFF MENU --%>
+                <%                 
+                 if (role.equals("staff"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Create Account</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-                /* FINANCE MENU */ 
-                else if (role.equals("finance"))      {
+                %>  
+
+                <%-- FINANCE MENU --%>
+                <%                 
+                 if (role.equals("finance"))      {
                         out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");

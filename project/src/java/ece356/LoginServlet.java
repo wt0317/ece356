@@ -37,8 +37,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             int username = Integer.parseInt(request.getParameter("username"));
             String password = request.getParameter("password");
-            
-            User user = DBAO.Login(username, password);
+            Directory user = DBAO.Login(username, password);
             
             //Set attributes of session object
             session.setAttribute("userObject", user);
