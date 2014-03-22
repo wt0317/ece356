@@ -80,8 +80,7 @@
                 
                 <%
                 /* DOCTOR MENU */
-                
-                 if (role.equals("Doctor"))      {
+                if (role.equals("Doctor"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");

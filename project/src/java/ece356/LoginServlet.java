@@ -42,7 +42,11 @@ public class LoginServlet extends HttpServlet {
             
             if (user != null) {
                 //Set attributes of session object
-                session.setAttribute("userObject", user);            
+                session.setAttribute("userObject", user); 
+                if (user.getRole().equals("Admin")) {
+                    response.sendRedirect("CreateAccountServlet");
+                    return;
+                }
                 //Redirect to appropriate page
                 response.sendRedirect("welcome.jsp");
                 return;
