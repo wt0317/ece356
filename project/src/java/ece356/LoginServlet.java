@@ -31,7 +31,8 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/index.jsp";
+
+      String url = "/index.jsp";
         try {
             if (request.getParameter("username") != null && request.getParameter("password") != null) {
                 //Create a new session object

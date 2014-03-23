@@ -4,12 +4,12 @@
     Author     : FireChemist
 --%>
 
-<%@page import="ece356.User"%>
+<%@page import="ece356.Directory"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%! String role; %>
-<% role = ((User)session.getAttribute("userObject")).getRole(); %>  
+<% role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
 
 <t:template>
     <jsp:attribute name="pagetitle">
