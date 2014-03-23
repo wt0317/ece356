@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,13 +18,13 @@
     </head>
     <body>
         <div class="container">
+            <c:if test="${loginFailed}">
+                <div class="alert alert-danger">Username or password incorrect</div>
+            </c:if>
             <form class="form-signin" role="form" action="LoginServlet" method="post">
                 <div class="signin-box">
                     <input name="username" type="input" class="form-control" placeholder="Username" required="" autofocus="">
                     <input name="password" type="password" class="form-control" placeholder="Password" required="">
-                    <label class="checkbox">
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                 </div>
             </form>

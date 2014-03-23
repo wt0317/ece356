@@ -9,9 +9,21 @@
 <%@tag description="Template" pageEncoding="UTF-8"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
+<%@attribute name="style" fragment="true"%>
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
+<%@attribute name="script" fragment="true"%>
 
+<<<<<<< HEAD
+=======
+<%! User user; %>
+<% if (session.getAttribute("userObject") == null) {
+    response.sendRedirect("index.jsp");
+    return;
+  } else {
+    user = (User) session.getAttribute("userObject");
+} %>
+>>>>>>> origin/master
 <%! String role; %>
 <%role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
 
@@ -37,12 +49,16 @@
         <!-- Custom styles for this template -->
         <link href="css/dashboard.css" rel="stylesheet">
         
+        <!-- Page specific css-->
+        <jsp:invoke fragment="style"/>
+        
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
+<<<<<<< HEAD
     
     <%! Directory user;%>
     <% 
@@ -54,6 +70,8 @@
         }
        
     %>
+=======
+>>>>>>> origin/master
     
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -71,14 +89,9 @@
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
-<!--                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>-->
-                <li><a href="#">Welcome! <% out.print(user.getName()); %></a></li>
-<!--                <li><a href="#">Help</a></li>-->
+                <li><a href="#">Welcome! <%= user.getName() %></a></li>
+                <li><a href="LogoutServlet">Logout</a></li>
               </ul>
-<!--              <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-              </form>-->
             </div>
           </div>
         </div>
@@ -91,12 +104,18 @@
                 
                 <%-- DOCTOR MENU --%>
                 <%
+<<<<<<< HEAD
                  if (role.equals("doctor"))      {
+=======
+                /* DOCTOR MENU */
+                if (role.equals("Doctor"))      {
+>>>>>>> origin/master
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
-                        out.print("<li><a href=\"#\">Manage Appointments</a></li>");
+                        out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
+<<<<<<< HEAD
                 %>    
 
                    <%-- PATIENT MENU --%>
@@ -115,17 +134,32 @@
                 <%-- STAFF MENU --%>
                 <%                 
                  if (role.equals("staff"))      {
+=======
+                /*  PATIENT MENU */
+                else if (role.equals("Patient"))      {
+                        out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
+                        out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
+                        out.print("<li><a href=\"#\">Account Settings</a></li>");
+                }
+                /* STAFF MENU */   
+                else if (role.equals("Staff"))      {
+>>>>>>> origin/master
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
-                        out.print("<li><a href=\"#\">Create Account</a></li>");
+                        out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
+<<<<<<< HEAD
                 %>  
 
                 <%-- FINANCE MENU --%>
                 <%                 
                  if (role.equals("finance"))      {
+=======
+                /* FINANCE MENU */ 
+                else if (role.equals("Finance"))      {
+>>>>>>> origin/master
                         out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
@@ -145,5 +179,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <!-- Page specific js-->
+        <jsp:invoke fragment="script"/>
     </body>
 </html>

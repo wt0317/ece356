@@ -7,8 +7,16 @@
 package ece356;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +28,34 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CreateAccountServlet extends HttpServlet {
 
+    private static final Logger logger = Logger.getLogger(CreateAccountServlet.class.getName());
+    
+    public static String hashPW(String password) {
+        String generatedPassword = null;
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //Add password bytes to digest
+            md.update(password.getBytes());
+            //Get the hash's bytes 
+            byte[] bytes = md.digest();
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
+        } 
+        catch (NoSuchAlgorithmException e) 
+        {
+             logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+        return generatedPassword;
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,27 +67,34 @@ public class CreateAccountServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        String url = "/createAccount.jsp";
         try {
-            /* TODO output your page here. You may use following sample code. */
-            Map<String,String[]> params = request.getParameterMap();
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateAccountServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateAccountServlet at " + request.getContextPath() + "</h1>");
-            for (Map.Entry<String,String[]> entry : params.entrySet()) {
-              out.println(entry.getKey() + ": " + entry.getValue()[0]);
-              out.println("<br><br>");
+            int username = -1;
+
+            HashMap<String,String> doctors = UserDAO.getDoctorsUsernameAndName();
+            request.setAttribute("doctors", doctors);
+
+            if (request.getParameter("submit") != null) {
+                String role = request.getParameter("role");
+
+                username = UserDAO.insertUser(request.getParameter("name"), hashPW(request.getParameter("password")), role, request.getParameter("address"), request.getParameter("phone"));
+
+                if (username != -1) {
+                    if (role.equals("Patient")) {
+                        PatientDAO.insertPatient(username, request.getParameter("healthCard"), request.getParameter("sin"), request.getParameter("doctor"), request.getParameter("health"), request.getParameter("comments"));
+                    } else if (role.equals("Doctor")) {
+                        LicenseDAO.insertLicense(request.getParameter("license"), request.getParameter("licenseIssue"), request.getParameter("licenseExpiry"));   
+                        DoctorDAO.insertDoctor(username, request.getParameter("license"), request.getParameter("dateHired"));
+                    }
+                }
             }
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
+
+            request.setAttribute("username", username);  
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+            url = "/error.jsp";
         }
+        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
