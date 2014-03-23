@@ -206,4 +206,5 @@ public class Patients implements Serializable {
     public String toString() {
         return "ece356.Patients[ username=" + username + " ]";
     }
+
 }

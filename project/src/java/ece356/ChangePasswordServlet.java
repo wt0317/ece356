@@ -15,10 +15,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Sieyor
+ * @author S
  */
-
-public class PatientServlet extends HttpServlet {
+public class ChangePasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,12 +38,9 @@ public class PatientServlet extends HttpServlet {
 
                     int username = Integer.parseInt(request.getParameter("username"));
                     String name = request.getParameter("name");
-                    String address = request.getParameter("address");
-                    String phoneNum = request.getParameter("phonenum");
-                    String hin = request.getParameter("hin");
-                    String sin = request.getParameter("sin");
+
                     
-                    DBAO.updateUser(username, name, address, phoneNum, hin, sin);
+                    //DBAO.changePassword(username, password);
                     
                     Directory user = new Directory();
                     user.setName(name);
@@ -105,3 +101,4 @@ public class PatientServlet extends HttpServlet {
     
 
 }
+

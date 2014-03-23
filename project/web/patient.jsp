@@ -8,6 +8,7 @@
 
 <% 
     Directory user = (Directory) session.getAttribute("userObject");
+
     String role = user.getRole();
     
     Patients patient = DBAO.getUserInfo(user.getUsername(), user.getPassword());
@@ -50,7 +51,7 @@
                 <p>User ID: 
 
                     <c:if test="${role == 'patient'}">
-                         <input name="name" type="input" class="form-control" value="${username}" required="" autofocus="">
+                         <input name="username" type="input" class="form-control" value="${username}" required="" autofocus="" readonly>
                    </c:if>
                    <c:if test="${role != 'patient'}">
                       <select class="form-control" name="patient" value="${username}">
@@ -77,7 +78,7 @@
                     <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="">
                 </p>
                 <p>Default Doctor: 
-                    <input name="defaultDoctor" type="input" class="form-control disabled" value="${defaultDoctor}" required="" autofocus="">
+                    <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="" readonly>
                 </p>
                 <button class="btn btn-lg btn-primary btn-block" type="save">Save</button>
               </form>

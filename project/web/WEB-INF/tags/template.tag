@@ -13,7 +13,8 @@
 <%@attribute name="content" fragment="true"%>
 
 <%! String role; %>
-<% role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
+<%role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
+
 
 <%-- any content can be specified here e.g.: --%>
 <!DOCTYPE html>
@@ -102,9 +103,8 @@
                 <%                 
                  if (role.equals("patient"))      {
                         
-                        out.print(" <li><a href=\"patient.jsp\">Summary</a></li>");
-                        out.print(" <li><a href=\"#\">Update Personal Information</a></li>");
-                        out.print(" <li><a href=\"#\">Change Password</a></li>");
+                        out.print(" <li><a href=\"patient.jsp\">Update Personal Information</a></li>");
+                        out.print(" <li><a href=\"changePassword.jsp#\">Change Password</a></li>");
                         out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"\">Past Appointments</a></li>");

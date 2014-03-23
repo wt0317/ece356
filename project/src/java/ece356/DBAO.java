@@ -124,7 +124,7 @@ public class DBAO {
             con = DriverManager.getConnection(url, user, pwd);  
             PreparedStatement pst = con.prepareStatement("SELECT username FROM sql332230.Patients;");
             rs = pst.executeQuery();  
-            System.out.println(rs.toString());
+            
             while (rs.next()) {
                 patientList.add(rs.getString("username"));   
             } 
@@ -170,33 +170,21 @@ public class DBAO {
         
     }
       
-    public static Directory updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
+    public static void updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
     throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
-
+        ResultSet rs = null;
         try {
-            emf = Persistence.createEntityManagerFactory( "projectPU" );
-            EntityManager em = emf.createEntityManager();
+                   
+            con = DriverManager.getConnection(url, user, pwd);  
+            PreparedStatement pst = con.prepareStatement("UPDATE sql332230.Patients SET health_card = '" + hin + "', social_insurance_number = '" + sin + "' WHERE username = '" + username + "'");
+            pst.executeUpdate();  
             
-            Query query = em.createQuery("UPDATE Patients SET health_card=:hin, social_insurance_number=:sin WHERE username=:username;");
-            query.setParameter("username", username);
-            query.setParameter("hin", hin);
-            query.setParameter("sin", sin);
-            query.getSingleResult();
             
-            query = em.createQuery("UPDATE Directory SET name=:name, address=:address, phone_number=:phoneNum WHERE username=:username;");
-            query.setParameter("username", username);
-            query.setParameter("name", name);
-            query.setParameter("address", address);
-            query.setParameter("phoneNum", phoneNum);
-            query.getSingleResult();
+            pst = con.prepareStatement("UPDATE sql332230.Directory SET name='" + name + "', address= '" + address + "', phone_number='" + phoneNum+ "' WHERE username= '" + username + "'");
+            pst.executeUpdate(); 
             
-            Directory user = new Directory();
-            user.setAddress(address);
-            user.setName(name);
-            user.setPhoneNumber(phoneNum);
-            return user;
         } finally {
             if (stmt != null) {
                 stmt.close();
