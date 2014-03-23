@@ -25,7 +25,7 @@
             <c:if test="${error.equals('Invalid')}">
                 <div class="alert alert-danger">
                     <Strong>
-                        Danger! 
+                        Error: 
                     </Strong>
                         This person does not exist!
                 </div>
@@ -35,7 +35,7 @@
                 <Strong>
                     Warning: 
                 </Strong>
-                    Duplicate match encountered, please enter ID.
+                    Duplicate match encountered, please select ID.
                 </div>
             </c:if>
             
@@ -51,10 +51,14 @@
         </div>
           
         <c:if test="${error.equals('Duplicate')}" >
-            <div class="form-group">
-                <label for="searchID">ID</label>
-                <input class="form-control" id="username" name="username" placeholder="12345678">
-            </div>        
+              <div class="form-group">
+                 <label for="searchID">ID</label>           
+                    <select name="username" class="form-control">
+                    <c:forEach items="${listPatientID}" var= "username">
+                        <option> <c:out value="${username}" />
+                    </c:forEach>
+                    </select>        
+               </div>
         </c:if>
         <button type="submit" class="btn btn-default">Submit</button>
      </form>
