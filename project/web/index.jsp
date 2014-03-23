@@ -7,9 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%! boolean loginFailed; %>
-<% loginFailed = (request.getAttribute("loginFailed") != null) ? (Boolean) request.getAttribute("loginFailed") : false; %>  
-
 <!DOCTYPE html>
 <html>
     <head>

@@ -31,29 +31,32 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url;
-        try {    
-            //Create a new session object
-            HttpSession session = request.getSession();
-            int username = Integer.parseInt(request.getParameter("username"));
-            String password = CreateAccountServlet.hashPW(request.getParameter("password"));
-            
-            User user = DBAO.Login(username, password);
-            
-            if (user != null) {
-                //Set attributes of session object
-                session.setAttribute("userObject", user); 
-                if (user.getRole().equals("Admin")) {
-                    response.sendRedirect("CreateAccountServlet");
+        String url = "/index.jsp";
+        try {
+            if (request.getParameter("username") != null && request.getParameter("password") != null) {
+                //Create a new session object
+                HttpSession session = request.getSession();
+                int username = Integer.parseInt(request.getParameter("username"));
+                String password = CreateAccountServlet.hashPW(request.getParameter("password"));
+
+                User user = DBAO.Login(username, password);
+
+                if (user != null) {
+                    //Set attributes of session object
+                    session.setAttribute("userObject", user); 
+                    if (user.getRole().equals("Admin")) {
+                        response.sendRedirect("CreateAccountServlet");
+                        return;
+                    }
+                    //Redirect to appropriate page
+                    response.sendRedirect("welcome.jsp");
                     return;
+                } else {
+                    request.setAttribute("loginFailed", true);
                 }
-                //Redirect to appropriate page
-                response.sendRedirect("welcome.jsp");
-                return;
-            } else {
-                session.setAttribute("loginFailed", true);
-                url="/index.jsp";
             }
+        } catch (NumberFormatException e) {
+            request.setAttribute("loginFailed", true);
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";
