@@ -13,7 +13,7 @@
 <%! User user; %>
 <% 
     user = (User) session.getAttribute("userObject");
-    if (!user.getRole().equals("Admin") && !user.getRole().equals("Staff")) {
+    if (user != null && !user.getRole().equals("Admin") && !user.getRole().equals("Staff")) {
         response.sendRedirect("welcome.jsp");
         return;
     }
