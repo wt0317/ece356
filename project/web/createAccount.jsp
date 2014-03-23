@@ -13,16 +13,11 @@
 <%! User user; %>
 <% 
     user = (User) session.getAttribute("userObject");
-    if (!user.getRole().equals("Admin") && !user.getRole().equals("Staff")) {
+    if (user != null && !user.getRole().equals("Admin") && !user.getRole().equals("Staff")) {
         response.sendRedirect("welcome.jsp");
         return;
     }
 %>
-
-<%! int username; %>
-<% username = (Integer) request.getAttribute("username"); %>  
-<%! HashMap<String,String> doctors; %>
-<% doctors = (HashMap<String,String>) request.getAttribute("doctors"); %>  
 
 <t:template>
     <jsp:attribute name="pagetitle">
@@ -45,7 +40,7 @@
             <div class="col-sm-10">
               <select class="form-control" id="role" name="role">
                 <option>Patient</option>
-                <c:if test="${user.getRole().equals('Admin')}">
+                <c:if test="${userObject.getRole().equals('Admin')}">
                     <option>Doctor</option>
                     <option>Staff</option>
                     <option>Finance</option>
