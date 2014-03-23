@@ -31,22 +31,8 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<<<<<<< HEAD
-        String url;
-        try {    
-            //Create a new session object
-            HttpSession session = request.getSession();
-            int username = Integer.parseInt(request.getParameter("username"));
-            String password = request.getParameter("password");
-            Directory user = DBAO.Login(username, password);
-            
-            //Set attributes of session object
-            session.setAttribute("userObject", user);
-            
-            //Redirect to appropriate page
-            url="/welcome.jsp";       
-=======
-        String url = "/index.jsp";
+
+      String url = "/index.jsp";
         try {
             if (request.getParameter("username") != null && request.getParameter("password") != null) {
                 //Create a new session object
@@ -72,7 +58,6 @@ public class LoginServlet extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             request.setAttribute("loginFailed", true);
->>>>>>> origin/master
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url="/error.jsp";
