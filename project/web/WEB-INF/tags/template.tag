@@ -69,7 +69,7 @@
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Welcome! <% out.print(user.getName()); %></a></li>
+                <li><a href="#">Welcome! <%= user.getName() %></a></li>
                 <li><a href="LogoutServlet">Logout</a></li>
               </ul>
             </div>

@@ -19,11 +19,6 @@
     }
 %>
 
-<%! int username; %>
-<% username = (Integer) request.getAttribute("username"); %>  
-<%! HashMap<String,String> doctors; %>
-<% doctors = (HashMap<String,String>) request.getAttribute("doctors"); %>  
-
 <t:template>
     <jsp:attribute name="pagetitle">
       Project Zero
@@ -45,7 +40,7 @@
             <div class="col-sm-10">
               <select class="form-control" id="role" name="role">
                 <option>Patient</option>
-                <c:if test="${user.getRole().equals('Admin')}">
+                <c:if test="${userObject.getRole().equals('Admin')}">
                     <option>Doctor</option>
                     <option>Staff</option>
                     <option>Finance</option>
