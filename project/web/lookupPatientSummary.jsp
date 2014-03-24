@@ -20,7 +20,7 @@
     <jsp:attribute name="content">
       <h1 class="page-header">Lookup Patient Summary</h1>
       
-      <form role="form" action="Lookup_Patient_SummaryServlet" method="post">
+      <form role="form" action="LookupPatientSummaryServlet" method="post">
         <div class="form-group">
             <c:if test="${error.equals('Invalid')}">
                 <div class="alert alert-danger">
@@ -42,7 +42,7 @@
             <label for="searchName">Name</label>
             <c:choose>
             <c:when test="${error.equals('Duplicate')}" >
-                <input class="form-control" id="name" name="name" value="${name}" >
+                <p id="name" name="name" value="${name}"> ${name} </p>
             </c:when>
             <c:otherwise>
                 <input class="form-control" id="name" name="name" placeholder="Bruce Wayne" >
@@ -59,8 +59,37 @@
                     </c:forEach>
                     </select>        
                </div>
+              <button type="button" class="btn btn-default" onclick="history.back()">Back</button>
         </c:if>
         <button type="submit" class="btn btn-default">Submit</button>
+        
+        <c:if test="${status.equals('Valid')}" >
+            <h2 class="sub-header">Results</h2>    
+            <p> <strong>Number of Visits: </strong> <c:out value="${countVisits}" /></p>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Diagnosis</th>
+                            <th>Diagnosis Name</th>
+                            <th>Drugs Prescribed</th>
+                            <th>Drug Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${patientResults}" var="data">
+                            <tr>
+                                <td> <c:out value="${data.diagnosis_id}" /></td>
+                                <td> <c:out value="${data.diagnosis_name}"/></td>
+                                <td> <c:out value="${data.prescription_id}" /></td>
+                                <td> <c:out value="${data.prescription_name}" /></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>           
+        </c:if>
      </form>
 
       
