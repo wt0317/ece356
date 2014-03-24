@@ -106,12 +106,8 @@
                 }
                 /* FINANCE MENU */ 
                 else if (role.equals("Finance"))      {
-<<<<<<< HEAD
-
                         out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookupPatientSummary.jsp\">Lookup Patient Summary</a></li>");
-=======
->>>>>>> 134c90c0969f77848dc30cfb44edb1914db68b4a
                         out.print("<li><a href=\"lookupDoctorSummary.jsp\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
