@@ -4,7 +4,7 @@
     Author     : rkn24
 --%>
 
-<%@tag import="ece356.Directory"%>
+<%@tag import="ece356.User"%>
 
 <%@tag description="Template" pageEncoding="UTF-8"%>
 
@@ -14,8 +14,6 @@
 <%@attribute name="content" fragment="true"%>
 <%@attribute name="script" fragment="true"%>
 
-<<<<<<< HEAD
-=======
 <%! User user; %>
 <% if (session.getAttribute("userObject") == null) {
     response.sendRedirect("index.jsp");
@@ -23,10 +21,8 @@
   } else {
     user = (User) session.getAttribute("userObject");
 } %>
->>>>>>> origin/master
 <%! String role; %>
-<%role = ((Directory)session.getAttribute("userObject")).getRole(); %>  
-
+<% role = user.getRole(); %>  
 
 <%-- any content can be specified here e.g.: --%>
 <!DOCTYPE html>
@@ -42,8 +38,6 @@
         </title>
         
         <!-- Bootstrap core CSS -->
-        <link href="css/patient.css" rel="stylesheet">
-        <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
@@ -58,20 +52,6 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-<<<<<<< HEAD
-    
-    <%! Directory user;%>
-    <% 
-         if (session.getAttribute("userObject") != null){
-            user = (Directory) session.getAttribute("userObject");
-        } else {
-            response.sendRedirect("index.jsp");
-            return;
-        }
-       
-    %>
-=======
->>>>>>> origin/master
     
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -100,41 +80,16 @@
           <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
               <ul class="nav nav-sidebar">
-                <li class="active"><a href="welcome.jsp">Home</a></li>
+                <li><a href="welcome.jsp">Home</a></li>
                 
-                <%-- DOCTOR MENU --%>
                 <%
-<<<<<<< HEAD
-                 if (role.equals("doctor"))      {
-=======
                 /* DOCTOR MENU */
                 if (role.equals("Doctor"))      {
->>>>>>> origin/master
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-<<<<<<< HEAD
-                %>    
-
-                   <%-- PATIENT MENU --%>
-                <%                 
-                 if (role.equals("patient"))      {
-                        
-                        out.print(" <li><a href=\"patient.jsp\">Update Personal Information</a></li>");
-                        out.print(" <li><a href=\"changePassword.jsp#\">Change Password</a></li>");
-                        out.print("<br>");
-                        out.print(" <li><a href=\"\">Future Appointments</a></li>");
-                        out.print(" <li><a href=\"\">Past Appointments</a></li>");
-                        
-
-                }%>
-
-                <%-- STAFF MENU --%>
-                <%                 
-                 if (role.equals("staff"))      {
-=======
                 /*  PATIENT MENU */
                 else if (role.equals("Patient"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
@@ -143,23 +98,14 @@
                 }
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
->>>>>>> origin/master
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
-<<<<<<< HEAD
-                %>  
-
-                <%-- FINANCE MENU --%>
-                <%                 
-                 if (role.equals("finance"))      {
-=======
                 /* FINANCE MENU */ 
                 else if (role.equals("Finance"))      {
->>>>>>> origin/master
                         out.print("<li><a href=\"#\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"lookup_patient_summary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
