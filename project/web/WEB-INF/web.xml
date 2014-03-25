@@ -16,6 +16,10 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>ece356.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LookupPatientSummaryServlet</servlet-name>
+        <servlet-class>ece356.LookupPatientSummaryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -32,9 +36,11 @@
         <servlet-name>PatientServlet</servlet-name>
         <url-pattern>/PatientServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>        
+        <servlet-name>LookupPatientSummaryServlet</servlet-name>
+        <url-pattern>/LookupPatientSummaryServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
 </web-app>
