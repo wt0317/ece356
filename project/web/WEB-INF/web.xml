@@ -8,6 +8,10 @@
         <servlet-name>CreateAccountServlet</servlet-name>
         <servlet-class>ece356.CreateAccountServlet</servlet-class>
     </servlet>
+   <servlet>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>ece356.PatientServlet</servlet-class>
+   </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>ece356.LogoutServlet</servlet-class>
@@ -29,6 +33,10 @@
         <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/PatientServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>        
         <servlet-name>LookupPatientSummaryServlet</servlet-name>
         <url-pattern>/LookupPatientSummaryServlet</url-pattern>
     </servlet-mapping>

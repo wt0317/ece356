@@ -19,6 +19,10 @@ public class User {
     private String phoneNumber;
     private boolean enabled;
 
+    public User(Integer username){
+        this.username = username;
+    }
+    
     public User(Integer username, String name, String password, String role, String address, String phoneNumber, boolean enabled) {
         this.username = username;
         this.name = name;

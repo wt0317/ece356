@@ -38,7 +38,6 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 int username = Integer.parseInt(request.getParameter("username"));
                 String password = CreateAccountServlet.hashPW(request.getParameter("password"));
-
                 User user = DBAO.Login(username, password);
 
                 if (user != null) {
