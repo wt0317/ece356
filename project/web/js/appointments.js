@@ -13,7 +13,7 @@ $(document).ready(function() {
         m = date.getMonth(),
         y = date.getFullYear();
 
-    $('#calendar').fullCalendar({
+    var calendar = $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -26,14 +26,14 @@ $(document).ready(function() {
             var title = prompt('Event Title:');
             if (title) {
                 calendar.fullCalendar('renderEvent',
-                        {
-                            title: title,
-                            start: start,
-                            end: end,
-                            allDay: allDay
-                        },
-                true // make the event "stick"
-                        );
+                    {
+                        title: title,
+                        start: start,
+                        end: end,
+                        allDay: allDay
+                    },
+                    true // make the event "stick"
+                );
             }
             calendar.fullCalendar('unselect');
         },
@@ -79,6 +79,4 @@ $(document).ready(function() {
             },
         ]
     });
-    console.log("TEST");
-
 });

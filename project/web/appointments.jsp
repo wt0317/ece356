@@ -15,7 +15,7 @@
     </jsp:attribute>
     
     <jsp:attribute name="pagetitle">
-      Manage Appointments
+        Manage Appointments
     </jsp:attribute>
     
     <jsp:attribute name="content">
@@ -27,5 +27,8 @@
         <script type="text/javascript" src="js/jquery-ui.custom.min.js"></script>
         <script type="text/javascript" src="js/fullcalendar.min.js"></script>
         <script type="text/javascript" src="js/appointments.js"></script>
+        <script>
+            
+        </script>    
     </jsp:attribute>
 </t:template>
