@@ -12,7 +12,7 @@
       Lookup Doctor's Summary
     </jsp:attribute>
     <jsp:attribute name="content">
-      <form class="form-signin" role="form" action="LoginServlet" method="post">
+      <form class="form-signin" role="form" action="DoctorServlet" method="post">
           <div class="signin-box">
               <input name="name" type="input" class="form-control" placeholder="name" required="" autofocus="">
               <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>

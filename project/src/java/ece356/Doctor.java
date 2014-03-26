@@ -16,17 +16,18 @@ import java.sql.*;
  * @author Rakin
  */
 public class Doctor {
-    public static void findDoctor(String name)
+    public static ResultSet findDoctor(String name)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
             con = DBAO.getConnection();
             
             String doctorQuery = "SELECT username FROM Directory WHERE name LIKE ? and role = 'doctor'";
             stmt = con.prepareStatement(doctorQuery);
             stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
         } finally {
             if (stmt != null) {
                 stmt.close();
@@ -35,5 +36,6 @@ public class Doctor {
                 con.close();
             }
         }
+        return rs;
     }
 }
