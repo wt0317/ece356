@@ -59,7 +59,7 @@ public class PatientDAO {
             PreparedStatement pst = con.prepareStatement("SELECT * FROM Patients as p WHERE p.username = '" + username + "'");
             rs = pst.executeQuery();  
             if (rs.next()){
-                patient.setUsername(rs.getString("username"));
+                patient.setUsername(rs.getInt("username"));
                 patient.setHealthCard(rs.getString("health_card"));
                 patient.setSin(rs.getString("social_insurance_number"));
                 patient.setDefaultDoctor(new Doctor(rs.getInt("default_doctor")));

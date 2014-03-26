@@ -16,27 +16,17 @@ public class Patient {
 	private int username;
 	private String healthCard;
 	private String sin;
-	private String numOfVisits;
+	private int numOfVisits;
 	private Doctor defaultDoctor;
 	private String currentHealth;
-        private String comment;
 	
 	public Patient(){
 		
 	}
-        public Patient (String username, String healthCard, String sin, String numOfVisits, Doctor defaultDoctor, String currentHealth, String comment) {
-            this.username = username;
-            this.healthCard = healthCard;
-            this.sin = sin;
-            this.numOfVisits = numOfVisits;
-            this.defaultDoctor = defaultDoctor;
-            this.currentHealth = currentHealth;
-            this.comment = comment;
-        } 
-	public String getUsername() {
+	public int getUsername() {
 		return username;
 	}
-	public void setUsername(String username) {
+	public void setUsername(int username) {
 		this.username = username;
 	}
 	public String getHealthCard() {
@@ -51,10 +41,10 @@ public class Patient {
 	public void setSin(String sin) {
 		this.sin = sin;
 	}
-	public String getNumOfVisits() {
+	public int getNumOfVisits() {
 		return numOfVisits;
 	}
-	public void setNumOfVisits(String numOfVisits) {
+	public void setNumOfVisits(int numOfVisits) {
 		this.numOfVisits = numOfVisits;
 	}
 	public Doctor getDefaultDoctor() {
@@ -68,12 +58,6 @@ public class Patient {
 	}
 	public void setCurrentHealth(String currentHealth) {
 		this.currentHealth = currentHealth;
-	}
-        public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 	
 	
