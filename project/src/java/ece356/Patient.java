@@ -13,20 +13,20 @@ package ece356;
 
 public class Patient {
 
-	private String username;
+	private int username;
 	private String healthCard;
 	private String sin;
-	private String numOfVisits;
+	private int numOfVisits;
 	private Doctor defaultDoctor;
 	private String currentHealth;
 	
 	public Patient(){
 		
 	}
-	public String getUsername() {
+	public int getUsername() {
 		return username;
 	}
-	public void setUsername(String username) {
+	public void setUsername(int username) {
 		this.username = username;
 	}
 	public String getHealthCard() {
@@ -41,10 +41,10 @@ public class Patient {
 	public void setSin(String sin) {
 		this.sin = sin;
 	}
-	public String getNumOfVisits() {
+	public int getNumOfVisits() {
 		return numOfVisits;
 	}
-	public void setNumOfVisits(String numOfVisits) {
+	public void setNumOfVisits(int numOfVisits) {
 		this.numOfVisits = numOfVisits;
 	}
 	public Doctor getDefaultDoctor() {
