@@ -11,18 +11,18 @@ package ece356;
  * @author Rakin
  */
 public class Doctor {
-    private Integer username;
+    private int username;
     private String name;
-    private Integer patientcount;
+    private int patientcount;
     
     public Doctor(){
     }
     
-    public Doctor(Integer username) {
+    public Doctor(int username) {
         this.username = username;
     }
 
-    public Integer getUsername() {
+    public int getUsername() {
         return username;
     }
 
@@ -38,11 +38,11 @@ public class Doctor {
         this.name = name;
     }
     
-    public Integer getPatientCount() {
+    public int getPatientCount() {
         return patientcount;
     }
 
-    public void setPatientCount(Integer patientcount) {
+    public void setPatientCount(int patientcount) {
         this.patientcount = patientcount;
     }
 

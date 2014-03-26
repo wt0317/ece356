@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author rkn24
  */
-public class DoctorServlet extends HttpServlet {
+public class DoctorSummaryServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,14 +36,24 @@ public class DoctorServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String url = "/lookupDoctorSummary.jsp";
+        /*Ability to monitor any doctor to determine how many patients he/she saw in
+          a given time period, how many times a given patient was seen, what the 
+          diagnosis/result was, any drugs prescribed, etc.
+        */
+      
+        String url = "/doctorSummary.jsp";
 
         List<Doctor> listDoctorSummary = new ArrayList<Doctor>();
         PreparedStatement getDoctorSummary = null;
         PreparedStatement getPatientCount = null;
+        PreparedStatement getDoctorPatientCount = null;
         boolean empty = true;
+        int numPatients = 0;
+        String doctorName = request.getParameter("doctorName");
+        int doctorid = Integer.parseInt(request.getParameter("doctor"));
         Connection con = null;
-        ResultSet rs;
+        ResultSet rs0;
+        ResultSet rs1;
         ResultSet rs2; 
 
         try {
@@ -51,43 +61,58 @@ public class DoctorServlet extends HttpServlet {
 
             //Lookup doctor by name
             if (!request.getParameterMap().containsKey("username")) {
-                String doctorQuery
-                        = "SELECT username, name FROM Directory "
-                        + "WHERE name LIKE ? and role = 'doctor'";
-
-                getDoctorSummary = con.prepareStatement(doctorQuery);
-                getDoctorSummary.setString(1, "%"+request.getParameter("name")+"%");
-                rs = getDoctorSummary.executeQuery();
-
-                //There is at least one result
-                while (rs.next()) {
-                    empty = false;
-                    Doctor d = new Doctor();
-                    d.setUsername(rs.getInt(1));
-                    d.setName(rs.getString(2));
-                    d.setPatientCount(1);
-                    
-                   /* String patientCountQuery
-                          = "SELECT COUNT(default_doctor) FROM Patients "
+                String doctorPatientCountQuery
+                          = "SELECT COUNT(default_doctor) AS total FROM Patients "
                           + "WHERE default_doctor = ?";
-                    getPatientCount = con.prepareStatement(patientCountQuery);
-                    getPatientCount.setInt(1, d.getUsername());
-                    rs2 = getPatientCount.executeQuery();
-                    while(rs2.next()){
-                       
-                        d.setUsername(rs2.getInt(1));
-                    }
-                    */
-                    listDoctorSummary.add(d);
+                getDoctorPatientCount = con.prepareStatement(doctorPatientCountQuery);
+                getDoctorPatientCount.setInt(1, doctorid);
+                rs0 = getDoctorPatientCount.executeQuery();
+                
+                while(rs0.next()){
+                  numPatients = rs0.getInt("total");
+                }
+                
+                if(numPatients > 0){
+                  String doctorSummaryQuery
+                            = "SELECT username FROM Patients "
+                            + "WHERE default_doctor = ?";
+                  getDoctorSummary = con.prepareStatement(doctorSummaryQuery);
+                  getDoctorSummary.setInt(1, doctorid);
+                  rs1 = getDoctorSummary.executeQuery();
+
+                  //There is at least one result
+                  while (rs1.next()) {
+                      if(empty){
+                        empty = false;
+                      }
+                      Doctor d = new Doctor();
+                      d.setUsername(rs1.getInt(1));
+                      String patientCountQuery
+                            = "SELECT COUNT(*) AS total FROM Visitations "
+                            + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? )";
+                      getPatientCount = con.prepareStatement(patientCountQuery);
+                      getPatientCount.setInt(1, doctorid);
+                      getPatientCount.setInt(2, rs1.getInt(1));
+                      rs2 = getPatientCount.executeQuery();
+                      while(rs2.next()){
+                          d.setPatientCount(rs2.getInt("total"));
+                      }
+                       //d.setPatientCount(1);
+                      listDoctorSummary.add(d);
+                  }
                 }
                 
                 request.setAttribute("queryDone", true);
                 if (empty) {
-                    request.setAttribute("listDoctorEmpty", true);
+                    request.setAttribute("doctorName", doctorName);
+                    request.setAttribute("listDoctorSummaryEmpty", true);
+                    request.setAttribute("numPatients", numPatients);
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                 }
                 else{
-                    request.setAttribute("listDoctorEmpty", false);
+                    request.setAttribute("doctorName", doctorName);
+                    request.setAttribute("listDoctorSummaryEmpty", false);
+                    request.setAttribute("numPatients", numPatients);
                     request.setAttribute("listDoctorSummary", listDoctorSummary);
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                 }
