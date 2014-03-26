@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>ece356.LoginServlet</servlet-class>
@@ -8,6 +8,10 @@
         <servlet-name>CreateAccountServlet</servlet-name>
         <servlet-class>ece356.CreateAccountServlet</servlet-class>
     </servlet>
+   <servlet>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>ece356.PatientServlet</servlet-class>
+   </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>ece356.LogoutServlet</servlet-class>
@@ -15,6 +19,14 @@
     <servlet>
         <servlet-name>AppointmentsServlet</servlet-name>
         <servlet-class>ece356.AppointmentsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoctorServlet</servlet-name>
+        <servlet-class>ece356.DoctorServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LookupPatientSummaryServlet</servlet-name>
+        <servlet-class>ece356.LookupPatientSummaryServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -32,9 +44,19 @@
         <servlet-name>AppointmentsServlet</servlet-name>
         <url-pattern>/Appointments</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoctorServlet</servlet-name>
+      <url-pattern>/DoctorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/PatientServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>        
+        <servlet-name>LookupPatientSummaryServlet</servlet-name>
+        <url-pattern>/LookupPatientSummaryServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
 </web-app>
