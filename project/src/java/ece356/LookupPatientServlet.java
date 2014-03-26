@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,13 +37,20 @@ public class LookupPatientServlet extends HttpServlet {
             throws ServletException, IOException {
         String url = "/lookupPatient.jsp";
         Connection con = null;
+        List<Patient> listPatients = new ArrayList<Patient>();
         try {
             con = DBAO.getConnection();
             
             // TODO: need to account for permissions
             String getPatientsQuery = "SELECT * FROM Patients";
             PreparedStatement getPatientsStmt = con.prepareStatement(getPatientsQuery);
-            ResultSet getPatientsRS = getPatientsStmt.executeQuery();
+            ResultSet rs = getPatientsStmt.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(rs.getInt("default_doctor"));
+                listPatients.add(new Patient(rs.getString("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
+                                        rs.getString("number_of_visits"), d, rs.getString("current_health"), rs.getString("comment")));
+            }
+            request.setAttribute("listPatients", listPatients);
         }
         catch (Exception e) {
             request.setAttribute("exception", e);

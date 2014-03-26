@@ -28,6 +28,10 @@
         <servlet-name>LookupPatientSummaryServlet</servlet-name>
         <servlet-class>ece356.LookupPatientSummaryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LookupPatientServlet</servlet-name>
+        <servlet-class>ece356.LookupPatientServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>LookupPatientSummaryServlet</servlet-name>
         <url-pattern>/LookupPatientSummaryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LookupPatientServlet</servlet-name>
+        <url-pattern>/LookupPatientServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

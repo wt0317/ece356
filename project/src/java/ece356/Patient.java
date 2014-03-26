@@ -13,16 +13,26 @@ package ece356;
 
 public class Patient {
 
-	private String username;
+	private int username;
 	private String healthCard;
 	private String sin;
 	private String numOfVisits;
 	private Doctor defaultDoctor;
 	private String currentHealth;
+        private String comment;
 	
 	public Patient(){
 		
 	}
+        public Patient (String username, String healthCard, String sin, String numOfVisits, Doctor defaultDoctor, String currentHealth, String comment) {
+            this.username = username;
+            this.healthCard = healthCard;
+            this.sin = sin;
+            this.numOfVisits = numOfVisits;
+            this.defaultDoctor = defaultDoctor;
+            this.currentHealth = currentHealth;
+            this.comment = comment;
+        } 
 	public String getUsername() {
 		return username;
 	}
@@ -58,6 +68,12 @@ public class Patient {
 	}
 	public void setCurrentHealth(String currentHealth) {
 		this.currentHealth = currentHealth;
+	}
+        public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 	
