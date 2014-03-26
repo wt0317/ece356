@@ -25,6 +25,14 @@ $(document).ready(function() {
         select: function(start, end, allDay) {
             var title = prompt('Event Title:');
             if (title) {
+                $.get("Appointments", {
+                    insert: "true", 
+                    startTime: dateToDateTime(start), 
+                    endTime: dateToDateTime(end)
+                }, 
+                function(data) {
+                   alert(data);
+                });
                 calendar.fullCalendar('renderEvent',
                     {
                         title: title,
@@ -36,6 +44,7 @@ $(document).ready(function() {
                 );
             }
             calendar.fullCalendar('unselect');
+            
         },
         editable: true,
         events: [
@@ -79,4 +88,13 @@ $(document).ready(function() {
             },
         ]
     });
+    function dateToDateTime(date){
+        var dateTime = date.getFullYear() + '-' +
+                ('00' + (date.getMonth()+1)).slice(-2) + '-' +
+                ('00' + date.getDate()).slice(-2) + ' ' + 
+                ('00' + date.getHours()).slice(-2) + ':' + 
+                ('00' + date.getMinutes()).slice(-2) + ':' + 
+                ('00' + date.getSeconds()).slice(-2);
+        return dateTime;
+    }
 });

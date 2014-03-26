@@ -25,7 +25,7 @@ public class AppointmentDAO {
         try {
             con = DBAO.getConnection();
             
-            String insertDoctor = "INSERT INTO Appointments (startTime, endTime, doctor, patient, createdBy) VALUES (?,?,?,?,?)";
+            String insertDoctor = "INSERT INTO Appointments (start_time, end_time, doctor, patient, created_by) VALUES (?,?,?,?,?)";
             stmt = con.prepareStatement(insertDoctor);
             stmt.setString(1, startTime);
             stmt.setString(2, endTime);
