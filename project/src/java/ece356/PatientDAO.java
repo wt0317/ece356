@@ -47,19 +47,19 @@ public class PatientDAO {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public static Patients getUserInfo(int username, String password)
+    public static Patient getUserInfo(int username, String password)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
-        Patients patient = new Patients();
+        Patient patient = new Patient();
         try {
             //con = DriverManager.getConnection(url, user, pwd);  
             con = DBAO.getConnection();
             PreparedStatement pst = con.prepareStatement("SELECT * FROM Patients as p WHERE p.username = '" + username + "'");
             rs = pst.executeQuery();  
             if (rs.next()){
-                patient.setUsername(rs.getString("username"));
+                patient.setUsername(rs.getInt("username"));
                 patient.setHealthCard(rs.getString("health_card"));
                 patient.setSin(rs.getString("social_insurance_number"));
                 patient.setDefaultDoctor(new Doctor(rs.getInt("default_doctor")));
