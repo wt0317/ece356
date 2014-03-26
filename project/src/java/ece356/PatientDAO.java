@@ -47,12 +47,12 @@ public class PatientDAO {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public static Patients getUserInfo(int username, String password)
+    public static Patient getUserInfo(int username, String password)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
-        Patients patient = new Patients();
+        Patient patient = new Patient();
         try {
             //con = DriverManager.getConnection(url, user, pwd);  
             con = DBAO.getConnection();

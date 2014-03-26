@@ -11,7 +11,7 @@ package ece356;
  * @author Sieyor
  */
 
-public class Patients {
+public class Patient {
 
 	private String username;
 	private String healthCard;
@@ -20,7 +20,7 @@ public class Patients {
 	private Doctor defaultDoctor;
 	private String currentHealth;
 	
-	public Patients(){
+	public Patient(){
 		
 	}
 	public String getUsername() {
