@@ -6,50 +6,44 @@
 
 package ece356;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.*;
-
 /**
  *
  * @author Rakin
  */
 public class Doctor {
-    public static void findDoctor(String name)
-            throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        PreparedStatement stmt = null;
-        try {
-            con = DBAO.getConnection();
-            
-            String doctorQuery = "SELECT username FROM Directory WHERE name LIKE ? and role = 'doctor'";
-            stmt = con.prepareStatement(doctorQuery);
-            stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
+    private int username;
+    private String name;
+    private int patientcount;
+    
+    public Doctor(){
     }
-    private Integer username;
-    public Doctor() {
-    }
-
-    public Doctor(Integer username) {
+    
+    public Doctor(int username) {
         this.username = username;
     }
 
-    public Integer getUsername() {
+    public int getUsername() {
         return username;
     }
 
     public void setUsername(Integer username) {
         this.username = username;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getPatientCount() {
+        return patientcount;
+    }
+
+    public void setPatientCount(int patientcount) {
+        this.patientcount = patientcount;
     }
 
 }
