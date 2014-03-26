@@ -6,42 +6,18 @@
 
 package ece356;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.*;
-
 /**
  *
  * @author Rakin
  */
 public class Doctor {
-    public static ResultSet findDoctor(String name)
-            throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            con = DBAO.getConnection();
-            
-            String doctorQuery = "SELECT username FROM Directory WHERE name LIKE ? and role = 'doctor'";
-            stmt = con.prepareStatement(doctorQuery);
-            stmt.setString(1, name);
-            rs = stmt.executeQuery();
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return rs;
-    }
     private Integer username;
-    public Doctor() {
+    private String name;
+    private Integer patientcount;
+    
+    public Doctor(){
     }
-
+    
     public Doctor(Integer username) {
         this.username = username;
     }
@@ -52,6 +28,22 @@ public class Doctor {
 
     public void setUsername(Integer username) {
         this.username = username;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public Integer getPatientCount() {
+        return patientcount;
+    }
+
+    public void setPatientCount(Integer patientcount) {
+        this.patientcount = patientcount;
     }
 
 }
