@@ -8,13 +8,22 @@
         <servlet-name>CreateAccountServlet</servlet-name>
         <servlet-class>ece356.CreateAccountServlet</servlet-class>
     </servlet>
+   <servlet>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>ece356.PatientServlet</servlet-class>
+   </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>ece356.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
+<<<<<<< HEAD
       <servlet-name>DoctorServlet</servlet-name>
       <servlet-class>ece356.DoctorServlet</servlet-class>
+=======
+        <servlet-name>LookupPatientSummaryServlet</servlet-name>
+        <servlet-class>ece356.LookupPatientSummaryServlet</servlet-class>
+>>>>>>> 150fbe12d3ee9abab3c34bc5aff0c51d098cc429
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -29,12 +38,19 @@
         <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
       <servlet-name>DoctorServlet</servlet-name>
       <url-pattern>/DoctorServlet</url-pattern>
+=======
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/PatientServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>        
+        <servlet-name>LookupPatientSummaryServlet</servlet-name>
+        <url-pattern>/LookupPatientSummaryServlet</url-pattern>
+>>>>>>> 150fbe12d3ee9abab3c34bc5aff0c51d098cc429
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
 </web-app>

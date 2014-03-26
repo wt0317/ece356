@@ -38,4 +38,20 @@ public class Doctor {
         }
         return rs;
     }
+    private Integer username;
+    public Doctor() {
+    }
+
+    public Doctor(Integer username) {
+        this.username = username;
+    }
+
+    public Integer getUsername() {
+        return username;
+    }
+
+    public void setUsername(Integer username) {
+        this.username = username;
+    }
+
 }
