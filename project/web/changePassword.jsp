@@ -1,13 +1,13 @@
 <%@page import="java.util.List"%>
-<%@page import="ece356.Patients"%>
+<%@page import="ece356.Patient"%>
 <%@page import="ece356.DBAO"%>
-<%@page import="ece356.Directory"%>
+<%@page import="ece356.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <% 
-    Directory user = (Directory) session.getAttribute("userObject");
+    User user = (User) session.getAttribute("userObject");
 
     String role = user.getRole();
     
