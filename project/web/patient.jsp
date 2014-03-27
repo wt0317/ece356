@@ -1,7 +1,7 @@
 <%@page import="ece356.User"%>
 <%@page import="ece356.PatientDAO"%>
 <%@page import="java.util.List"%>
-<%@page import="ece356.Patients"%>
+<%@page import="ece356.Patient"%>
 <%@page import="ece356.DBAO"%>
 <%@page import="ece356.Directory"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,7 +13,7 @@
 
     String role = user.getRole();
     
-    Patients patient = PatientDAO.getUserInfo(user.getUsername(), user.getPassword());
+    Patient patient = PatientDAO.getUserInfo(user.getUsername(), user.getPassword());
     
     List<String> patientList = PatientDAO.getAllPatients();
     
