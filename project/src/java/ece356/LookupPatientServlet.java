@@ -42,13 +42,17 @@ public class LookupPatientServlet extends HttpServlet {
             con = DBAO.getConnection();
             
             // TODO: need to account for permissions
-            String getPatientsQuery = "SELECT * FROM Patients";
+            String getPatientsQuery = "SELECT U.username, U.health_card, U.social_insurance_number, U.number_of_visits, U.default_doctor, "
+                    + "U.current_health, U.comment, P.`name` AS patient_name, D.`name` AS doctor_name "
+                    + "FROM Patients U, Directory P, Directory D WHERE U.username = P.username AND U.default_doctor = D.username";
             PreparedStatement getPatientsStmt = con.prepareStatement(getPatientsQuery);
             ResultSet rs = getPatientsStmt.executeQuery();
             while (rs.next()) {
-                Doctor d = new Doctor(rs.getInt("default_doctor"));
-                listPatients.add(new Patient(rs.getString("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
-                                        rs.getString("number_of_visits"), d, rs.getString("current_health"), rs.getString("comment")));
+                Doctor d = new Doctor(rs.getInt("default_doctor"), rs.getString("doctor_name"));
+                Patient p = new Patient(rs.getInt("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
+                                        rs.getInt("number_of_visits"), d, rs.getString("current_health"), rs.getString("comment"));
+                p.setName(rs.getString("patient_name"));
+                listPatients.add(p);
             }
             request.setAttribute("listPatients", listPatients);
         }
