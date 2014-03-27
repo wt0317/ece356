@@ -138,6 +138,19 @@
                 </div>
               </div>
           </div>
+          <!--Staff-->
+          <div id="staffDiv" class="role-specific-fields">
+              <h2>Staff Specific Information</h2>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Assigned Doctor(s)</label>
+                  <div class="col-sm-10">
+                      <c:forEach items="${doctors.entrySet()}" var="d">
+                          <label class="col-sm-2 control-label">${d.getValue()}</label>
+                          <input class="form-control" type="checkbox" id="assignedDoctors" name="assignedDoctors" value="${d.getKey()}"/>
+                      </c:forEach>
+                  </div>
+              </div>
+          </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
               <button type="submit" class="btn btn-default" name="submit">Create Account</button>
@@ -162,6 +175,9 @@
                 sin : {
                     digits : true,
                     rangelength : [6,6]
+                },
+                'assignedDoctors' : {
+                    required : true
                 }
             },
             messages : {
@@ -170,6 +186,9 @@
                 },
                 sin : {
                     rangelength : "SIN must be 6 digits, no hyphen, no spaces"
+                },
+                'assignedDoctors' : {
+                    required : "Please select at least one assigned doctor"
                 }
             }
         });
@@ -181,6 +200,9 @@
                     break;
                 case "Doctor" :
                     $("#doctorDiv").show();
+                    break;
+                case "Staff" :
+                    $("#staffDiv").show();
                     break;
             }
         }).change();
