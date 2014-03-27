@@ -21,6 +21,11 @@ public class Doctor {
     public Doctor(int username) {
         this.username = username;
     }
+    
+    public Doctor(int username, String name) {
+        this.username = username;
+        this.name = name;
+    }
 
     public int getUsername() {
         return username;

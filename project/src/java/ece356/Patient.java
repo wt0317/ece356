@@ -6,6 +6,8 @@
 
 package ece356;
 
+import com.google.gson.Gson;
+
 /**
  *
  * @author Sieyor
@@ -19,10 +21,23 @@ public class Patient {
 	private int numOfVisits;
 	private Doctor defaultDoctor;
 	private String currentHealth;
+        private String comment;
+        
+        // attributes not part of Patients table
+        private String name;
 	
 	public Patient(){
 		
 	}
+        public Patient (int username, String healthCard, String sin, int numOfVisits, Doctor defaultDoctor, String currentHealth, String comment) {
+            this.username = username;
+            this.healthCard = healthCard;
+            this.sin = sin;
+            this.numOfVisits = numOfVisits;
+            this.defaultDoctor = defaultDoctor;
+            this.currentHealth = currentHealth;
+            this.comment = comment;
+        } 
 	public int getUsername() {
 		return username;
 	}
@@ -59,6 +74,24 @@ public class Patient {
 	public void setCurrentHealth(String currentHealth) {
 		this.currentHealth = currentHealth;
 	}
+        public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+        
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        
+        public String toJSON() {
+            Gson gson = new Gson();
+            return gson.toJson(this);
+        }
 	
 	
 }
