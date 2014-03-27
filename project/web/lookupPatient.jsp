@@ -59,7 +59,7 @@
                         index: 1, //The order this column should appear in the table
                         type: "string", //The type. Possible are string, number, bool, date(in milliseconds).
                         friendly: "Name",  //Name that will be used in header. Can also be any html as shown here.
-                        format: "<a href='#' class='userId' target='_blank'>{0}</a>",  //Used to format the data anything you want. Use {0} as placeholder for the actual data.
+                        format: "<a href='#'>{0}</a>",  //Used to format the data anything you want. Use {0} as placeholder for the actual data.
                         sortOrder: "asc" //Data will initially be sorted by this column. Possible are "asc" or "desc"
                     },
                     healthCard: {
@@ -81,7 +81,7 @@
                         index: 5,
                         type: "string",
                         friendly: "Default Doctor",
-                        format: "<a href='#' class='userId' target='_blank'>{0}</a>"
+                        format: "<a href='#'>{0}</a>"
                     },
                     currentHealth: {
                         index: 6,

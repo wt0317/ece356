@@ -41,7 +41,7 @@ public class LookupPatientServlet extends HttpServlet {
         try {
             con = DBAO.getConnection();
             
-            // TODO: need to account for permissions
+            // TODO: need to account for permissions for different roles
             String getPatientsQuery = "SELECT U.username, U.health_card, U.social_insurance_number, U.number_of_visits, U.default_doctor, "
                     + "U.current_health, U.comment, P.`name` AS patient_name, D.`name` AS doctor_name "
                     + "FROM Patients U, Directory P, Directory D WHERE U.username = P.username AND U.default_doctor = D.username";
