@@ -137,6 +137,15 @@
                     <input type="date" class="form-control" id="dateHired" name="dateHired" required/>
                 </div>
               </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Assigned Staff(s)</label>
+                  <div class="col-sm-10">
+                      <c:forEach items="${staff.entrySet()}" var="s">
+                          <label class="col-sm-2 control-label">${s.getValue()}</label>
+                          <input class="form-control" type="checkbox" id="assignedStaff" name="assignedStaff" value="${s.getKey()}"/>
+                      </c:forEach>
+                  </div>
+              </div>
           </div>
           <!--Staff-->
           <div id="staffDiv" class="role-specific-fields">
@@ -178,6 +187,9 @@
                 },
                 'assignedDoctors' : {
                     required : true
+                },
+                'assignedStaff' : {
+                    required : true
                 }
             },
             messages : {
@@ -189,6 +201,9 @@
                 },
                 'assignedDoctors' : {
                     required : "Please select at least one assigned doctor"
+                },
+                'assignedStaff' : {
+                    required : "Please select at least one assigned staff"
                 }
             }
         });
