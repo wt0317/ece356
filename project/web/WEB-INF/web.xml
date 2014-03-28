@@ -35,7 +35,7 @@
     <servlet>
         <servlet-name>AddVisitationRecordInsertServlet</servlet-name>
         <servlet-class>ece356.AddVisitationRecordInsertServlet</servlet-class>
-    </servlet><
+    </servlet>
     <servlet>
         <servlet-name>LookupPatientServlet</servlet-name>
         <servlet-class>ece356.LookupPatientServlet</servlet-class>
@@ -80,7 +80,7 @@
         <servlet-name>AddVisitationRecordInsertServlet</servlet-name>
         <url-pattern>/AddVisitationRecordInsertServlet</url-pattern>
     </servlet-mapping>
-    <servlet>
+    <servlet-mapping>
         <servlet-name>LookupPatientServlet</servlet-name>
         <url-pattern>/LookupPatientServlet</url-pattern>
     </servlet-mapping>

@@ -88,11 +88,8 @@
                 <%
                 /* DOCTOR MENU */
                 if (role.equals("Doctor"))      {
-<<<<<<< HEAD
+
                         out.print("<li><a href=\"lookupVisitationRecord.jsp\">Lookup Visitation Record</a></li>");
-=======
-                        out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
->>>>>>> 4906f43937af5af0c7a4821517f84891242e1721
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
