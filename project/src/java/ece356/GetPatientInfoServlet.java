@@ -7,12 +7,9 @@
 package ece356;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Wilson
  */
-public class LookupPatientServlet extends HttpServlet {
+public class GetPatientInfoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,26 +32,26 @@ public class LookupPatientServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/lookupPatient.jsp";
+        String url = "/getPatientInfo.jsp";
         Connection con = null;
-        List<Patient> listPatients = new ArrayList<Patient>();
         try {
             con = DBAO.getConnection();
             
             // TODO: need to account for permissions for different roles
-            String getPatientsQuery = "SELECT U.username, U.health_card, U.social_insurance_number, U.number_of_visits, U.default_doctor, "
+            String getPatientQuery = "SELECT U.username, U.health_card, U.social_insurance_number, U.number_of_visits, U.default_doctor, "
                     + "U.current_health, U.comment, P.`name` AS patient_name, D.`name` AS doctor_name "
-                    + "FROM Patients U, Directory P, Directory D WHERE U.username = P.username AND U.default_doctor = D.username";
-            PreparedStatement getPatientsStmt = con.prepareStatement(getPatientsQuery);
-            ResultSet rs = getPatientsStmt.executeQuery();
-            while (rs.next()) {
+                    + "FROM Patients U, Directory P, Directory D "
+                    + "WHERE U.username=? AND U.username=P.username AND U.default_doctor=D.username";
+            PreparedStatement getPatientStmt = con.prepareStatement(getPatientQuery);
+            getPatientStmt.setString(1, request.getParameter("username"));
+            ResultSet rs = getPatientStmt.executeQuery();
+            if (rs.next()) {
                 Doctor d = new Doctor(rs.getInt("default_doctor"), rs.getString("doctor_name"));
                 Patient p = new Patient(rs.getInt("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
                                         rs.getInt("number_of_visits"), d, rs.getString("current_health"), rs.getString("comment"));
                 p.setName(rs.getString("patient_name"));
-                listPatients.add(p);
+                request.setAttribute("p", p);
             }
-            request.setAttribute("listPatients", listPatients);
         }
         catch (Exception e) {
             request.setAttribute("exception", e);

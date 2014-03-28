@@ -13,6 +13,7 @@
 <%@attribute name="pagetitle" fragment="true"%>
 <%@attribute name="content" fragment="true"%>
 <%@attribute name="script" fragment="true"%>
+<%@attribute name="onload" fragment="true"%>
 
 <%! User user; %>
 <% if (session.getAttribute("userObject") == null) {
@@ -37,6 +38,8 @@
           <jsp:invoke fragment="pagetitle"/>
         </title>
         
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -53,7 +56,7 @@
         <![endif]-->
     </head>
     
-    <body>
+    <body onload='<jsp:invoke fragment="onload"/>'>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
           <div class="container-fluid">
             <div class="navbar-header">
@@ -86,7 +89,7 @@
                 /* DOCTOR MENU */
                 if (role.equals("Doctor"))      {
                         out.print("<li><a href=\"lookupVisitationRecord.jsp\">Lookup Visitation Record</a></li>");
-                        out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
+                        out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
@@ -102,7 +105,7 @@
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
-                        out.print("<li><a href=\"#\">Lookup Patient Information</a></li>");
+                        out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
@@ -125,7 +128,6 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
         <script src="js/jquery.validate.min.js"></script>
