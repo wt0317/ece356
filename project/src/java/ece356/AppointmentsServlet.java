@@ -8,6 +8,8 @@ package ece356;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -65,21 +67,39 @@ public class AppointmentsServlet extends HttpServlet {
                 HttpSession session = request.getSession();
 
                 AppointmentDAO.insertAppointment(
+                    request.getParameter("title"),
                     request.getParameter("startTime"),
                     request.getParameter("endTime"), 
                     332231, 
                     332260, 
                     ((User)session.getAttribute("userObject")).getUsername()
                 );
-
-            } catch(Exception e) {
-                text = e.getLocalizedMessage();
-            } finally {
                 text = "Successfully added.";
-                response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
-                response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-                response.getWriter().write(text);       // Write response body.
+            } catch(Exception e) {
+                text = "Error has occured: " + e.getLocalizedMessage();
+            } finally {
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(text);
             } 
+        } else if("true".equals(request.getParameter("select"))) {
+            List<Appointment> appointments = new ArrayList<Appointment>();
+            try {
+                appointments = AppointmentDAO.getAllAppointments();
+                text += "{\"events\": [";
+                for(int i=0; i< appointments.size(); i++){
+                    text += appointments.get(i).toString();
+                    if(i != appointments.size() - 1){
+                        text += ",";
+                    }
+                }
+                text += "]}";
+            } catch (Exception e) {
+            } finally {
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(text);
+            }
         } else {
             processRequest(request, response);
         }

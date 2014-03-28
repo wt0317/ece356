@@ -6,11 +6,16 @@
 
 package ece356;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Johnny
  */
 class Appointment {
+    private String title;
     private String startTime;
     private String endTime;
     private int doctor;
@@ -18,15 +23,23 @@ class Appointment {
     private int createdBy;
     private int creationTime;
     
-    public Appointment(String startTime, String endTime, int doctor, int patient, int createdBy, int creationTime){
+    public Appointment(String title, String startTime, String endTime, int doctor, int patient, int createdBy){
+        this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.doctor = doctor;
         this.patient = patient;
         this.createdBy = createdBy;
-        this.creationTime = creationTime;
     }
 
+    public String getTitle() {
+        return startTime;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
     public String getStartTime() {
         return startTime;
     }
@@ -69,5 +82,33 @@ class Appointment {
 
     public int getCreationTime() {
         return creationTime;
+    }
+    
+    public String toString() {
+        String text = "";
+        /*try {
+            text = "{"
+                    + "\"title\": " + this.title
+                    + "\"start\": " + this.startTime
+                    + "\"end\": " + this.endTime
+                    + "\"doctor\": " + PatientDAO.getName(this.doctor)
+                    + "\"patient\": " + PatientDAO.getName(this.patient)
+                    + "\"creator\": " + PatientDAO.getName(this.createdBy) +
+                    "}";
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Appointment.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Appointment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                */
+        text = "{"
+            + "\"title\": \"" + this.title + "\","
+            + "\"start\": \"" + this.startTime + "\","
+            + "\"end\": \"" + this.endTime + "\","
+            + "\"doctor\": " + this.doctor + ","
+            + "\"patient\": " + this.patient + ","
+            + "\"creator\": " + this.createdBy +
+            "}";        
+        return text;
     }
 }

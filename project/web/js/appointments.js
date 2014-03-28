@@ -7,94 +7,101 @@
 $(document).ready(function() {
 
     // page is now ready, initialize the calendar...
+    
+    (function() {
+        // Globals
+        var date = new Date(),
+            d = date.getDate(),
+            m = date.getMonth(),
+            y = date.getFullYear(),
+            eventList = [];
 
-    var date = new Date(),
-        d = date.getDate(),
-        m = date.getMonth(),
-        y = date.getFullYear();
+        var calendar = $('#calendar').fullCalendar({
+            allDayDefault: false,
+            allDaySlot: false,
+            height: window.innerHeight-160,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            eventStartEditable: false,
+            defaultView: 'agendaWeek',
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end, allDay) {
+                var title = prompt('Event Title:');
+                if (title) {
+                    $.get("Appointments", {
+                        insert: "true", 
+                        title: title, 
+                        startTime: dateToDateTime(start), 
+                        endTime: dateToDateTime(end)
+                    }, 
+                    function(data) {
+                       alert(data);
+                    });
+                    calendar.fullCalendar('renderEvent',
+                        {
+                            title: title,
+                            start: start,
+                            end: end,
+                            allDay: allDay
+                        }, 
+                        true
+                    );
+                }
+                calendar.fullCalendar('unselect');            
+            },
+            editable: true,
+            titleFormat: {
+                month: 'MMMM yyyy',                             // September 2009
+                week: "MMMM d[ yyyy]{ '&#8212;'[ MMM] d, yyyy}", // September 7 - 13, 2009
+                day: 'dddd, MMM d, yyyy'                  // Tuesday, Sep 8, 2009
+            },
+            events: []
+        });
 
-    var calendar = $('#calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        defaultView: 'agendaWeek',
-        selectable: true,
-        selectHelper: true,
-        select: function(start, end, allDay) {
-            var title = prompt('Event Title:');
-            if (title) {
-                $.get("Appointments", {
-                    insert: "true", 
-                    startTime: dateToDateTime(start), 
-                    endTime: dateToDateTime(end)
-                }, 
-                function(data) {
-                   alert(data);
-                });
-                calendar.fullCalendar('renderEvent',
-                    {
-                        title: title,
-                        start: start,
-                        end: end,
-                        allDay: allDay
-                    },
-                    true // make the event "stick"
-                );
-            }
-            calendar.fullCalendar('unselect');
-            
-        },
-        editable: true,
-        events: [
-            {
-                title: 'All Day Event',
-                start: new Date(y, m, 1)
-            },
-            {
-                title: 'Long Event',
-                start: new Date(y, m, d - 5),
-                end: new Date(y, m, d - 2)
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d - 3, 16, 0),
-                allDay: false
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: new Date(y, m, d + 4, 16, 0),
-                allDay: false
-            },
-            {
-                title: 'Meeting',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false
-            },
-            {
-                title: 'Lunch',
-                start: new Date(y, m, d, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false
-            },
-            {
-                title: 'Birthday Party',
-                start: new Date(y, m, d + 1, 19, 0),
-                end: new Date(y, m, d + 1, 22, 30),
-                allDay: false
-            },
-        ]
-    });
-    function dateToDateTime(date){
-        var dateTime = date.getFullYear() + '-' +
+        function initEvents() {
+            $.get("Appointments", {
+                select: "true"
+            }, function(data){
+                try{
+                    eventsData = JSON.parse(data).events;
+                } catch(e) {
+                    console.log(e);
+                }
+                for(var i=0; i < eventsData.length; i++) {
+                    var event = {
+                       title: eventsData[i].title,
+                       //description: eventsData[i].patient,
+                       start: dateTimeToDate(eventsData[i].start),
+                       end: dateTimeToDate(eventsData[i].end)
+                    };
+                    
+                    calendar.fullCalendar('renderEvent', event, true);
+                }
+            });
+        }
+
+        function dateToDateTime(date){
+            var dateTime = date.getFullYear() + '-' +
                 ('00' + (date.getMonth()+1)).slice(-2) + '-' +
                 ('00' + date.getDate()).slice(-2) + ' ' + 
                 ('00' + date.getHours()).slice(-2) + ':' + 
                 ('00' + date.getMinutes()).slice(-2) + ':' + 
                 ('00' + date.getSeconds()).slice(-2);
-        return dateTime;
-    }
+            return dateTime;
+        }
+
+        function dateTimeToDate(dt) {
+            // Split timestamp into [ Y, M, D, h, m, s ]
+            var dt = dt.split(/[- :]/);
+
+            // Apply each element to the Date function
+            return new Date(dt[0], dt[1]-1, dt[2], dt[3], dt[4], dt[5]);
+        }
+
+        initEvents();
+    })();
 });
