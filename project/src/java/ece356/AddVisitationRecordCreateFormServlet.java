@@ -47,9 +47,11 @@ public class AddVisitationRecordCreateFormServlet extends HttpServlet {
         //3. Query list of surgeries
         
         try {
-
+            
             con = DBAO.getConnection();
-
+           
+            HttpSession session = request.getSession();
+            
             PreparedStatement getDiagnoses = null;
             PreparedStatement getPrescriptions = null;
             PreparedStatement getSurgeries = null;
@@ -95,10 +97,10 @@ public class AddVisitationRecordCreateFormServlet extends HttpServlet {
                 procedures.add(resultProcedures.getString(1));
             }
             
-            request.setAttribute("diagnoses", diagnoses);
-            request.setAttribute("prescriptions", prescriptions);
-            request.setAttribute("surgeries", surgeries);
-            request.setAttribute("procedures", procedures);
+            session.setAttribute("diagnoses", diagnoses);
+            session.setAttribute("prescriptions", prescriptions);
+            session.setAttribute("surgeries", surgeries);
+            session.setAttribute("procedures", procedures);
             
             getServletContext().getRequestDispatcher(url).forward(request, response);
             

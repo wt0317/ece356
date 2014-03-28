@@ -22,15 +22,25 @@
 
     <jsp:attribute name="content">
 
-        <h1> Lookup Visitation Record </h1>
-        <br>
-        <c:if test="${(userObject.getRole()).equals('Doctor')}">
-            <p class="lead"> Actions 
-                 <form role="form" action="AddVisitationRecordCreateFormServlet" method="post">
-                    <button type="submit" class="btn btn-primary">Add Visitation Record</button>
-                 </form>
-            </p>
+        <c:if test="${success.equals('Added visitation record!')}">
+            <div class="alert alert-success">
+                <strong>
+                    Success!
+                </strong>
+                ${success}
+            </div>
         </c:if>
 
-    </jsp:attribute>
+        <h1> Lookup Visitation Record </h1>
+        <br>
+
+        <c:if test="${(userObject.getRole()).equals('Doctor')}">
+            <p class="lead"> Actions 
+            <form role="form" action="AddVisitationRecordCreateFormServlet" method="post">
+                <button type="submit" class="btn btn-primary">Add Visitation Record</button>
+            </form>
+        </p>
+    </c:if>
+
+</jsp:attribute>
 </t:template>
