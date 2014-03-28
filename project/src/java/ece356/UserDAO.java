@@ -52,22 +52,23 @@ public class UserDAO {
         }
     }
     
-    public static HashMap<String,String> getDoctorsUsernameAndName()
+    public static HashMap<String,String> getUsernameAndName(String role)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
         try {
             con = DBAO.getConnection();
             
-            String selectAllDoctors = "SELECT username, name FROM Directory WHERE role = 'Doctor'";
-            stmt = con.prepareStatement(selectAllDoctors);
-            ResultSet rsDoctors = stmt.executeQuery();
-            HashMap<String,String> doctors = new HashMap<String,String>();
-            while (rsDoctors.next()) {
-                doctors.put(rsDoctors.getString(1), rsDoctors.getString(2));
+            String selectAll = "SELECT username, name FROM Directory WHERE role = ?";
+            stmt = con.prepareStatement(selectAll);
+            stmt.setString(1, role);
+            ResultSet rs = stmt.executeQuery();
+            HashMap<String,String> result = new HashMap<String,String>();
+            while (rs.next()) {
+                result.put(rs.getString(1), rs.getString(2));
             }
             
-            return doctors;
+            return result;
         } finally {
             if (stmt != null) {
                 stmt.close();
