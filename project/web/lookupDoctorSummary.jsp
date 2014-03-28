@@ -17,14 +17,12 @@
       Lookup Doctor Summary
     </jsp:attribute>
     
-    <jsp:attribute name="content">
-      
+    <jsp:attribute name="content">   
       <form role="form" action="DoctorLookupServlet" method="post">
         <div class="form-group">
-            <label for="searchName">Name</label>
-            <input class="form-control" id="name" name="name" placeholder="Search by name." >
+            <label for="name">Name:&nbsp;&nbsp;</label><input type="text" id="name" name="name" placeholder="Search by name." >
+            <button type="submit" class="btn btn-default">Submit</button>
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
       </form>
         
       <c:if test="${queryDone.equals(true)}" >
