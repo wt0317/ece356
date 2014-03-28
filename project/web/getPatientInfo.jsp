@@ -41,25 +41,23 @@
             <hr>
             <div class="row">
                 <h2>Permissions</h2>
-                <div class="table-responsive col-md-8">
-                    <form>
-                        <table class="table table-striped table-hover" id="permissionsTable">
-                            <c:forEach items="${p.getPermissions()}" var="perm">
-                                <tr>
-                                    <td><c:out value="${perm.getName()}"/></td>
-                                    <td>
-                                        <button type="button" class="close" aria-hidden="true" onclick="removePermission(this, <c:out value="${perm.getUsername()}"/>)">
-                                            &times;
-                                        </button>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></button>
-                            <button type="submit" class="btn btn-default" name="savePermissions">Save</button>
-                        </div>
-                    </form>
+                <div class="table-responsive col-md-8" id="permissionsTableDiv">
+                    <table class="table table-striped table-hover" id="permissionsTable">
+                        <c:forEach items="${p.getPermissions()}" var="perm">
+                            <tr id=${perm.getUsername()}>
+                                <td><c:out value="${perm.getName()}"/></td>
+                                <td>
+                                    <button type="button" class="close" aria-hidden="true" onclick="removePermission(this, <c:out value="${perm.getUsername()}"/>)">
+                                        &times;
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="button" class="btn btn-primary" name="savePermissions" onclick="sendAjax(<c:out value="${p.getUsername()}"/>)">Save</button>
+                    </div>
                 </div>
             </div>
             <!-- Modal -->
@@ -109,21 +107,27 @@
     </jsp:attribute>
     <jsp:attribute name="script">
         <script type="text/javascript">
-            var trackChanges = {"add" : [], "remove" : []};
+            var trackChanges = {patient: 0, add : [], remove : []};
             function removePermission(cur, employee) {
                 if ($("#defaultDoctor").val() == employee) {
                     alert("Cannot remove default doctor");
                     return;
                 }
+                var addIndex = trackChanges.add.indexOf(employee);
                 var removeIndex = trackChanges.remove.indexOf(employee);
                 if (removeIndex > -1) {
                     var correspondingRow = $(cur).parent().prev().children().first();
                     correspondingRow.replaceWith(correspondingRow.text());
                     $(cur).html('&times;');
+                    $(cur).parent().parent().css("color", "");
                     trackChanges.remove.splice(removeIndex,1);
+                } else if (addIndex > -1) {
+                    $(cur).parent().parent().remove();
+                    trackChanges.add.splice(addIndex,1);
                 } else {
                     $(cur).parent().prev().wrapInner('<strike>');
-                    $(cur).html('&plus;');
+                    $(cur).html('UNDO');
+                    $(cur).parent().parent().css("color", "red");
                     trackChanges.remove.push(employee);
                 }
 //                console.log(JSON.stringify(trackChanges));
@@ -132,7 +136,14 @@
                 var role = ($("#role").val() === "Doctor") ? "doctor" : "staff";
                 var username = $("#" + role).val();
                 var name = $("#" + role).find(":selected").text();
-                if (trackChanges.add.indexOf(parseInt(username)) > -1) {
+                var exists = false;
+                $("#permissionsTable > tbody > tr").each(function(){
+                    if ($(this).attr('id') === username) {
+                        exists = true;
+                        return;
+                    }
+                });
+                if (exists) {
                     alert("Already added");
                     return;
                 }
@@ -143,8 +154,8 @@
                         )
                         .append($('<td>')
                             .append('<button type="button" class="close" aria-hidden="true" onclick="removePermission(this, ' + username + ')">&times;</button></span></a>')
-                        )
-                    )
+                        ).css("color", "green")
+                    );
                 trackChanges.add.push(parseInt(username));
             }
             $("#role").change(function(){
@@ -158,6 +169,34 @@
                         break;
                 }
             }).change();
+            function sendAjax(patientUsername) {
+                trackChanges.patient = patientUsername;
+                console.log(JSON.stringify(trackChanges));
+                $.ajax({
+                    url: "UpdatePermissionsServlet",
+                    dataType: 'json',
+                    data: trackChanges,
+                    success: function () {
+                        trackChanges = {patient: 0, add : [], remove : []};
+                        $("#permissionsTable > tbody > tr").each(function(){
+                            if ($(this).css("color") === 'rgb(0, 128, 0)') { // green
+                                $(this).css("color","");
+                            } else if ($(this).css("color") === 'rgb(255, 0, 0)') { // red
+                                $(this).remove();
+                            }
+                        });
+                        $("#permissionsTableDiv").prepend('<div class="alert alert-success">Updated database</div>');
+                    },
+                    error: function () {
+                        $("#permissionsTableDiv").prepend('<div class="alert alert-danger">Failed to update database</div>');
+                    }
+                });
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove(); 
+                    });
+                }, 2500);
+            }
         </script>
     </jsp:attribute>
 </t:template>

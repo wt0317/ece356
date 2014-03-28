@@ -37,4 +37,25 @@ public class PermissionsDAO {
             }
         }
     }
+    public static void deletePermission(String employee, int patient)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            con = DBAO.getConnection();
+            
+            String insertPermission = "DELETE FROM Permissions WHERE employee=? AND patient=?";
+            stmt = con.prepareCall(insertPermission);
+            stmt.setString(1, employee);
+            stmt.setInt(2, patient);
+            stmt.executeUpdate();
+        } finally {
+            if (stmt!= null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
 }
