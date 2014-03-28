@@ -35,7 +35,8 @@
     <servlet>
         <servlet-name>AddVisitationRecordInsertServlet</servlet-name>
         <servlet-class>ece356.AddVisitationRecordInsertServlet</servlet-class>
-
+    </servlet><
+    <servlet>
         <servlet-name>LookupPatientServlet</servlet-name>
         <servlet-class>ece356.LookupPatientServlet</servlet-class>
     </servlet>
@@ -72,21 +73,20 @@
         <url-pattern>/LookupPatientSummaryServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>AddVisitationRecordCreateFormServlet</servlet-name>
         <url-pattern>/AddVisitationRecordCreateFormServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddVisitationRecordInsertServlet</servlet-name>
         <url-pattern>/AddVisitationRecordInsertServlet</url-pattern>
-=======
+    </servlet-mapping>
+    <servlet>
         <servlet-name>LookupPatientServlet</servlet-name>
         <url-pattern>/LookupPatientServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GetPatientInfoServlet</servlet-name>
         <url-pattern>/GetPatientInfoServlet</url-pattern>
->>>>>>> 4906f43937af5af0c7a4821517f84891242e1721
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
