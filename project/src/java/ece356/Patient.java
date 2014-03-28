@@ -7,6 +7,8 @@
 package ece356;
 
 import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -25,6 +27,7 @@ public class Patient {
         
         // attributes not part of Patients table
         private String name;
+        private List<Permission> permissions;
 	
 	public Patient(){
 		
@@ -86,6 +89,16 @@ public class Patient {
         }
         public void setName(String name) {
             this.name = name;
+        }
+        
+        public List<Permission> getPermissions() {
+            return permissions;
+        }
+        public void addPermission(Permission permission) {
+            if (permissions == null)
+                permissions = new ArrayList<Permission>();
+            
+            permissions.add(permission);
         }
         
         public String toJSON() {

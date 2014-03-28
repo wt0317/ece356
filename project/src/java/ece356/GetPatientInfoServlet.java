@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,14 @@ public class GetPatientInfoServlet extends HttpServlet {
         String url = "/getPatientInfo.jsp";
         Connection con = null;
         try {
+            HashMap<String,String> doctors = UserDAO.getUsernameAndName("Doctor");
+            request.setAttribute("doctors", doctors);
+            HashMap<String,String> staff = UserDAO.getUsernameAndName("Staff");
+            request.setAttribute("staff", staff);
+            
             con = DBAO.getConnection();
+            
+            Patient p = null;
             
             // TODO: need to account for permissions for different roles
             String getPatientQuery = "SELECT U.username, U.health_card, U.social_insurance_number, U.number_of_visits, U.default_doctor, "
@@ -47,11 +55,23 @@ public class GetPatientInfoServlet extends HttpServlet {
             ResultSet rs = getPatientStmt.executeQuery();
             if (rs.next()) {
                 Doctor d = new Doctor(rs.getInt("default_doctor"), rs.getString("doctor_name"));
-                Patient p = new Patient(rs.getInt("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
+                p = new Patient(rs.getInt("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
                                         rs.getInt("number_of_visits"), d, rs.getString("current_health"), rs.getString("comment"));
                 p.setName(rs.getString("patient_name"));
-                request.setAttribute("p", p);
             }
+            
+            String permissionsQuery = "SELECT P.employee, E.name, P.accessibility FROM Permissions P, Directory E "
+                    + "WHERE P.employee=E.username AND P.patient=? AND P.enabled";
+            PreparedStatement permissionsStmt = con.prepareStatement(permissionsQuery);
+            permissionsStmt.setString(1, request.getParameter("username"));
+            ResultSet permRS = permissionsStmt.executeQuery();
+            while (permRS.next()) {
+                Permission perm = new Permission(permRS.getInt("employee"), permRS.getBoolean("P.accessibility"));
+                perm.setName(permRS.getString("E.name"));
+                p.addPermission(perm);
+            }
+            
+            request.setAttribute("p", p);
         }
         catch (Exception e) {
             request.setAttribute("exception", e);

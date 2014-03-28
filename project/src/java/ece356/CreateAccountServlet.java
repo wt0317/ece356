@@ -9,11 +9,6 @@ package ece356;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,8 +66,10 @@ public class CreateAccountServlet extends HttpServlet {
         try {
             int username = -1;
 
-            HashMap<String,String> doctors = UserDAO.getDoctorsUsernameAndName();
+            HashMap<String,String> doctors = UserDAO.getUsernameAndName("Doctor");
             request.setAttribute("doctors", doctors);
+            HashMap<String,String> staff = UserDAO.getUsernameAndName("Staff");
+            request.setAttribute("staff", staff);
 
             if (request.getParameter("submit") != null) {
                 String role = request.getParameter("role");
@@ -82,9 +79,13 @@ public class CreateAccountServlet extends HttpServlet {
                 if (username != -1) {
                     if (role.equals("Patient")) {
                         PatientDAO.insertPatient(username, request.getParameter("healthCard"), request.getParameter("sin"), request.getParameter("doctor"), request.getParameter("health"), request.getParameter("comments"));
+                        PermissionsDAO.insertPermission(request.getParameter("doctor"), username);
                     } else if (role.equals("Doctor")) {
                         LicenseDAO.insertLicense(request.getParameter("license"), request.getParameter("licenseIssue"), request.getParameter("licenseExpiry"));   
                         DoctorDAO.insertDoctor(username, request.getParameter("license"), request.getParameter("dateHired"));
+                        StaffAssignmentDAO.insertStaffAssignment(false, username, request.getParameterValues("assignedStaff"));
+                    } else if (role.equals("Staff")) {
+                        StaffAssignmentDAO.insertStaffAssignment(true, username, request.getParameterValues("assignedDoctors"));
                     }
                 }
             }
