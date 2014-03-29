@@ -101,7 +101,7 @@
                         out.print(" <li><a href=\"changePassword.jsp#\">Change Password</a></li>");
                         out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
-                        out.print(" <li><a href=\"\">Past Appointments</a></li>");
+                        out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
                  }
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
