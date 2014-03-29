@@ -107,9 +107,7 @@ public class LookupPatientSummaryServlet extends HttpServlet {
                 numberOfVisits.setInt(1, listPatientID.get(0));
                 rs2 = numberOfVisits.executeQuery();
 
-            } 
-            
-            //Lookup patient by username
+            } //Lookup patient by username
             else {
 
                 //Good to display result (Diagnosis/result, Drugs Prescribed)
@@ -138,7 +136,7 @@ public class LookupPatientSummaryServlet extends HttpServlet {
                 ps.setPrescription_name(rs1.getString(4));
                 patientResults.add(ps);
             }
-                       
+
             while (rs2.next()) {
                 countVisits = rs2.getInt("total");
             }
@@ -146,13 +144,12 @@ public class LookupPatientSummaryServlet extends HttpServlet {
             request.setAttribute("status", "Valid");
             request.setAttribute("patientResults", patientResults);
             request.setAttribute("countVisits", countVisits);
-            getServletContext().getRequestDispatcher(url).forward(request, response);
-            
+
         } catch (Exception e) {
             request.setAttribute("exception", e);
             url = "/error.jsp";
         }
-
+        getServletContext().getRequestDispatcher(url).forward(request, response);
         //getServletContext().getRequestDispatcher(url).forward(request, response);
         //Get patient ID from Patient table
         //Search vistation records according to patient ID
