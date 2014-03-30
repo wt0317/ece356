@@ -88,7 +88,7 @@
                 <%
                 /* DOCTOR MENU */
                 if (role.equals("Doctor"))      {
-
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
@@ -98,13 +98,14 @@
                 /*  PATIENT MENU */
                 else if (role.equals("Patient"))      {
                         
-                        out.print(" <li><a href=\"patient.jsp\">Update Personal Information</a></li>");
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
                  }
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"#\">Manage Appointments</a></li>");
@@ -113,12 +114,14 @@
                 }
                 /* FINANCE MENU */ 
                 else if (role.equals("Finance"))      {
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"lookupPatientSummary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"lookupDoctorSummary.jsp\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }    
                 /* ADMIN MENU */
                 else if (role.equals("Admin"))      {
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
                 }
                 %>

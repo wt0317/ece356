@@ -98,32 +98,4 @@ public class PatientDAO {
         
         
     }
-      
-    public static void updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
-    throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-                   
-            //con = DriverManager.getConnection(url, user, pwd);  
-            con = DBAO.getConnection();
-            PreparedStatement pst = con.prepareStatement("UPDATE Patients SET health_card = '" + hin + "', social_insurance_number = '" + sin + "' WHERE username = '" + username + "'");
-            pst.executeUpdate();  
-            
-            
-            pst = con.prepareStatement("UPDATE Directory SET name='" + name + "', address= '" + address + "', phone_number='" + phoneNum+ "' WHERE username= '" + username + "'");
-            pst.executeUpdate(); 
-            
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        
-        
-    }
 }

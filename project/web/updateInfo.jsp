@@ -1,3 +1,4 @@
+<%@page import="ece356.Doctor"%>
 <%@page import="ece356.UserDAO"%>
 <%@page import="ece356.User"%>
 <%@page import="ece356.PatientDAO"%>
@@ -14,25 +15,34 @@
 
     String role = user.getRole();
     
-    Patient patient = UserDAO.getUserInfo(user.getUsername(), user.getPassword());
-    
     List<String> patientList = PatientDAO.getAllPatients();
     
-    request.setAttribute("hin", patient.getHealthCard());
+    
+    
+    
     request.setAttribute("username", user.getUsername());
     request.setAttribute("name", user.getName());
     request.setAttribute("address", user.getAddress());
     request.setAttribute("phonenum", user.getPhoneNumber());
     request.setAttribute("patientList", patientList);
     request.setAttribute("role",role);
-    request.setAttribute("sin", patient.getSin());
-    request.setAttribute("defaultDoctor", PatientDAO.getName(patient.getDefaultDoctor().getUsername()));
     
-   
+    
+    if (role.equals("Patient")){
+        Patient patient = (Patient) UserDAO.getUserInfo(user.getUsername(), user.getPassword(), role);
+        request.setAttribute("hin", patient.getHealthCard());
+        request.setAttribute("sin", patient.getSin());
+        request.setAttribute("defaultDoctor", PatientDAO.getName(patient.getDefaultDoctor().getUsername()));
+    }
+    if (role.equals("Doctor")){
+        Doctor doctor = (Doctor) UserDAO.getUserInfo(user.getUsername(), user.getPassword(), role);
+        request.setAttribute("licenseId", doctor.getLicenseId());
+        request.setAttribute("dateHired", doctor.getDateHired());
+    }
 %>
 <t:template> 
     <jsp:attribute name="pagetitle">
-      Patient Homepage
+      Account Settings
     </jsp:attribute>
     <jsp:attribute name="content">
     
@@ -64,23 +74,12 @@
                     </div>
                 </c:if>
                
-               <form role="form" action="PatientServlet" method="post">
+               <form role="form" action="UpdateInfoServlet" method="post">
                 <p>User ID: 
-
-                    <c:if test="${role == 'Patient'}">
-                         <input name="username" type="input" class="form-control" value="${username}" required="" autofocus="" readonly>
-                   </c:if>
-                   <c:if test="${role != 'Patient'}">
-                      <select class="form-control" name="patient" value="${username}">
-                        <c:forEach items="${patientList}" var="item">
-                           <option>${item}</option>
-                        </c:forEach>
-                      </select>
-                   </c:if>
-
+                   <input name="username" type="input" class="form-control" value="${username}" required="" autofocus="" readonly>
                 </p>
-                <p class = "disabled">Name: 
-                    <input name="name" type="input" class="form-control disabled" value="${name}" required="" autofocus="">
+                <p>Name: 
+                    <input name="name" type="input" class="form-control disabled" value="${name}" required="" autofocus="true" readonly>
                 </p>
                 <p>Address: 
                     <input name="address" type="input" class="form-control" id="disabledInput" value="${address}" required="" autofocus="">
@@ -88,21 +87,31 @@
                 <p>Phone Number: 
                     <input name="phonenum" type="input" class="form-control disabled" value="${phonenum}" required="" autofocus="">
                 </p>
-                <p class = "disabled">Health Card Number: 
-                    <input name="hin" type="input" class="form-control" value="${hin}" required="" autofocus="">
-                </p>
-                <p class = "disabled">Social Insurance Number: 
-                    <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="">
-                </p>
-                <p>Default Doctor: 
-                    <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="" readonly>
-                </p>
+                <c:if test="${role.equals('Patient')}">
+                    <p class = "disabled">Health Card Number: 
+                        <input name="hin" type="input" class="form-control" value="${hin}" required="" autofocus="" readonly>
+                    </p>
+                    <p class = "disabled">Social Insurance Number: 
+                        <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="" readonly>
+                    </p>
+                    <p>Default Doctor: 
+                        <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="" readonly>
+                    </p>
+                </c:if>
+                <c:if test="${role.equals('Doctor')}">
+                    <p class = "disabled">License Id: 
+                        <input name="licenseId" type="input" class="form-control" value="${licenseId}" required="" autofocus="" readonly>
+                    </p>
+                    <p class = "disabled">Date Hired: 
+                        <input name="dateHired" type="input" class="form-control" value="${dateHired}" required="" autofocus="" readonly>
+                    </p>
+                </c:if>
                 <h2>Change Password</h2>
                 <p>New Password: 
                     <input name="password" type="password" class="form-control" placeholder="Password" autofocus="" >
                 </p>
                 <p>Confirm Password: 
-                    <input name="passwordConfirm" type="password" class="form-control" placeholder="Password" autofocus="">
+                    <input name="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm" autofocus="">
                 </p>
                 <p class="hidden">
                     <input name = "role" value = "${role}">

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * @author Sieyor
  */
 
-public class PatientServlet extends HttpServlet {
+public class UpdateInfoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +31,7 @@ public class PatientServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String url = "/patient.jsp";
+                String url = "/updateInfo.jsp";
                 try {    
                     //Create a new session object
                     
@@ -41,19 +41,27 @@ public class PatientServlet extends HttpServlet {
                     String name = request.getParameter("name");
                     String address = request.getParameter("address");
                     String phoneNum = request.getParameter("phonenum");
-                    String hin = request.getParameter("hin");
-                    String sin = request.getParameter("sin");
-
                     String role = request.getParameter("role");
+                    
+                    String hin = null;
+                    String sin = null;
+                    
+                    if (role.equals("Patient")) {
+                      hin = request.getParameter("hin");
+                      sin = request.getParameter("sin");
+                      
+                    }
+                    UserDAO.updateUser(username, name, address, phoneNum, hin, sin, role);
                     String password;
                     String passwordConfirm;
-                    
-                    if ((request.getParameter("password") != null) || (request.getParameter("passwordConfirm") != null)) {
+                    //System.out.println("test: " + request.getParameter("passwordConfirm"));
+                    if (!(request.getParameter("password").equals("")) && (request.getParameter("passwordConfirm").equals(""))) {
+                      password = "";
+                      passwordConfirm = "";
+
+                    }else{
                       password = CreateAccountServlet.hashPW(request.getParameter("password"));
                       passwordConfirm = CreateAccountServlet.hashPW(request.getParameter("passwordConfirm"));
-                    }else{
-                      password = null;
-                      passwordConfirm = null;
                     }
                     
 
@@ -67,21 +75,17 @@ public class PatientServlet extends HttpServlet {
                       session.setAttribute("userObject", user);
 
                     
-                    PatientDAO.updateUser(username, name, address, phoneNum, hin, sin);
+                    
 
                     //Set attributes of session object
                     
                     session.setAttribute("userObject", user);
                     
-                    //Redirect to appropriate page
-                    url="/welcome.jsp"; 
  
-                    if (passwordConfirm.equals(password) && (password != null || passwordConfirm != null)){
+                    if (passwordConfirm.equals(password) && (!password.equals("") && !passwordConfirm.equals(""))){
                       DBAO.updatePassword(username, password, role);
-                      //DBAO.changePassword(username, password);
-                    } else if (password != null && passwordConfirm == null) {
-                      request.setAttribute("error", "password");
-                    } else if (password == null && passwordConfirm != null) {
+                      url="/welcome.jsp"; 
+                    } else if (password.equals("") && passwordConfirm.equals("")) {
                       request.setAttribute("error", "password");
                     } else if (!password.equals(passwordConfirm)){
                       request.setAttribute("error", "notEqual");
