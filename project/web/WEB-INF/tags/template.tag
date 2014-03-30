@@ -92,6 +92,7 @@
                         out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
+                        out.print("<li><a href=\"StaffAssignmentServlet\">Manage Staff</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /*  PATIENT MENU */
@@ -129,6 +130,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
+        <!-- jquery at top of page because of certain requirements -->
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
         <script src="js/jquery.validate.min.js"></script>
