@@ -45,7 +45,25 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
         
         if (role.equals("Patient")) {
             try {
-                VisitationDAOResult visitationDAOResult = VisitationDAO.getPatientVisitationRecords(username);
+                VisitationDAOResult visitationDAOResult = VisitationDAO.getPatientVisitationRecordsForPatient(username);
+                request.setAttribute("columnNames", visitationDAOResult.getColumnNames());
+                request.setAttribute("records", visitationDAOResult.getVisitationRecords());
+                request.setAttribute("count", visitationDAOResult.getCount());
+                request.setAttribute("status", "Valid");
+                url = "/lookupVisitationRecord.jsp";
+            } catch (Exception e) {
+                request.setAttribute("exception", e);
+                url = "/error.jsp";
+            } finally {
+                getServletContext().getRequestDispatcher(url).forward(request, response);
+                out.close();
+            }
+        }
+        
+         if (role.equals("Doctor")) {
+             
+            try {
+                VisitationDAOResult visitationDAOResult = VisitationDAO.getPatientVisitationRecordsForDoctor(username);
                 request.setAttribute("columnNames", visitationDAOResult.getColumnNames());
                 request.setAttribute("records", visitationDAOResult.getVisitationRecords());
                 request.setAttribute("count", visitationDAOResult.getCount());

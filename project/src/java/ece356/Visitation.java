@@ -20,6 +20,7 @@ public class Visitation {
     private int prescriptionId;
     private int createdBy;
     private int surgeryId;
+    private String patientName;
     private String doctorName;
     private String createdName;
     private String procedureName;
@@ -39,6 +40,10 @@ public class Visitation {
 
     public void setPatient(int patient) {
         this.patient = patient;
+    }
+    
+    public void setPatientName(String patient) {
+        this.patientName = patient;
     }
 
     public void setDoctor(int doctor) {
@@ -115,6 +120,10 @@ public class Visitation {
 
     public int getPatient() {
         return patient;
+    }
+     
+    public String getPatientName() {
+        return patientName;
     }
 
     public int getDoctor() {
