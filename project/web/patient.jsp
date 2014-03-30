@@ -1,3 +1,4 @@
+<%@page import="ece356.UserDAO"%>
 <%@page import="ece356.User"%>
 <%@page import="ece356.PatientDAO"%>
 <%@page import="java.util.List"%>
@@ -13,7 +14,7 @@
 
     String role = user.getRole();
     
-    Patient patient = PatientDAO.getUserInfo(user.getUsername(), user.getPassword());
+    Patient patient = UserDAO.getUserInfo(user.getUsername(), user.getPassword());
     
     List<String> patientList = PatientDAO.getAllPatients();
     
@@ -27,10 +28,6 @@
     request.setAttribute("sin", patient.getSin());
     request.setAttribute("defaultDoctor", PatientDAO.getName(patient.getDefaultDoctor().getUsername()));
     
-    //Patients patient = new Patients(user.getUsername());
-    //patient.queryUserInfo();
-    //System.out.println("test : " + user.getAddress());
-   //request.setAttribute("address", user.getAddress());
    
 %>
 <t:template> 
@@ -49,6 +46,24 @@
           <div class="row-fluid">
             <div class="panel-heading">
                <h2>Personal Information</h2>
+               
+                <c:if test="${error.equals('notEqual')}">
+                    <div class="alert alert-danger">
+                        <Strong>
+                            Error: 
+                        </Strong>
+                        Passwords did not match.
+                    </div>
+                </c:if>
+                <c:if test="${error.equals('password')}">
+                    <div class="alert alert-danger">
+                        <Strong>
+                            Error: 
+                        </Strong>
+                        You must enter a new password.
+                    </div>
+                </c:if>
+               
                <form role="form" action="PatientServlet" method="post">
                 <p>User ID: 
 
@@ -64,7 +79,7 @@
                    </c:if>
 
                 </p>
-                <p>Name: 
+                <p class = "disabled">Name: 
                     <input name="name" type="input" class="form-control disabled" value="${name}" required="" autofocus="">
                 </p>
                 <p>Address: 
@@ -73,16 +88,26 @@
                 <p>Phone Number: 
                     <input name="phonenum" type="input" class="form-control disabled" value="${phonenum}" required="" autofocus="">
                 </p>
-                <p>Health Card Number: 
+                <p class = "disabled">Health Card Number: 
                     <input name="hin" type="input" class="form-control" value="${hin}" required="" autofocus="">
                 </p>
-                <p>Social Insurance Number: 
+                <p class = "disabled">Social Insurance Number: 
                     <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="">
                 </p>
                 <p>Default Doctor: 
                     <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="" readonly>
                 </p>
-                <button class="btn btn-lg btn-primary btn-block" type="save">Save</button>
+                <h2>Change Password</h2>
+                <p>New Password: 
+                    <input name="password" type="password" class="form-control" placeholder="Password" autofocus="" >
+                </p>
+                <p>Confirm Password: 
+                    <input name="passwordConfirm" type="password" class="form-control" placeholder="Password" autofocus="">
+                </p>
+                <p class="hidden">
+                    <input name = "role" value = "${role}">
+                </p>                
+                <button class="btn btn-lg btn-primary btn-block" type="save">UPDATE</button>
               </form>
             </div><!--/span-->
 

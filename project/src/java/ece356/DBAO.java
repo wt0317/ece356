@@ -59,4 +59,29 @@ public class DBAO {
         }
     }
 
+    public static void updatePassword(int username, String password, String role)
+    throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+                   
+            //con = DriverManager.getConnection(url, user, pwd);  
+            con = DBAO.getConnection();
+            PreparedStatement pst = con.prepareStatement("UPDATE Directory SET password = '" + password + "' WHERE username = '" + username + "'");
+            pst.executeUpdate();  
+
+            
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        
+        
+    }
+
 }
