@@ -22,6 +22,9 @@ class Appointment {
     private int patient;
     private int createdBy;
     private int creationTime;
+    private String doctorName;
+    private String patientName;
+    private String createdByName;
     
     public Appointment(String title, String startTime, String endTime, int doctor, int patient, int createdBy){
         this.title = title;
@@ -30,6 +33,16 @@ class Appointment {
         this.doctor = doctor;
         this.patient = patient;
         this.createdBy = createdBy;
+    }
+    
+    public Appointment(String title, String startTime, String endTime, int doctor, String doctorName, String patientName, String createdByName) {
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.doctor = doctor;
+        this.doctorName = doctorName;
+        this.patientName = patientName;
+        this.createdByName = createdByName;
     }
 
     public String getTitle() {
@@ -84,31 +97,40 @@ class Appointment {
         return creationTime;
     }
     
-    public String toString() {
-        String text = "";
-        /*try {
-            text = "{"
-                    + "\"title\": " + this.title
-                    + "\"start\": " + this.startTime
-                    + "\"end\": " + this.endTime
-                    + "\"doctor\": " + PatientDAO.getName(this.doctor)
-                    + "\"patient\": " + PatientDAO.getName(this.patient)
-                    + "\"creator\": " + PatientDAO.getName(this.createdBy) +
-                    "}";
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Appointment.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Appointment.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                */
-        text = "{"
+    public String getDoctorName() {
+        return doctorName;
+    }
+    
+    public void setDoctorname(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public String getCreatedByName() {
+        return createdByName;
+    }
+
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
+    }
+    
+    public String toStringJSON() {
+        String text = "{"
             + "\"title\": \"" + this.title + "\","
             + "\"start\": \"" + this.startTime + "\","
             + "\"end\": \"" + this.endTime + "\","
-            + "\"doctor\": " + this.doctor + ","
-            + "\"patient\": " + this.patient + ","
-            + "\"creator\": " + this.createdBy +
-            "}";        
+            + "\"doctorID\":" + this.doctor + ","
+            + "\"doctor\": \"" + this.doctorName + "\","
+            + "\"patient\": \"" + this.patientName + "\","
+            + "\"creator\": \"" + this.createdByName + "\""
+        +"}";        
         return text;
     }
 }

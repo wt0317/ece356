@@ -29,6 +29,12 @@ public class Patient {
 	public Patient(){
 		
 	}
+        
+        public Patient(int username, String name) {
+            this.username = username;
+            this.name = name;
+        }
+        
         public Patient (int username, String healthCard, String sin, int numOfVisits, Doctor defaultDoctor, String currentHealth, String comment) {
             this.username = username;
             this.healthCard = healthCard;

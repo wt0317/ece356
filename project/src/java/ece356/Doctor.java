@@ -6,6 +6,8 @@
 
 package ece356;
 
+import java.util.List;
+
 /**
  *
  * @author Rakin
@@ -14,6 +16,7 @@ public class Doctor {
     private int username;
     private String name;
     private int patientcount;
+    private List<Patient> patients;
     
     public Doctor(){
     }
@@ -25,6 +28,12 @@ public class Doctor {
     public Doctor(int username, String name) {
         this.username = username;
         this.name = name;
+    }
+    
+    public Doctor(int username, String name, List<Patient> patients) {
+        this.username = username;
+        this.name = name;
+        this.patients = patients;
     }
 
     public int getUsername() {
@@ -50,5 +59,12 @@ public class Doctor {
     public void setPatientCount(int patientcount) {
         this.patientcount = patientcount;
     }
-
+    
+    public List<Patient> getPatients() {
+        return patients;
+    }
+    
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
+    }
 }

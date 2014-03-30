@@ -91,7 +91,7 @@
 
                         out.print("<li><a href=\"lookupVisitationRecord.jsp\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
-                        out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
+                        out.print("<li><a href=\"Appointments\">View Appointments</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /*  PATIENT MENU */
@@ -107,7 +107,7 @@
                 else if (role.equals("Staff"))      {
                         out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
-                        out.print("<li><a href=\"#\">Manage Appointments</a></li>");
+                        out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
@@ -129,6 +129,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
+        
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
         <script src="js/jquery.validate.min.js"></script>
