@@ -18,29 +18,97 @@
         <c:if test="${(userObject.getRole()).equals('Doctor')}">
             Doctor
         </c:if>
+        <c:if test="${(userObject.getRole()).equals('Patient')}">
+            Patient
+        </c:if>
     </jsp:attribute>
 
     <jsp:attribute name="content">
 
-        <c:if test="${success.equals('Added visitation record!')}">
-            <div class="alert alert-success">
-                <strong>
-                    Success!
-                </strong>
-                ${success}
-            </div>
-        </c:if>
-
-        <h1> Lookup Visitation Record </h1>
-        <br>
 
         <c:if test="${(userObject.getRole()).equals('Doctor')}">
-            <p class="lead"> Actions 
+            <c:if test="${success.equals('Added visitation record!')}">
+                <div class="alert alert-success">
+                    <strong>
+                        Success!
+                    </strong>
+                    ${success}
+                </div>
+            </c:if>
+
             <form role="form" action="AddVisitationRecordCreateFormServlet" method="post">
                 <button type="submit" class="btn btn-primary">Add Visitation Record</button>
             </form>
-        </p>
-    </c:if>
 
-</jsp:attribute>
+
+            <c:if test="${status.equals('Valid')}">
+                <h2 class="sub-header"> Visitation Records </h2>
+                <p> <strong> Count </strong>: ${count} </p> 
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <c:forEach items="${columnNames}" var="attribute">
+                                    <th><c:out value="${attribute}"/></th>
+                                    </c:forEach>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${records}" var="data">
+                                <tr>
+                                    <td> <c:out value="${data.patientName}"/></td>
+                                    <td> <c:out value="${data.timeScheduled}" /></td>
+                                    <td> <c:out value="${data.startTime}" /></td>
+                                    <td> <c:out value="${data.endTime}" /></td>
+                                    <td> <c:out value="${data.creationTime}" /></td>
+                                    <td> <c:out value="${data.createdName}" /></td>
+                                    <td> <c:out value="${data.procedureName}" /></td>
+                                    <td> <c:out value="${data.diagnosisName}" /></td>
+                                    <td> <c:out value="${data.prescriptionName}" /></td>
+                                    <td> <c:out value="${data.surgeryName}" /></td>
+                                    <td> <c:out value="${data.comments}" /></td>
+                                    <td> <c:out value="${data.revisionComments}" /></td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </c:if>
+        </c:if>
+
+        <c:if test="${(userObject.getRole()).equals('Patient')}">
+
+            <c:if test="${status.equals('Valid')}">
+                <h2 class="sub-header"> Visitation Records </h2>
+                <p> <strong> Count </strong>: ${count} </p> 
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <c:forEach items="${columnNames}" var="attribute">
+                                    <th><c:out value="${attribute}"/></th>
+                                    </c:forEach>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${records}" var="data">
+                                <tr>
+                                    <td> <c:out value="${data.doctorName}"/></td>
+                                    <td> <c:out value="${data.timeScheduled}" /></td>
+                                    <td> <c:out value="${data.startTime}" /></td>
+                                    <td> <c:out value="${data.endTime}" /></td>
+                                    <td> <c:out value="${data.creationTime}" /></td>
+                                    <td> <c:out value="${data.createdName}" /></td>
+                                    <td> <c:out value="${data.procedureName}" /></td>
+                                    <td> <c:out value="${data.diagnosisName}" /></td>
+                                    <td> <c:out value="${data.prescriptionName}" /></td>
+                                    <td> <c:out value="${data.surgeryName}" /></td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </c:if>
+        </c:if>
+    </jsp:attribute>
 </t:template>

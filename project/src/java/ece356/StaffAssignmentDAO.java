@@ -11,18 +11,45 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author Johnny
+ * @author Wilson
  */
-class StaffAssignmentDAO {
+public class StaffAssignmentDAO {
+    public static void insertStaffAssignment(boolean isStaff, int user, String[] assigned)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            con = DBAO.getConnection();
+            
+            String insertAssignment = "INSERT INTO Staff_Assignments (staff, doctor) VALUES (?,?)";
+            stmt = con.prepareCall(insertAssignment);
+            for (String a : assigned) {
+                if (isStaff) {
+                    stmt.setInt(1, user);
+                    stmt.setString(2, a);
+                } else {
+                    stmt.setString(1, a);
+                    stmt.setInt(2, user);
+                }
+                stmt.executeUpdate();
+            }
+            
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+           
     public static List<Doctor> getAllAssignedDoctors(int staff) 
-                throws ClassNotFoundException, SQLException {
+        throws ClassNotFoundException, SQLException {
         List<Doctor> doctors = new ArrayList<Doctor>();
         
         Connection con = null;

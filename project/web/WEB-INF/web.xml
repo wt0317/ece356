@@ -52,6 +52,22 @@
         <servlet-name>GetPatientInfoServlet</servlet-name>
         <servlet-class>ece356.GetPatientInfoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdatePermissionsServlet</servlet-name>
+        <servlet-class>ece356.UpdatePermissionsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LookupVisitationRecordsServlet</servlet-name>
+        <servlet-class>ece356.LookupVisitationRecordsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StaffAssignmentServlet</servlet-name>
+        <servlet-class>ece356.StaffAssignmentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAssignmentsServlet</servlet-name>
+        <servlet-class>ece356.UpdateAssignmentsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -103,6 +119,22 @@
     <servlet-mapping>
         <servlet-name>GetPatientInfoServlet</servlet-name>
         <url-pattern>/GetPatientInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdatePermissionsServlet</servlet-name>
+        <url-pattern>/UpdatePermissionsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LookupVisitationRecordsServlet</servlet-name>
+        <url-pattern>/LookupVisitationRecordsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffAssignmentServlet</servlet-name>
+        <url-pattern>/StaffAssignmentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAssignmentsServlet</servlet-name>
+        <url-pattern>/UpdateAssignmentsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

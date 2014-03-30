@@ -31,7 +31,7 @@ public class PatientServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String url;
+                String url = "/patient.jsp";
                 try {    
                     //Create a new session object
                     
@@ -43,24 +43,55 @@ public class PatientServlet extends HttpServlet {
                     String phoneNum = request.getParameter("phonenum");
                     String hin = request.getParameter("hin");
                     String sin = request.getParameter("sin");
+
+                    String role = request.getParameter("role");
+                    String password;
+                    String passwordConfirm;
+                    
+                    if ((request.getParameter("password") != null) || (request.getParameter("passwordConfirm") != null)) {
+                      password = CreateAccountServlet.hashPW(request.getParameter("password"));
+                      passwordConfirm = CreateAccountServlet.hashPW(request.getParameter("passwordConfirm"));
+                    }else{
+                      password = null;
+                      passwordConfirm = null;
+                    }
+                    
+
+                      User user = new User(username);
+                      user.setName(name);
+                      user.setRole(role);
+                      user.setAddress(address);
+                      user.setPhoneNumber(phoneNum);
+                      //Set attributes of session object
+
+                      session.setAttribute("userObject", user);
+
                     
                     PatientDAO.updateUser(username, name, address, phoneNum, hin, sin);
-                    
-                    User user = new User(username);
-                    user.setName(name);
-                    user.setRole("Patient");
+
                     //Set attributes of session object
                     
                     session.setAttribute("userObject", user);
                     
                     //Redirect to appropriate page
-                    url="/welcome.jsp";       
+                    url="/welcome.jsp"; 
+ 
+                    if (passwordConfirm.equals(password) && (password != null || passwordConfirm != null)){
+                      DBAO.updatePassword(username, password, role);
+                      //DBAO.changePassword(username, password);
+                    } else if (password != null && passwordConfirm == null) {
+                      request.setAttribute("error", "password");
+                    } else if (password == null && passwordConfirm != null) {
+                      request.setAttribute("error", "password");
+                    } else if (!password.equals(passwordConfirm)){
+                      request.setAttribute("error", "notEqual");
+                    }
                 } catch (Exception e) {
                     request.setAttribute("exception", e);
                     url="/error.jsp";
                 }
 
-                getServletContext().getRequestDispatcher("/welcome.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher(url).forward(request, response);
             }
 
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

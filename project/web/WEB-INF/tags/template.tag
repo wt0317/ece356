@@ -88,20 +88,19 @@
                 <%
                 /* DOCTOR MENU */
                 if (role.equals("Doctor"))      {
-
-                        out.print("<li><a href=\"lookupVisitationRecord.jsp\">Lookup Visitation Record</a></li>");
+                        out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">View Appointments</a></li>");
+                        out.print("<li><a href=\"StaffAssignmentServlet\">Manage Staff</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
                 }
                 /*  PATIENT MENU */
                 else if (role.equals("Patient"))      {
                         
                         out.print(" <li><a href=\"patient.jsp\">Update Personal Information</a></li>");
-                        out.print(" <li><a href=\"changePassword.jsp#\">Change Password</a></li>");
                         out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
-                        out.print(" <li><a href=\"\">Past Appointments</a></li>");
+                        out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
                  }
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
@@ -116,7 +115,11 @@
                         out.print("<li><a href=\"lookupPatientSummary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"lookupDoctorSummary.jsp\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
-                }             
+                }    
+                /* ADMIN MENU */
+                else if (role.equals("Admin"))      {
+                        out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
+                }
                 %>
                 </ul>
             </div>
@@ -129,7 +132,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        
+        <!-- jquery at top of page because of certain requirements -->
         <script src="js/bootstrap.min.js"></script>
         <script src="js/docs.min.js"></script>
         <script src="js/jquery.validate.min.js"></script>
