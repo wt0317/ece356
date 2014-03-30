@@ -116,7 +116,11 @@
                         out.print("<li><a href=\"lookupPatientSummary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"lookupDoctorSummary.jsp\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
-                }             
+                }    
+                /* ADMIN MENU */
+                else if (role.equals("Admin"))      {
+                        out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
+                }
                 %>
                 </ul>
             </div>
