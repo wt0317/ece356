@@ -74,8 +74,7 @@ public class VisitationDAO {
         }
     }
 
-    public static VisitationDAOResult getPatientVisitationRecords(int username) throws ClassNotFoundException,
-            SQLException {
+    public static VisitationDAOResult getPatientVisitationRecordsForPatient(int username) throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -85,13 +84,12 @@ public class VisitationDAO {
         int count = 0;
 
         try {
-            System.out.println("Hello");
             con = DBAO.getConnection();
 
             String query = "SELECT dir.name as doctorName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name "
                     + "FROM Visitations v, Procedures p, Diagnoses d, Prescriptions pr, Surgeries s, Directory dir, Directory dir2 "
-                    + "WHERE (v.doctor = dir.username AND "
-                    + "v.procedure_id = p.procedure_id "
+                    + "WHERE (v.doctor = dir.username "
+                    + "AND v.procedure_id = p.procedure_id "
                     + "AND v.diagnosis_id = d.diagnosis_id "
                     + "AND v.prescription_id = pr.prescription_id "
                     + "AND v.surgery_id = s.surgery_id AND v.created_by = dir2.username AND "
@@ -108,20 +106,17 @@ public class VisitationDAO {
                 //Custom column name name
                 if (index == 1) {
                     columnNames.add("Doctor");
-                } 
-                else if(index == 6) {
+                } //Custom column name
+                else if (index == 6) {
                     columnNames.add("Created By");
-                }
+                } //Default column name
                 else {
-                    String columnName = rsmd.getColumnName(index);                    
+                    String columnName = rsmd.getColumnName(index);
                     columnName = columnName.replace("_", " ");
                     columnName = WordUtils.capitalize(columnName);
                     columnNames.add(columnName);
                 }
-                System.out.println(rsmd.getColumnName(index));
             }
-
-            System.out.println("Hello");
 
             while (rs.next()) {
                 Visitation record = new Visitation();
@@ -150,5 +145,88 @@ public class VisitationDAO {
                 con.close();
             }
         }
+    }
+
+    public static VisitationDAOResult getPatientVisitationRecordsForDoctor(int username) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ResultSetMetaData rsmd = null;
+        List<Visitation> visitation = new ArrayList<Visitation>();
+        List<String> columnNames = new ArrayList<String>();
+        int count = 0;
+        
+        try {
+            con = DBAO.getConnection();
+
+            String query = "SELECT dir.name as patientName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name, comments, revision_comments "
+                    + "FROM Visitations as v, Procedures p, Diagnoses d, Prescriptions pr, Surgeries s, Directory dir, Directory dir2, Permissions perm "
+                    + "WHERE (v.procedure_id = p.procedure_id "
+                    + "AND v.diagnosis_id = d.diagnosis_id "
+                    + "AND v.prescription_id = pr.prescription_id "
+                    + "AND v.surgery_id = s.surgery_id "
+                    + "AND v.created_by = dir2.username "
+                    + "AND v.patient = dir.username " 
+                    + "AND perm.employee = v.doctor "
+                    + "AND perm.patient = v.patient "
+                    + "AND perm.accessibility = 1 "
+                    + "AND perm.enabled = 1 "
+                    + "AND v.doctor = ?) "
+                    + "ORDER BY v.time_scheduled DESC";
+
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, username);
+            rs = stmt.executeQuery();
+            rsmd = rs.getMetaData();
+
+            //Assign column names to output table        
+            for (int index = 1; index <= rsmd.getColumnCount(); index++) {
+
+                //Custom column name name
+                if (index == 1) {
+                    columnNames.add("Patient");
+                } //Custom column name
+                else if (index == 6) {
+                    columnNames.add("Created By");
+                } //Default column name
+                else {
+                    String columnName = rsmd.getColumnName(index);
+                    columnName = columnName.replace("_", " ");
+                    columnName = WordUtils.capitalize(columnName);
+                    columnNames.add(columnName);
+                }
+            }
+
+            while (rs.next()) {
+                Visitation record = new Visitation();
+                record.setPatientName(rs.getString("patientName"));
+                record.setProcedureName(rs.getString("procedure_name"));
+                record.setDiagnosisName(rs.getString("diagnosis_name"));
+                record.setPrescriptionName(rs.getString("prescription_name"));
+                record.setTimeScheduled(rs.getTimestamp("time_scheduled"));
+                record.setStartTime(rs.getTimestamp("start_time"));
+                record.setEndTime(rs.getTimestamp("end_time"));
+                record.setCreationTime(rs.getTimestamp("creation_time"));
+                record.setCreatedName(rs.getString("createdName"));
+                record.setSurgeryName(rs.getString("surgery_name"));
+                record.setComments(rs.getString("comments"));
+                record.setRevisionComments(rs.getString("revision_comments"));
+                visitation.add(record);
+                count++;
+            }
+
+            
+            VisitationDAOResult visitationDAOResult = new VisitationDAOResult(visitation, columnNames, count);
+            return visitationDAOResult;
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
     }
 }
