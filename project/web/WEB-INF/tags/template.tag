@@ -99,7 +99,6 @@
                 else if (role.equals("Patient"))      {
                         
                         out.print(" <li><a href=\"patient.jsp\">Update Personal Information</a></li>");
-                        out.print(" <li><a href=\"changePassword.jsp#\">Change Password</a></li>");
                         out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
