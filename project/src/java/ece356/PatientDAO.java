@@ -39,43 +39,6 @@ public class PatientDAO {
             }
         }
     }
-/**
-     *
-     * @param username
-     * @param password
-     * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    public static Patient getUserInfo(int username, String password)
-            throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        Patient patient = new Patient();
-        try {
-            //con = DriverManager.getConnection(url, user, pwd);  
-            con = DBAO.getConnection();
-            PreparedStatement pst = con.prepareStatement("SELECT * FROM Patients as p WHERE p.username = '" + username + "'");
-            rs = pst.executeQuery();  
-            if (rs.next()){
-                patient.setUsername(rs.getInt("username"));
-                patient.setHealthCard(rs.getString("health_card"));
-                patient.setSin(rs.getString("social_insurance_number"));
-                patient.setDefaultDoctor(new Doctor(rs.getInt("default_doctor")));
-
-            }
-            return patient;
-            
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-    }
 
     public static List<String> getAllPatients()
             throws ClassNotFoundException, SQLException {
@@ -124,34 +87,6 @@ public class PatientDAO {
                 name = rs.getString("name");   
             }
             return name;
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        
-        
-    }
-      
-    public static void updateUser(int username, String name, String address, String phoneNum, String hin, String sin)
-    throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-                   
-            //con = DriverManager.getConnection(url, user, pwd);  
-            con = DBAO.getConnection();
-            PreparedStatement pst = con.prepareStatement("UPDATE Patients SET health_card = '" + hin + "', social_insurance_number = '" + sin + "' WHERE username = '" + username + "'");
-            pst.executeUpdate();  
-            
-            
-            pst = con.prepareStatement("UPDATE Directory SET name='" + name + "', address= '" + address + "', phone_number='" + phoneNum+ "' WHERE username= '" + username + "'");
-            pst.executeUpdate(); 
-            
         } finally {
             if (stmt != null) {
                 stmt.close();

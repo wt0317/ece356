@@ -54,7 +54,23 @@ public class DoctorSummaryServlet extends HttpServlet {
         Connection con = null;
         ResultSet rs0;
         ResultSet rs1;
-        ResultSet rs2; 
+        ResultSet rs2;
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String patientCountQuery = "";
+        
+        if(startDate != null && endDate != null && startDate != "" && endDate != ""){
+          request.setAttribute("startDate", startDate);
+          request.setAttribute("endDate", endDate);
+          patientCountQuery 
+                  = "SELECT COUNT(*) AS total FROM Visitations "
+                  + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? AND start_time >= '"+startDate+" 00:00:00' AND end_time <= '"+endDate+" 00:00:00' )";
+        }
+        else{
+          patientCountQuery 
+                  = "SELECT COUNT(*) AS total FROM Visitations "
+                  + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? )";
+        }
 
         try {
             con = DBAO.getConnection();
@@ -86,10 +102,7 @@ public class DoctorSummaryServlet extends HttpServlet {
                         empty = false;
                       }
                       Doctor d = new Doctor();
-                      d.setUsername(rs1.getInt(1));
-                      String patientCountQuery
-                            = "SELECT COUNT(*) AS total FROM Visitations "
-                            + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? )";
+                      d.setUsername(rs1.getInt(1));                           
                       getPatientCount = con.prepareStatement(patientCountQuery);
                       getPatientCount.setInt(1, doctorid);
                       getPatientCount.setInt(2, rs1.getInt(1));
@@ -104,12 +117,14 @@ public class DoctorSummaryServlet extends HttpServlet {
                 
                 request.setAttribute("queryDone", true);
                 if (empty) {
+                    request.setAttribute("doctor", doctorid);
                     request.setAttribute("doctorName", doctorName);
                     request.setAttribute("listDoctorSummaryEmpty", true);
                     request.setAttribute("numPatients", numPatients);
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                 }
                 else{
+                    request.setAttribute("doctor", doctorid);
                     request.setAttribute("doctorName", doctorName);
                     request.setAttribute("listDoctorSummaryEmpty", false);
                     request.setAttribute("numPatients", numPatients);

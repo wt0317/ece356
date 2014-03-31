@@ -21,14 +21,14 @@
 
 <t:template>
     <jsp:attribute name="pagetitle">
-      Project Zero
+      Create Account
     </jsp:attribute>
     <jsp:attribute name="content">
           <c:if test="${username != -1}">
               <div class="alert alert-success">Account created! Username: <c:out value="${username}"/></div>
           </c:if>
         <form class="form-horizontal" role="form" action="CreateAccountServlet" method="post">
-          <h1 class="form-heading">Create Account</h1>
+          <h1 class="form-heading">General Account Information</h1>
           <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
@@ -137,6 +137,30 @@
                     <input type="date" class="form-control" id="dateHired" name="dateHired" required/>
                 </div>
               </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Assigned Staff(s)</label>
+                  <div class="col-sm-10">
+                      <c:forEach items="${staff.entrySet()}" var="s">
+                          <input type="checkbox" id="assignedStaff" name="assignedStaff" value="${s.getKey()}"/>
+                          <label >${s.getValue()}</label>
+                          <br/>
+                      </c:forEach>
+                  </div>
+              </div>
+          </div>
+          <!--Staff-->
+          <div id="staffDiv" class="role-specific-fields">
+              <h2>Staff Specific Information</h2>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Assigned Doctor(s)</label>
+                  <div class="col-sm-10">
+                      <c:forEach items="${doctors.entrySet()}" var="d">
+                          <input type="checkbox" id="assignedDoctors" name="assignedDoctors" value="${d.getKey()}"/>
+                          <label>${d.getValue()}</label>
+                          <br/>
+                      </c:forEach>
+                  </div>
+              </div>
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
@@ -162,6 +186,12 @@
                 sin : {
                     digits : true,
                     rangelength : [6,6]
+                },
+                'assignedDoctors' : {
+                    required : true
+                },
+                'assignedStaff' : {
+                    required : true
                 }
             },
             messages : {
@@ -170,6 +200,12 @@
                 },
                 sin : {
                     rangelength : "SIN must be 6 digits, no hyphen, no spaces"
+                },
+                'assignedDoctors' : {
+                    required : "Please select at least one assigned doctor"
+                },
+                'assignedStaff' : {
+                    required : "Please select at least one assigned staff"
                 }
             }
         });
@@ -181,6 +217,9 @@
                     break;
                 case "Doctor" :
                     $("#doctorDiv").show();
+                    break;
+                case "Staff" :
+                    $("#staffDiv").show();
                     break;
             }
         }).change();

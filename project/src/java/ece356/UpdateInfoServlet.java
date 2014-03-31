@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * @author Sieyor
  */
 
-public class PatientServlet extends HttpServlet {
+public class UpdateInfoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +31,7 @@ public class PatientServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String url;
+                String url = "/updateInfo.jsp";
                 try {    
                     //Create a new session object
                     
@@ -41,26 +41,61 @@ public class PatientServlet extends HttpServlet {
                     String name = request.getParameter("name");
                     String address = request.getParameter("address");
                     String phoneNum = request.getParameter("phonenum");
-                    String hin = request.getParameter("hin");
-                    String sin = request.getParameter("sin");
+                    String role = request.getParameter("role");
                     
-                    PatientDAO.updateUser(username, name, address, phoneNum, hin, sin);
+                    String hin = null;
+                    String sin = null;
                     
-                    User user = new User(username);
-                    user.setName(name);
-                    user.setRole("Patient");
+                    if (role.equals("Patient")) {
+                      hin = request.getParameter("hin");
+                      sin = request.getParameter("sin");
+                      
+                    }
+                    UserDAO.updateUser(username, name, address, phoneNum, hin, sin, role);
+                    String password;
+                    String passwordConfirm;
+                    //System.out.println("test: " + request.getParameter("passwordConfirm"));
+                    if (!(request.getParameter("password").equals("")) && (request.getParameter("passwordConfirm").equals(""))) {
+                      password = "";
+                      passwordConfirm = "";
+
+                    }else{
+                      password = CreateAccountServlet.hashPW(request.getParameter("password"));
+                      passwordConfirm = CreateAccountServlet.hashPW(request.getParameter("passwordConfirm"));
+                    }
+                    
+
+                      User user = new User(username);
+                      user.setName(name);
+                      user.setRole(role);
+                      user.setAddress(address);
+                      user.setPhoneNumber(phoneNum);
+                      //Set attributes of session object
+
+                      session.setAttribute("userObject", user);
+
+                    
+                    
+
                     //Set attributes of session object
                     
                     session.setAttribute("userObject", user);
                     
-                    //Redirect to appropriate page
-                    url="/welcome.jsp";       
+ 
+                    if (passwordConfirm.equals(password) && (!password.equals("") && !passwordConfirm.equals(""))){
+                      DBAO.updatePassword(username, password, role);
+                      url="/welcome.jsp"; 
+                    } else if (password.equals("") && passwordConfirm.equals("")) {
+                      request.setAttribute("error", "password");
+                    } else if (!password.equals(passwordConfirm)){
+                      request.setAttribute("error", "notEqual");
+                    }
                 } catch (Exception e) {
                     request.setAttribute("exception", e);
                     url="/error.jsp";
                 }
 
-                getServletContext().getRequestDispatcher("/welcome.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher(url).forward(request, response);
             }
 
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
