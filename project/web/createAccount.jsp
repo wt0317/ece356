@@ -186,12 +186,6 @@
                 sin : {
                     digits : true,
                     rangelength : [6,6]
-                },
-                'assignedDoctors' : {
-                    required : true
-                },
-                'assignedStaff' : {
-                    required : true
                 }
             },
             messages : {
@@ -200,12 +194,6 @@
                 },
                 sin : {
                     rangelength : "SIN must be 6 digits, no hyphen, no spaces"
-                },
-                'assignedDoctors' : {
-                    required : "Please select at least one assigned doctor"
-                },
-                'assignedStaff' : {
-                    required : "Please select at least one assigned staff"
                 }
             }
         });

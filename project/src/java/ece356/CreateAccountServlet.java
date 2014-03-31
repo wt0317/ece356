@@ -83,9 +83,11 @@ public class CreateAccountServlet extends HttpServlet {
                     } else if (role.equals("Doctor")) {
                         LicenseDAO.insertLicense(request.getParameter("license"), request.getParameter("licenseIssue"), request.getParameter("licenseExpiry"));   
                         DoctorDAO.insertDoctor(username, request.getParameter("license"), request.getParameter("dateHired"));
-                        StaffAssignmentDAO.insertStaffAssignment(false, username, request.getParameterValues("assignedStaff"));
+                        if (request.getParameterValues("assignedStaff") != null) 
+                            StaffAssignmentDAO.insertStaffAssignment(false, username, request.getParameterValues("assignedStaff"));
                     } else if (role.equals("Staff")) {
-                        StaffAssignmentDAO.insertStaffAssignment(true, username, request.getParameterValues("assignedDoctors"));
+                        if (request.getParameterValues("assignedDoctors") != null) 
+                            StaffAssignmentDAO.insertStaffAssignment(true, username, request.getParameterValues("assignedDoctors"));
                     }
                 }
             }
