@@ -18,8 +18,6 @@
     List<String> patientList = PatientDAO.getAllPatients();
     
     
-    
-    
     request.setAttribute("username", user.getUsername());
     request.setAttribute("name", user.getName());
     request.setAttribute("address", user.getAddress());
@@ -49,10 +47,6 @@
         <div class="container-fluid">
             <div class="row-fluid">
           <div class="span9">
-          <div class="well">
-            <h1>Notifications</h1>
-            <p>You have no notifications at this time</p>
-          </div>
           <div class="row-fluid">
             <div class="panel-heading">
                <h2>Personal Information</h2>
@@ -73,50 +67,58 @@
                         You must enter a new password.
                     </div>
                 </c:if>
+                <c:if test="${error.equals('noError')}">
+                    <div class="alert alert-success">
+                        <Strong>
+                            Well done! 
+                        </Strong>
+                        Information Updated.
+                    </div>
+                </c:if>
                
-               <form role="form" action="UpdateInfoServlet" method="post">
+               <form class="form-horizontal" role="form" action="UpdateInfoServlet" method="post">
                 <p>User ID: 
-                   <input name="username" type="input" class="form-control" value="${username}" required="" autofocus="" readonly>
+                   <input name="username" type="input" class="form-control" value="${username}" required="" autofocus="true" readonly>
                 </p>
                 <p>Name: 
-                    <input name="name" type="input" class="form-control disabled" value="${name}" required="" autofocus="true" readonly>
+                    <input name="name" type="input" class="form-control disabled" value="${name}" required="" readonly>
                 </p>
                 <p>Address: 
-                    <input name="address" type="input" class="form-control" id="disabledInput" value="${address}" required="" autofocus="">
+                    <input name="address" type="input" class="form-control" id="disabledInput" value="${address}" required="" required>
                 </p>
                 <p>Phone Number: 
-                    <input name="phonenum" type="input" class="form-control disabled" value="${phonenum}" required="" autofocus="">
+                    <input name="phone" id="phone" type="input" class="form-control disabled" value="${phonenum}" required="" required>
                 </p>
                 <c:if test="${role.equals('Patient')}">
                     <p class = "disabled">Health Card Number: 
-                        <input name="hin" type="input" class="form-control" value="${hin}" required="" autofocus="" readonly>
+                        <input name="hin" type="input" class="form-control" value="${hin}" required="" readonly>
                     </p>
                     <p class = "disabled">Social Insurance Number: 
-                        <input name="sin" type="input" class="form-control" value="${sin}" required="" autofocus="" readonly>
+                        <input name="sin" type="input" class="form-control" value="${sin}" required="" readonly>
                     </p>
                     <p>Default Doctor: 
-                        <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" autofocus="" readonly>
+                        <input name="defaultDoctor" type="input" class="form-control" value="${defaultDoctor}" required="" readonly>
                     </p>
                 </c:if>
                 <c:if test="${role.equals('Doctor')}">
                     <p class = "disabled">License Id: 
-                        <input name="licenseId" type="input" class="form-control" value="${licenseId}" required="" autofocus="" readonly>
+                        <input name="licenseId" type="input" class="form-control" value="${licenseId}" required="" readonly>
                     </p>
                     <p class = "disabled">Date Hired: 
-                        <input name="dateHired" type="input" class="form-control" value="${dateHired}" required="" autofocus="" readonly>
+                        <input name="dateHired" type="input" class="form-control" value="${dateHired}" required="" readonly>
                     </p>
                 </c:if>
                 <h2>Change Password</h2>
                 <p>New Password: 
-                    <input name="password" type="password" class="form-control" placeholder="Password" autofocus="" >
+                    <input name="password" type="password" class="form-control" placeholder="Password">
                 </p>
                 <p>Confirm Password: 
-                    <input name="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm" autofocus="">
+                    <input name="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm">
                 </p>
                 <p class="hidden">
                     <input name = "role" value = "${role}">
                 </p>                
-                <button class="btn btn-lg btn-primary btn-block" type="save">UPDATE</button>
+                <button class="btn btn-default" type="save">UPDATE</button>
               </form>
             </div><!--/span-->
 
@@ -125,5 +127,26 @@
       
       <hr>
         </div>
+    </jsp:attribute>
+    <jsp:attribute name="script">
+        <script>
+//        $(function(){
+//           alert("okay"); 
+//        });
+        $(".form-horizontal").validate({
+            rules : {
+                phone : {
+                    digits : true,
+                    rangelength : [10,10]
+                }
+            },
+            messages : {
+                phone : {
+                    rangelength : "Phone number must be 10 digits, no hyphen, no spaces"
+                }
+            }
+        });
+ 
+        </script>
     </jsp:attribute>
 </t:template>
