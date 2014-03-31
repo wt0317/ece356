@@ -155,7 +155,7 @@ public class VisitationDAO {
         List<Visitation> visitation = new ArrayList<Visitation>();
         List<String> columnNames = new ArrayList<String>();
         int count = 0;
-        
+
         try {
             con = DBAO.getConnection();
 
@@ -166,7 +166,7 @@ public class VisitationDAO {
                     + "AND v.prescription_id = pr.prescription_id "
                     + "AND v.surgery_id = s.surgery_id "
                     + "AND v.created_by = dir2.username "
-                    + "AND v.patient = dir.username " 
+                    + "AND v.patient = dir.username "
                     + "AND perm.employee = v.doctor "
                     + "AND perm.patient = v.patient "
                     + "AND perm.accessibility = 1 "
@@ -215,7 +215,6 @@ public class VisitationDAO {
                 count++;
             }
 
-            
             VisitationDAOResult visitationDAOResult = new VisitationDAOResult(visitation, columnNames, count);
             return visitationDAOResult;
 
@@ -228,5 +227,174 @@ public class VisitationDAO {
             }
         }
 
+    }
+
+    public static VisitationDAOResult getPatientVisitationRecordsForDoctorSEARCH(
+            int username,
+            String patientName,
+            int patientUsername,
+            int diagnosisID,
+            int procedureID,
+            int prescriptionID,
+            int surgeryID,
+            String comments,
+            String revisionComments,
+            Timestamp timeScheduled1,
+            Timestamp timeScheduled2,
+            Timestamp timeStart1,
+            Timestamp timeStart2,
+            Timestamp timeEnd1,
+            Timestamp timeEnd2,
+            Timestamp timeCreation1,
+            Timestamp timeCreation2,
+            HttpServletRequest request,
+            HttpServletResponse response
+    )
+            throws ClassNotFoundException, SQLException, ServletException, IOException {
+
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ResultSetMetaData rsmd = null;
+        List<Visitation> visitation = new ArrayList<Visitation>();
+        List<String> columnNames = new ArrayList<String>();
+        int count = 0;
+
+        try {
+            con = DBAO.getConnection();
+            String query = "SELECT dir.name as patientName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name, comments, revision_comments "
+                    + "FROM Visitations as v, Procedures p, Diagnoses d, Prescriptions pr, Surgeries s, Directory dir, Directory dir2, Permissions perm "
+                    + "WHERE (v.procedure_id = p.procedure_id "
+                    + "AND v.diagnosis_id = d.diagnosis_id "
+                    + "AND v.prescription_id = pr.prescription_id "
+                    + "AND v.surgery_id = s.surgery_id "
+                    + "AND v.created_by = dir2.username "
+                    + "AND v.patient = dir.username "
+                    + "AND perm.employee = v.doctor "
+                    + "AND perm.patient = v.patient "
+                    + "AND perm.accessibility = 1 "
+                    + "AND perm.enabled = 1 "
+                    + "AND v.doctor = ? ";
+                    //New additions
+            // "AND v.patient = ? ";  //Caution this should be an int
+            //"AND v.diagnosis_id = ? "; //Caution this should be an int
+            //+ "AND v.procedure_id = ? " //Caution this should be an int
+            //+ "AND v.prescription_id = ? " //Caution this should be an int
+            //+ "AND v.surgery_id = ? " //Caution this should be an int
+            //+ "AND v.comments LIKE ? "
+            //+ "AND v.revision_comments LIKE ? )";
+            
+            if (!patientName.equals("")) {
+                query = query.concat(" AND dir.name LIKE '%" + patientName + "%'");
+            }
+            
+            if (patientUsername != -1) {
+                query = query.concat(" AND v.patient = " + patientUsername);
+            }
+
+            if (diagnosisID != -1) {
+                query = query.concat(" AND v.diagnosis_id = " + diagnosisID);
+            }
+
+            if (procedureID != -1) {
+                query = query.concat(" AND v.procedure_id = " + procedureID);
+            }
+
+            if (prescriptionID != -1) {
+                query = query.concat(" AND v.prescription_id = " + prescriptionID);
+            }
+
+            if (surgeryID != -1) {
+                query = query.concat(" AND v.surgery_id = " + surgeryID);
+            }
+
+            if (!comments.equals("")) {
+                query = query.concat(" AND v.comments LIKE " +"'%"+comments+"%'");
+            }
+
+            if (!revisionComments.equals("")) {
+                query = query.concat(" AND v.revision_comments LIKE " +"'%"+revisionComments+"%'");
+            }
+            
+            if (timeScheduled1 != null && timeScheduled2 != null) {
+                query = query.concat(" AND '" + timeScheduled1 + "' <= v.time_scheduled" + " AND  v.time_scheduled <= '" + timeScheduled2 + "'");
+            }
+            
+            if (timeStart1 != null && timeStart2 != null) {
+                query = query.concat(" AND '" + timeStart1 + "' <= v.start_time" + " AND  v.start_time <= '" + timeStart2 + "'");
+            }
+            
+            if (timeEnd1 != null && timeEnd2 != null) {
+                query = query.concat(" AND '" + timeEnd1 + "' <= v.end_time" + " AND  v.end_time <= '" + timeEnd2 + "'");
+            }
+            
+            if (timeCreation1 != null && timeCreation2 != null) {
+                query = query.concat(" AND '" + timeCreation1 + "' <= v.creation_time" + " AND  v.creation_time <= '" + timeCreation2 + "'");
+            }
+            
+            query = query.concat(" )");
+            stmt = con.prepareStatement(query);
+            System.out.println("return2");
+            stmt.setInt(1, username);
+            System.out.println(query);
+            //stmt.setInt(2, diagnosisID);
+            System.out.println("return3");
+            //Get and set diagnosis_id
+
+            //Get procedure_id
+            //Get prescription_id
+            //Get surgery_id
+            rs = stmt.executeQuery();
+            System.out.println("return4");
+            rsmd = rs.getMetaData();
+            
+
+            //Assign column names to output table        
+            for (int index = 1; index <= rsmd.getColumnCount(); index++) {
+
+                //Custom column name name
+                if (index == 1) {
+                    columnNames.add("Patient");
+                } //Custom column name
+                else if (index == 6) {
+                    columnNames.add("Created By");
+                } //Default column name
+                else {
+                    String columnName = rsmd.getColumnName(index);
+                    columnName = columnName.replace("_", " ");
+                    columnName = WordUtils.capitalize(columnName);
+                    columnNames.add(columnName);
+                }
+            }
+
+            while (rs.next()) {
+                Visitation record = new Visitation();
+                record.setPatientName(rs.getString("patientName"));
+                record.setProcedureName(rs.getString("procedure_name"));
+                record.setDiagnosisName(rs.getString("diagnosis_name"));
+                record.setPrescriptionName(rs.getString("prescription_name"));
+                record.setTimeScheduled(rs.getTimestamp("time_scheduled"));
+                record.setStartTime(rs.getTimestamp("start_time"));
+                record.setEndTime(rs.getTimestamp("end_time"));
+                record.setCreationTime(rs.getTimestamp("creation_time"));
+                record.setCreatedName(rs.getString("createdName"));
+                record.setSurgeryName(rs.getString("surgery_name"));
+                record.setComments(rs.getString("comments"));
+                record.setRevisionComments(rs.getString("revision_comments"));
+                visitation.add(record);
+                count++;
+            }
+
+            VisitationDAOResult visitationDAOResult = new VisitationDAOResult(visitation, columnNames, count);
+            return visitationDAOResult;
+        }   
+            finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
     }
 }

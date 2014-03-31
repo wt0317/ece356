@@ -40,7 +40,7 @@ public class UpdateInfoServlet extends HttpServlet {
                     int username = Integer.parseInt(request.getParameter("username"));
                     String name = request.getParameter("name");
                     String address = request.getParameter("address");
-                    String phoneNum = request.getParameter("phonenum");
+                    String phoneNum = request.getParameter("phone");
                     String role = request.getParameter("role");
                     
                     String hin = null;
@@ -54,15 +54,10 @@ public class UpdateInfoServlet extends HttpServlet {
                     UserDAO.updateUser(username, name, address, phoneNum, hin, sin, role);
                     String password;
                     String passwordConfirm;
-                    //System.out.println("test: " + request.getParameter("passwordConfirm"));
-                    if (!(request.getParameter("password").equals("")) && (request.getParameter("passwordConfirm").equals(""))) {
-                      password = "";
-                      passwordConfirm = "";
 
-                    }else{
-                      password = CreateAccountServlet.hashPW(request.getParameter("password"));
-                      passwordConfirm = CreateAccountServlet.hashPW(request.getParameter("passwordConfirm"));
-                    }
+                      password = request.getParameter("password");
+                      passwordConfirm = request.getParameter("passwordConfirm");
+                    
                     
 
                       User user = new User(username);
@@ -81,14 +76,17 @@ public class UpdateInfoServlet extends HttpServlet {
                     
                     session.setAttribute("userObject", user);
                     
- 
                     if (passwordConfirm.equals(password) && (!password.equals("") && !passwordConfirm.equals(""))){
-                      DBAO.updatePassword(username, password, role);
-                      url="/welcome.jsp"; 
-                    } else if (password.equals("") && passwordConfirm.equals("")) {
+                      DBAO.updatePassword(username, CreateAccountServlet.hashPW(password), role);
+                       request.setAttribute("error", "noError");
+                    } else if (!(password.equals("")) && (passwordConfirm.equals(""))) {
+                      request.setAttribute("error", "password");
+                    } else if ((password.equals("")) && !(passwordConfirm.equals(""))) {
                       request.setAttribute("error", "password");
                     } else if (!password.equals(passwordConfirm)){
                       request.setAttribute("error", "notEqual");
+                    }else {
+                      request.setAttribute("error", "noError");
                     }
                 } catch (Exception e) {
                     request.setAttribute("exception", e);

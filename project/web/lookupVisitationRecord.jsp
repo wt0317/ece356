@@ -25,7 +25,6 @@
 
     <jsp:attribute name="content">
 
-
         <c:if test="${(userObject.getRole()).equals('Doctor')}">
             <c:if test="${success.equals('Added visitation record!')}">
                 <div class="alert alert-success">
@@ -37,9 +36,12 @@
             </c:if>
 
             <form role="form" action="AddVisitationRecordCreateFormServlet" method="post">
-                <button type="submit" class="btn btn-primary">Add Visitation Record</button>
+                <button type="submit" class="btn btn-primary" name="button" value="add">Add Visitation Record</button>
             </form>
-
+            <br>            
+            <form role="form" action="AddVisitationRecordCreateFormServlet" method="post">
+                <button type="submit" class="btn btn-default" name="button" value="search">Search</button>
+            </form>
 
             <c:if test="${status.equals('Valid')}">
                 <h2 class="sub-header"> Visitation Records </h2>
