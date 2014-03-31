@@ -25,12 +25,6 @@
         </c:if>
     </jsp:attribute>
 
-            
-            
-            
-            
-            
-            
     <jsp:attribute name="content">
         <c:if test="${(userObject.getRole()).equals('Staff')}">
                 <!--<span class="current-doctor">
@@ -42,7 +36,7 @@
                 </span>-->
                 <div class="input-group">
                     <span id="appointmentHeader" class="input-group-addon">Manage Appointments: </span>
-                    <select name="form" class="form-control" onchange="location=this.options[this.selectedIndex].getAttribute('data-redirect') + '?appDocUser='+this.options[this.selectedIndex].value+'&appDocName='+this.options[this.selectedIndex].innerHTML" >            
+                    <select id="appointment-select-doctor" name="form" class="form-control" onchange="location=this.options[this.selectedIndex].getAttribute('data-redirect') + '?appDocUser='+this.options[this.selectedIndex].value+'&appDocName='+this.options[this.selectedIndex].innerHTML" >            
                         <c:forEach items="${docList}" var="doctor">
                             <option <c:if test="${doctor.getUsername() == appDoc.getUsername()}">selected</c:if> data-redirect="Appointments" value="${doctor.getUsername()}">${doctor.getName()}</option>
                         </c:forEach>
