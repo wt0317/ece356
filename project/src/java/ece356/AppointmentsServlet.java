@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ece356;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpSession;
  *
  * @author Johnny
  */
-@WebServlet(name = "AppointmentsServlet", urlPatterns = {"/Appointments"})
 public class AppointmentsServlet extends HttpServlet {
 
     /**
@@ -33,18 +30,39 @@ public class AppointmentsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String url;
-        
-        try {    
+
+        String url = "/appointments.jsp";
+
+        try {
             //Create a new session object
             HttpSession session = request.getSession();
-            
             //Redirect to appropriate page
-            url="/appointments.jsp";       
+            User user = ((User) session.getAttribute("userObject"));
+            String role = user.getRole();
+
+            if (role.equals("Doctor")) {
+                Doctor appDoc = new Doctor(user.getUsername(), user.getName());
+                request.setAttribute("appDoc", appDoc);
+            } else if (role.equals("Staff")) {
+                List<Doctor> doctors = StaffAssignmentDAO.getAllAssignedDoctors(user.getUsername());
+                if(doctors.isEmpty()){
+                    request.setAttribute("noAppDoc", true);
+                } else{
+                    if(request.getParameter("appDocUser") != null && request.getParameter("appDocName") != null){
+                        Integer appDocUser = Integer.parseInt(request.getParameter("appDocUser"));
+                        String appDocName = (String) request.getParameter("appDocName");
+                        request.setAttribute("appDoc", new Doctor(appDocUser, appDocName, DoctorDAO.getAllPatients(appDocUser)));
+                    } else {
+                        request.setAttribute("appDoc", doctors.get(0));
+                    }
+                    request.setAttribute("docList", doctors);
+                }
+            } else {
+                url = "/error.jsp";
+            }
         } catch (Exception e) {
             request.setAttribute("exception", e);
-            url="/error.jsp";
+            url = "/error.jsp";
         }
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
@@ -61,7 +79,60 @@ public class AppointmentsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String text = "";
+        if ("true".equals(request.getParameter("insert"))) {
+            try {
+                HttpSession session = request.getSession();
+
+                AppointmentDAO.insertAppointment(
+                        request.getParameter("title"),
+                        request.getParameter("start"),
+                        request.getParameter("end"),
+                        Integer.parseInt(request.getParameter("doctorID")),
+                        Integer.parseInt(request.getParameter("patientID")),
+                        ((User) session.getAttribute("userObject")).getUsername()
+                );
+                text = "Successfully added.";
+            } catch (Exception e) {
+                text = "Error has occured: " + e.getLocalizedMessage();
+            } finally {
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(text);
+            }
+        } else if ("true".equals(request.getParameter("select"))) {
+            List<Appointment> appointments;
+            try {
+                appointments = AppointmentDAO.getAllAppointments(request.getParameter("doctor"));
+                text += "{\"events\": [";
+                for (int i = 0; i < appointments.size(); i++) {
+                    text += appointments.get(i).toStringJSON();
+                    if (i != appointments.size() - 1) {
+                        text += ",";
+                    }
+                }
+                text += "]}";
+            } catch (Exception e) {
+                text = "Error has occured: " + e.getLocalizedMessage();
+            } finally {
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(text);
+            }
+        } else if ("true".equals(request.getParameter("delete"))){
+            try {
+                AppointmentDAO.deleteAppointment(request.getParameter("startTime"), Integer.parseInt(request.getParameter("doctor")));
+                text = "Successfully removed.";
+            } catch (Exception e) {
+                text = "Error has occured: " + e.getLocalizedMessage();
+            } finally {
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(text);
+            }
+        } else {
+            processRequest(request, response);
+        }
     }
 
     /**

@@ -9,12 +9,24 @@
         <servlet-class>ece356.CreateAccountServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>ece356.PatientServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>UpdateInfoServlet</servlet-name>
         <servlet-class>ece356.UpdateInfoServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>ece356.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AppointmentsServlet</servlet-name>
+        <servlet-class>ece356.AppointmentsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoctorServlet</servlet-name>
+        <servlet-class>ece356.DoctorServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DoctorLookupServlet</servlet-name>
@@ -73,12 +85,24 @@
         <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>AppointmentsServlet</servlet-name>
+        <url-pattern>/Appointments</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoctorServlet</servlet-name>
+        <url-pattern>/DoctorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>DoctorLookupServlet</servlet-name>
         <url-pattern>/DoctorLookupServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DoctorSummaryServlet</servlet-name>
         <url-pattern>/DoctorSummaryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/PatientServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UpdateInfoServlet</servlet-name>
