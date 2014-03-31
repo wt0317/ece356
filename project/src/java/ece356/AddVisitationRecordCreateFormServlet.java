@@ -102,6 +102,11 @@ public class AddVisitationRecordCreateFormServlet extends HttpServlet {
             session.setAttribute("surgeries", surgeries);
             session.setAttribute("procedures", procedures);
             
+            //If search was pressed
+            if(request.getParameter("button").equals("search")) {
+                url = "/searchVisitationRecords.jsp";
+            }
+            
             getServletContext().getRequestDispatcher(url).forward(request, response);
             
             
