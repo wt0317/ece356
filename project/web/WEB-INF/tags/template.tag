@@ -104,7 +104,7 @@
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
                         out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
-                        out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
+                        out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");

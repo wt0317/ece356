@@ -214,7 +214,7 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
                     flag1 = checkTimestamps(request, response, "timeStart1", "timeStart2", "Start Time field 2 is missing!", "Start Time field 1 is missing!", "Start Time field 1 is after or the same as Start Time field 2!");
                     flag2 = checkTimestamps(request, response, "timeEnd1", "timeEnd2", "End Time field 2 is missing!", "End Time field 1 is missing!", "End Time field 1 is after or the same as End Time field 2!");
                     flag3 = checkTimestamps(request, response, "timeCreation1", "timeCreation2", "Creation Time field 1 is missing!", "Creation Time field 2 is missing!", "Creation Time field 1 is after or the same as Creation Time field 2!");
-                            
+
                     //Error
                     if (flag0 == 1 || flag1 == 1 || flag2 == 1 || flag3 == 1) {
                         url = "/searchVisitationRecords.jsp";
@@ -316,6 +316,27 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
                 out.close();
             }
         }
+
+        if (role.equals("Staff")) {
+            //List all visitation records that this staff has access to
+            try {
+                VisitationDAOResult visitationDAOResult = null;
+                visitationDAOResult = VisitationDAO.getPatientVisitationRecordsForStaff(username);
+                request.setAttribute("columnNames", visitationDAOResult.getColumnNames());
+                request.setAttribute("records", visitationDAOResult.getVisitationRecords());
+                request.setAttribute("count", visitationDAOResult.getCount());
+                request.setAttribute("status", "Valid");
+                url = "/lookupVisitationRecord.jsp";
+                getServletContext().getRequestDispatcher(url).forward(request, response);
+            } catch (Exception e) {
+                request.setAttribute("exception", e);
+                url = "/error.jsp";
+                getServletContext().getRequestDispatcher(url).forward(request, response);
+            } finally {
+                out.close();
+            }
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
