@@ -78,4 +78,79 @@ public class UserDAO {
             }
         }
     }    
+
+  /**
+   *
+   * @param username
+   * @param password
+   * @return
+   * @throws ClassNotFoundException
+   * @throws SQLException
+   */
+  public static Object getUserInfo(int username, String password, String role) throws ClassNotFoundException, SQLException {
+    Connection con = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      if (role.equals("Patient")){
+        Patient patient = new Patient();
+        con = DBAO.getConnection();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM Patients as p WHERE p.username = '" + username + "'");
+        rs = pst.executeQuery();
+        if (rs.next()) {
+          patient.setUsername(rs.getInt("username"));
+          patient.setHealthCard(rs.getString("health_card"));
+          patient.setSin(rs.getString("social_insurance_number"));
+          patient.setDefaultDoctor(new Doctor(rs.getInt("default_doctor")));
+        }
+        return patient;
+      } else if (role.equals("Doctor")){
+        Doctor doctor = new Doctor();
+        con = DBAO.getConnection();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM Doctors as p WHERE p.username = '" + username + "'");
+        rs = pst.executeQuery();
+        if (rs.next()) {
+          doctor.setUsername(rs.getInt("username"));
+          doctor.setLicenseId(rs.getString("license_id"));
+          doctor.setDateHired(rs.getString("date_hired"));
+          System.out.println(doctor.getLicenseId());
+          System.out.println(doctor.getDateHired());
+        }
+        return doctor;
+      } else {
+        return null;
+      }
+    } finally {
+      if (stmt != null) {
+        stmt.close();
+      }
+      if (con != null) {
+        con.close();
+      }
+    }
+  }
+
+  public static void updateUser(int username, String name, String address, String phoneNum, String hin, String sin, String role) throws ClassNotFoundException, SQLException {
+    Connection con = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+    try {
+      con = DBAO.getConnection();
+      PreparedStatement pst;
+      if (role.equals("Patient")) {
+        pst = con.prepareStatement("UPDATE Patients SET health_card = '" + hin + "', social_insurance_number = '" + sin + "' WHERE username = '" + username + "'");
+        pst.executeUpdate();
+      }
+      pst = con.prepareStatement("UPDATE Directory SET name='" + name + "', address= '" + address + "', phone_number='" + phoneNum + "' WHERE username= '" + username + "'");
+      pst.executeUpdate();
+    } finally {
+      if (stmt != null) {
+        stmt.close();
+      }
+      if (con != null) {
+        con.close();
+      }
+    }
+  }
 }

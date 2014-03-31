@@ -21,14 +21,14 @@
 
 <t:template>
     <jsp:attribute name="pagetitle">
-      Project Zero
+      Create Account
     </jsp:attribute>
     <jsp:attribute name="content">
           <c:if test="${username != -1}">
               <div class="alert alert-success">Account created! Username: <c:out value="${username}"/></div>
           </c:if>
         <form class="form-horizontal" role="form" action="CreateAccountServlet" method="post">
-          <h1 class="form-heading">Create Account</h1>
+          <h1 class="form-heading">General Account Information</h1>
           <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
@@ -141,8 +141,9 @@
                   <label class="col-sm-2 control-label">Assigned Staff(s)</label>
                   <div class="col-sm-10">
                       <c:forEach items="${staff.entrySet()}" var="s">
-                          <label class="col-sm-2 control-label">${s.getValue()}</label>
-                          <input class="form-control" type="checkbox" id="assignedStaff" name="assignedStaff" value="${s.getKey()}"/>
+                          <input type="checkbox" id="assignedStaff" name="assignedStaff" value="${s.getKey()}"/>
+                          <label >${s.getValue()}</label>
+                          <br/>
                       </c:forEach>
                   </div>
               </div>
@@ -154,8 +155,9 @@
                   <label class="col-sm-2 control-label">Assigned Doctor(s)</label>
                   <div class="col-sm-10">
                       <c:forEach items="${doctors.entrySet()}" var="d">
-                          <label class="col-sm-2 control-label">${d.getValue()}</label>
-                          <input class="form-control" type="checkbox" id="assignedDoctors" name="assignedDoctors" value="${d.getKey()}"/>
+                          <input type="checkbox" id="assignedDoctors" name="assignedDoctors" value="${d.getKey()}"/>
+                          <label>${d.getValue()}</label>
+                          <br/>
                       </c:forEach>
                   </div>
               </div>

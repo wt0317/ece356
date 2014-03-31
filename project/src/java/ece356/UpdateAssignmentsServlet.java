@@ -7,7 +7,8 @@
 package ece356;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Wilson
  */
-public class LoginServlet extends HttpServlet {
+public class UpdateAssignmentsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,37 +32,40 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/index.jsp";
+        Connection con = null;
+        PreparedStatement stmt = null;
         try {
-            if (request.getParameter("username") != null && request.getParameter("password") != null) {
-                //Create a new session object
-                HttpSession session = request.getSession();
-                int username = Integer.parseInt(request.getParameter("username"));
-                String password = CreateAccountServlet.hashPW(request.getParameter("password"));
-                User user = DBAO.Login(username, password);
-
-                if (user != null) {
-                    //Set attributes of session object
-                    session.setAttribute("userObject", user); 
-                    /*if (user.getRole().equals("Admin")) {
-                        response.sendRedirect("CreateAccountServlet");
-                        return;
-                    }*/
-                    //Redirect to appropriate page
-                    response.sendRedirect("welcome.jsp");
-                    return;
-                } else {
-                    request.setAttribute("loginFailed", true);
-                }
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("userObject");
+            
+            con = DBAO.getConnection();
+            
+            String[] addStaff = {};
+            if (request.getParameterValues("add[]") != null)
+                addStaff = request.getParameterValues("add[]");
+            for (String s : addStaff) {
+                String insertAssignment = "INSERT INTO Staff_Assignments (staff, doctor) VALUES (?,?)";
+                stmt = con.prepareCall(insertAssignment);
+                stmt.setString(1, s);
+                stmt.setInt(2, user.getUsername());
+                stmt.executeUpdate();
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("loginFailed", true);
+            
+            String[] removeStaff = {};
+            if (request.getParameterValues("remove[]") != null)
+                removeStaff = request.getParameterValues("remove[]");
+            for (String s : removeStaff) {
+                String deleteAssignment = "DELETE FROM Staff_Assignments WHERE staff=? AND doctor=?";
+                stmt = con.prepareCall(deleteAssignment);
+                stmt.setString(1, s);
+                stmt.setInt(2, user.getUsername());
+                stmt.executeUpdate();
+            }
+            
+            response.getWriter().print("{\"success\": true}");
+            response.getWriter().flush();
         } catch (Exception e) {
-            request.setAttribute("exception", e);
-            url="/error.jsp";
         }
-        
-        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

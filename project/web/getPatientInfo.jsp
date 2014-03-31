@@ -69,21 +69,23 @@
                             <h4 class="modal-title" id="myModalLabel">Add Permission</h4>
                         </div>
                         <div class="modal-body">
-                            <label for="role" class="col-sm-2 control-label">Role</label>
-                            <select class="form-control" id="role" name="role">
-                                <option>Doctor</option>
-                                <option>Staff</option>
-                            </select>
-                            <div class="chooseEmployee" id="chooseDoctor">
-                                <label for="doctor" class="col-sm-2 control-label">Doctor</label>
+                            <div class="input-group">
+                                <span for="role" class="input-group-addon">Role</span>
+                                <select class="form-control" id="role" name="role">
+                                    <option>Doctor</option>
+                                    <option>Staff</option>
+                                </select>
+                            </div>
+                            <div class="input-group chooseEmployee" id="chooseDoctor">
+                                <span for="doctor" class="input-group-addon">Doctor</span>
                                 <select class="form-control" id="doctor" name="doctor">
                                     <c:forEach items="${doctors.entrySet()}" var="d">
                                         <option value=${d.getKey()}>${d.getValue()}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <div class="chooseEmployee" id="chooseStaff">
-                                <label for="staff" class="col-sm-2 control-label">Staff</label>
+                            <div class="input-group chooseEmployee" id="chooseStaff">
+                                <span for="staff" class="input-group-addon">Staff</span>
                                 <select class="form-control" id="staff" name="staff">
                                     <c:forEach items="${staff.entrySet()}" var="s">
                                         <option value=${s.getKey()}>${s.getValue()}</option>
@@ -148,7 +150,7 @@
                     return;
                 }
                 $("#permissionsTable")
-                    .append($('<tr>')
+                    .append($('<tr id=' + username + '>')
                         .append($('<td>')
                             .append(name)
                         )

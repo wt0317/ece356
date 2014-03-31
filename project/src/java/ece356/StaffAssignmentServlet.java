@@ -8,6 +8,10 @@ package ece356;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +22,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Wilson
  */
-public class LoginServlet extends HttpServlet {
+public class StaffAssignmentServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,36 +35,35 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/index.jsp";
+        String url = "/staffAssignment.jsp";
+        Connection con = null;
         try {
-            if (request.getParameter("username") != null && request.getParameter("password") != null) {
-                //Create a new session object
-                HttpSession session = request.getSession();
-                int username = Integer.parseInt(request.getParameter("username"));
-                String password = CreateAccountServlet.hashPW(request.getParameter("password"));
-                User user = DBAO.Login(username, password);
-
-                if (user != null) {
-                    //Set attributes of session object
-                    session.setAttribute("userObject", user); 
-                    /*if (user.getRole().equals("Admin")) {
-                        response.sendRedirect("CreateAccountServlet");
-                        return;
-                    }*/
-                    //Redirect to appropriate page
-                    response.sendRedirect("welcome.jsp");
-                    return;
-                } else {
-                    request.setAttribute("loginFailed", true);
-                }
+            HashMap<String,String> allStaff = UserDAO.getUsernameAndName("Staff");
+            request.setAttribute("allStaff", allStaff);
+            
+            con = DBAO.getConnection();
+            
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("userObject");
+            
+            String assignmentQuery = "SELECT D.username, D.name FROM Staff_Assignments S, Directory D "
+                    + "WHERE S.staff=D.username AND S.doctor=?";
+            PreparedStatement assignmentStmt = con.prepareStatement(assignmentQuery);
+            assignmentStmt.setInt(1, user.getUsername());
+            ResultSet assignmentRS = assignmentStmt.executeQuery();
+            
+            HashMap<String,String> assignedStaff = new HashMap<String,String>();
+            
+            while (assignmentRS.next()) {
+                assignedStaff.put(assignmentRS.getString("username"), assignmentRS.getString("name"));
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("loginFailed", true);
+            
+            request.setAttribute("assignedStaff", assignedStaff);
+            
         } catch (Exception e) {
             request.setAttribute("exception", e);
-            url="/error.jsp";
+            url = "/error.jsp";
         }
-        
         getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 

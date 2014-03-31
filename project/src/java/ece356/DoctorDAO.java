@@ -8,7 +8,10 @@ package ece356;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -37,5 +40,34 @@ public class DoctorDAO {
                 con.close();
             }
         }
+    }
+    
+    public static List<Patient> getAllPatients(int doctor) 
+        throws ClassNotFoundException, SQLException {
+        List<Patient> patients = new ArrayList<Patient>();
+        
+        Connection con = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            con = DBAO.getConnection();
+            
+            String selectPatients = "SELECT Permissions.patient, Directory.name FROM Permissions INNER JOIN Directory ON Permissions.patient=Directory.username WHERE employee = '"+ doctor +"'";
+            stmt = con.prepareStatement(selectPatients);
+            ResultSet resultPatients = stmt.executeQuery();
+            
+            while(resultPatients.next()) {                
+                patients.add(new Patient(resultPatients.getInt("patient"), resultPatients.getString("name")));
+            }
+            
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return patients;
     }
 }
