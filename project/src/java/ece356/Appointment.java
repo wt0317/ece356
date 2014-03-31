@@ -6,7 +6,12 @@
 
 package ece356;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Johnny
  */
-class Appointment {
+public class Appointment {
     private String title;
     private String startTime;
     private String endTime;
@@ -46,7 +51,7 @@ class Appointment {
     }
 
     public String getTitle() {
-        return startTime;
+        return title;
     }
 
     public void setTitle(String title) {
@@ -133,4 +138,18 @@ class Appointment {
         +"}";        
         return text;
     }
+    
+    public String getTimeString(String dateTime) throws ParseException {
+        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat printFormat = new SimpleDateFormat("h:mm a");
+        java.util.Date date = parseFormat.parse(dateTime);
+        return printFormat.format(date);
+    }
+
+    public String getDateString(String dateTime) throws ParseException {
+        SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat printFormat = new SimpleDateFormat("EEE, MMMMM dd, yyyy");
+        java.util.Date date = parseFormat.parse(dateTime);
+        return printFormat.format(date);
+    }    
 }

@@ -72,6 +72,10 @@
         <servlet-name>UpdateAssignmentsServlet</servlet-name>
         <servlet-class>ece356.UpdateAssignmentsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FutureAppointmentsServlet</servlet-name>
+        <servlet-class>ece356.FutureAppointmentsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>UpdateAssignmentsServlet</servlet-name>
         <url-pattern>/UpdateAssignmentsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FutureAppointmentsServlet</servlet-name>
+        <url-pattern>/FutureAppointmentsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

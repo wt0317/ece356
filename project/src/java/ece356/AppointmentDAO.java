@@ -101,4 +101,40 @@ public class AppointmentDAO {
         
         return appointments;
     }
+    
+    public static List<Appointment> getAllFutureAppointments(int patient) throws ClassNotFoundException, SQLException {
+        List<Appointment> appointments = new ArrayList<Appointment>();
+        Connection con = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            con = DBAO.getConnection();
+            
+            String selectAppointments = "SELECT a.title, a.start_time, a.end_time, a.doctor, d.name, p.name, c.name FROM Appointments a JOIN Directory d ON a.doctor = d.username JOIN Directory p ON a.patient = p.username JOIN Directory c ON a.created_by = c.username WHERE patient = '"+ String.valueOf(patient) +"' AND start_time > NOW()";
+            stmt = con.prepareStatement(selectAppointments);
+            ResultSet resultAppointments = stmt.executeQuery();
+            
+            while(resultAppointments.next()) {                
+                appointments.add(new Appointment(
+                        resultAppointments.getString("a.title"),
+                        resultAppointments.getString("a.start_time"),
+                        resultAppointments.getString("a.end_time"),
+                        resultAppointments.getInt("a.doctor"),
+                        resultAppointments.getString("d.name"),
+                        resultAppointments.getString("p.name"),
+                        resultAppointments.getString("c.name")
+                ));
+            }
+            
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        
+        return appointments;
+    }
 }
