@@ -41,6 +41,12 @@ public class Patient {
             this.currentHealth = currentHealth;
             this.comment = comment;
         } 
+        
+        public Patient(int username, String name) {
+            this.username = username;
+            this.name = name;
+        }
+        
 	public int getUsername() {
 		return username;
 	}

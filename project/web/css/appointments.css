@@ -32,3 +32,7 @@ and open the template in the editor.
 #appointmentHeader {
     font-weight:bold;
 }
+
+#appointmentHeaderSelect {
+    width:auto;
+}

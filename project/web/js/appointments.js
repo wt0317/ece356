@@ -21,7 +21,7 @@ $(document).ready(function() {
         var calendar = $('#calendar').fullCalendar({
             allDayDefault: false,
             allDaySlot: false,
-            height: window.innerHeight-165,
+            height: window.innerHeight-140,
             header: {
                 left: 'prev,next today',
                 center: 'title',
