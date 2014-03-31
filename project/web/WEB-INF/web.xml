@@ -11,6 +11,10 @@
     <servlet>
         <servlet-name>PatientServlet</servlet-name>
         <servlet-class>ece356.PatientServlet</servlet-class>
+    </servlet>    
+    <servlet>
+        <servlet-name>UpdateInfoServlet</servlet-name>
+        <servlet-class>ece356.UpdateInfoServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
@@ -99,6 +103,10 @@
     <servlet-mapping>
         <servlet-name>PatientServlet</servlet-name>
         <url-pattern>/PatientServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateInfoServlet</servlet-name>
+        <url-pattern>/UpdateInfoServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LookupPatientSummaryServlet</servlet-name>

@@ -16,6 +16,8 @@ public class Doctor {
     private String name;
     private int patientcount;
     private List<Patient> patients;
+    private String licenceId;
+    private String dateHired;
     
     public Doctor(){
     }
@@ -66,4 +68,20 @@ public class Doctor {
     public void setPatients(List<Patient> patients) {
         this.patients = patients;
     }
+
+    public String getLicenseId() {
+        return licenceId;
+    }
+
+    public void setLicenseId(String licenceId) {
+        this.licenceId = licenceId;
+    }
+        public String getDateHired() {
+        return dateHired;
+    }
+
+    public void setDateHired(String dateHired) {
+        this.dateHired = dateHired;
+    }
+
 }
