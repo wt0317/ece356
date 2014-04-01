@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,13 +42,23 @@ public class LookupPatientServlet extends HttpServlet {
         Connection con = null;
         List<Patient> listPatients = new ArrayList<Patient>();
         try {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("userObject");
+            
             con = DBAO.getConnection();
             
             // TODO: need to account for permissions for different roles
-            String getPatientsQuery = "SELECT U.username, U.health_card, U.social_insurance_number, U.number_of_visits, U.default_doctor, "
-                    + "U.current_health, U.comment, P.`name` AS patient_name, D.`name` AS doctor_name "
-                    + "FROM Patients U, Directory P, Directory D WHERE U.username = P.username AND U.default_doctor = D.username";
+            String getPatientsQuery = "SELECT DISTINCT U.username, health_card, social_insurance_number, number_of_visits, default_doctor, current_health, comment, P.`name` AS patient_name, D.`name` AS doctor_name "
+                    + "FROM Patients U, Directory P, Directory D, Permissions perm, Staff_Assignments asgn "
+                    + "WHERE U.username=P.username AND U.default_doctor=D.username "
+                    + "AND ("
+                    + "(perm.employee=? AND perm.patient=U.username)"
+                    + "OR "
+                    + "(asgn.staff=? AND asgn.doctor=perm.employee AND perm.patient=U.username)"
+                    + ")";
             PreparedStatement getPatientsStmt = con.prepareStatement(getPatientsQuery);
+            getPatientsStmt.setInt(1, user.getUsername());
+            getPatientsStmt.setInt(2, user.getUsername());
             ResultSet rs = getPatientsStmt.executeQuery();
             while (rs.next()) {                
                 Doctor d = new Doctor(rs.getInt("default_doctor"), rs.getString("doctor_name"));
