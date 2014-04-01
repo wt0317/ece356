@@ -23,7 +23,7 @@
     <jsp:attribute name="content">
         <div class="container-fluid">
             <div class="row">
-                <h2>Patient Information</h2>
+                <h2>Health Record</h2>
                 <c:if test="${param.updated}">
                     <div class="alert alert-success">Database updated</div>
                 </c:if>
