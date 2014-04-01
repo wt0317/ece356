@@ -64,7 +64,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
         
         <c:if test="${status.equals('Valid')}" >
-            <h2 class="sub-header">Results</h2>    
+            <h2 class="sub-header">Results for ${resultName}</h2>    
             <p> <strong>Number of Visits: </strong> <c:out value="${countVisits}" /></p>
             <br>
             <div class="table-responsive">
