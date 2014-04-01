@@ -1,28 +1,30 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ece356;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.sql.Date;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author FireChemist
  */
-public class AddVisitationRecordInsertServlet extends HttpServlet {
+public class EditVisitationRecordInsertServlet extends HttpServlet {
 
     public int getID(HttpServletRequest request, HttpServletResponse response, Connection con, String selectCriteria, String table, String column, String search)
             throws SQLException, ServletException, IOException {
@@ -56,8 +58,22 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
     public Timestamp getTimestamp(HttpServletRequest request, String name) {
         Timestamp timestamp;
         String test = request.getParameter(name).replace("T", " ");
-        String test2 = test.concat(":00");
-        timestamp = Timestamp.valueOf(test2);
+        String test2 = "";
+        int flag = -1;
+
+        System.out.println(test);
+        System.out.println("Length: " + test.length());
+
+        if (test.length() == 16) {
+            test2 = test.concat(":00");
+            flag = 0;
+        }
+
+        if (flag == -1) {
+            timestamp = Timestamp.valueOf(test);
+        } else {
+            timestamp = Timestamp.valueOf(test2);
+        }
         return timestamp;
     }
 
@@ -72,10 +88,11 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        String url = "/addVisitationRecord.jsp";
+        String url = "/editVisitation.jsp";
         List<Integer> listPatientID = new ArrayList<Integer>();
         PreparedStatement getPatientID = null;
         PreparedStatement getProcedureID = null;
@@ -129,6 +146,7 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                     request.setAttribute("prescriptionName", request.getParameter("prescription"));
                     request.setAttribute("surgeryName", request.getParameter("surgery"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -136,6 +154,7 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                 //No result
                 if (empty) {
                     request.setAttribute("error", "Invalid");
+                    request.setAttribute("listPatientID", listPatientID);
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
                     request.setAttribute("startTime", request.getParameter("startTime"));
                     request.setAttribute("endTime", request.getParameter("endTime"));
@@ -144,6 +163,7 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                     request.setAttribute("prescriptionName", request.getParameter("prescription"));
                     request.setAttribute("surgeryName", request.getParameter("surgery"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -175,15 +195,16 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                 //Test start time is before end time
                 if (startTime.getTime() >= endTime.getTime()) {
                     request.setAttribute("error", "invalidEndTime");
-                    request.setAttribute("name", request.getParameter("name"));
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
                     request.setAttribute("startTime", request.getParameter("startTime"));
                     request.setAttribute("endTime", request.getParameter("endTime"));
+                    request.setAttribute("name", request.getParameter("name"));
                     request.setAttribute("procedureName", request.getParameter("procedure"));
                     request.setAttribute("diagnosisName", request.getParameter("diagnosis"));
                     request.setAttribute("prescriptionName", request.getParameter("prescription"));
                     request.setAttribute("surgeryName", request.getParameter("surgery"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -194,9 +215,7 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                         listPatientID.get(0).intValue(),
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
-                        request.getParameter("freeformComments"), "");
-                
-                PatientDAO.updateNumberVisits(listPatientID.get(0).intValue());
+                        request.getParameter("freeformComments"), request.getParameter("revisionComments"));
 
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
@@ -232,14 +251,15 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                 if (startTime.getTime() >= endTime.getTime()) {
                     request.setAttribute("error", "invalidEndTime");
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
-                    request.setAttribute("name", request.getParameter("name"));
                     request.setAttribute("startTime", request.getParameter("startTime"));
                     request.setAttribute("endTime", request.getParameter("endTime"));
+                    request.setAttribute("name", request.getParameter("name"));
+                    request.setAttribute("freeformComments", request.getParameter("freeformComments"));
                     request.setAttribute("procedureName", request.getParameter("procedure"));
                     request.setAttribute("diagnosisName", request.getParameter("diagnosis"));
                     request.setAttribute("prescriptionName", request.getParameter("prescription"));
                     request.setAttribute("surgeryName", request.getParameter("surgery"));
-                    request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -249,9 +269,8 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                         Integer.valueOf(request.getParameter("username")),
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
-                        request.getParameter("freeformComments"), "");
-                
-                PatientDAO.updateNumberVisits(Integer.valueOf(request.getParameter("username")));
+                        request.getParameter("freeformComments"), request.getParameter("revisionComments"));
+
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
                 getServletContext().getRequestDispatcher(url).forward(request, response);

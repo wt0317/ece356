@@ -96,14 +96,16 @@
                 }
                 /*  PATIENT MENU */
                 else if (role.equals("Patient"))      {                        
-                        out.print("<li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print(" <li><a href=\"HealthRecordServlet\">Health Record</a></li>");
+                        out.print("<br>");
                         out.print("<li><a href=\"FutureAppointmentsServlet\">Future Appointments</a></li>");
-                        out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
+                        out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
                  }
                 /* STAFF MENU */   
                 else if (role.equals("Staff"))      {
-                        out.print("<li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
-                        out.print("<li><a href=\"#\">Lookup Visitation Record</a></li>");
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
@@ -119,6 +121,11 @@
                 else if (role.equals("Admin"))      {
                         out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
+                }
+                /* LEGAL MENU */
+                else if (role.equals("Legal"))      {
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print("<li><a href=\"VisitationChangelogServlet\">Visitation Records Chagenlog</a></li>");
                 }
                 %>
                 </ul>

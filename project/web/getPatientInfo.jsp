@@ -15,7 +15,7 @@
     <jsp:attribute name="style">
         <style>
             .comments {
-                padding-left:5em;
+                margin-left:3em;
                 text-align:justify;
             }
         </style>
@@ -24,19 +24,75 @@
         <div class="container-fluid">
             <div class="row">
                 <h2>Patient Information</h2>
-                <div class="col-md-6">
-                    <p>Name: <c:out value="${p.getName()}"/></p>
-                    <p>Health Card: <c:out value="${p.getHealthCard()}"/></p>
-                    <p>Social Insurance Number: <c:out value="${p.getSin()}"/></p>
-                </div>
-                <div class="col-md-6">
-                    <p>Default Doctor: <c:out value="${p.getDefaultDoctor().getName()}"/></p>
-                    <p>Number of Visits: <c:out value="${p.getNumOfVisits()}"/></p>
-                    <p>Current Health: <c:out value="${p.getCurrentHealth()}"/></p>
-                </div>
-                <div class="col-md-12">
-                    <p>Comment: <p class='comments'><c:out value="${p.getComment()}"/></p></p>
-                </div>
+                <c:if test="${param.updated}">
+                    <div class="alert alert-success">Database updated</div>
+                </c:if>
+                <form class="form-horizontal" action="UpdatePatientInfoServlet" method="post">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name" class="col-md-6 control-label">Name</label> 
+                            <div class="col-md-6">
+                                <input name="name" id="name" class="form-control" value="${p.getName()}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="healthCard" class="col-md-6 control-label">Health Card</label> 
+                            <div class="col-md-6">
+                                <input name="healthCard" id="healthCard" class="form-control" value="${p.getHealthCard()}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sin" class="col-md-6 control-label">Social Insurance Number</label> 
+                            <div class="col-md-6">
+                                <input name="sin" id="sin" class="form-control" value="${p.getSin()}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="doctorName" class="col-md-6 control-label">Default Doctor</label> 
+                            <div class="col-md-6">
+                                <select name="doctorName" class="form-control" id="doctorName">
+                                    <c:forEach items="${doctors.entrySet()}" var="d">
+                                        <c:choose>
+                                            <c:when test="${p.getDefaultDoctor().getUsername() == d.getKey()}">
+                                                <option value=${d.getKey()} selected>${d.getValue()}</option>
+                                            </c:when>
+
+                                            <c:otherwise>
+                                                <option value=${d.getKey()}>${d.getValue()}</option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="numVisits" class="col-md-6 control-label">Number of Visits</label> 
+                            <div class="col-md-6">
+                                <input name="numVisits" id="numVisits" class="form-control" value="${p.getNumOfVisits()}" disabled/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="health" class="col-md-6 control-label">Current Health</label> 
+                            <div class="col-md-6">
+                                <input name="health" id="health" class="form-control" value="${p.getCurrentHealth()}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="comment" class="col-md-1 control-label">Comment</label> 
+                            <div class="col-md-12">
+                                <textarea name="comment" id="comment" class="comments form-control">${p.getComment()}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" class="btn btn-primary" value="Update"/>
+                    </div>
+                    <input type="hidden" name="username" value="${p.getUsername()}"/>
+                </form>
             </div>
             <hr>
             <div class="row">
@@ -47,7 +103,7 @@
                             <tr id=${perm.getUsername()}>
                                 <td><c:out value="${perm.getName()}"/></td>
                                 <td>
-                                    <button type="button" class="close" aria-hidden="true" onclick="removePermission(this, <c:out value="${perm.getUsername()}"/>)">
+                                    <button type="button" class="close" aria-hidden="true" onclick="removePermission(this, ${perm.getUsername()})">
                                         &times;
                                     </button>
                                 </td>
@@ -56,7 +112,7 @@
                     </table>
                     <div class="form-group">
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></button>
-                        <button type="button" class="btn btn-primary" name="savePermissions" onclick="sendAjax(<c:out value="${p.getUsername()}"/>)">Save</button>
+                        <button type="button" class="btn btn-primary" name="savePermissions" onclick="sendAjax(${p.getUsername()})">Save</button>
                     </div>
                 </div>
             </div>
@@ -99,10 +155,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <hr>
-            <div class="row">
-                <h2>Visitation Records</h2>
             </div>
         </div>
         <input type="hidden" id="defaultDoctor" value="<c:out value="${p.getDefaultDoctor().getUsername()}"/>">

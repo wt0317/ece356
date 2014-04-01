@@ -76,6 +76,34 @@
         <servlet-name>FutureAppointmentsServlet</servlet-name>
         <servlet-class>ece356.FutureAppointmentsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditVisitations</servlet-name>
+        <servlet-class>ece356.EditVisitations</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditVisitationRecordsInsertServlet</servlet-name>
+        <servlet-class>ece356.EditVisitationRecordInsertServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditVisitationRecordInsertServlet</servlet-name>
+        <servlet-class>ece356.EditVisitationRecordInsertServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdatePatientInfoServlet</servlet-name>
+        <servlet-class>ece356.UpdatePatientInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HealthRecordServlet</servlet-name>
+        <servlet-class>ece356.HealthRecordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VisitationChangelogServlet</servlet-name>
+        <servlet-class>ece356.VisitationChangelogServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VisitationChangelogDetailsServlet</servlet-name>
+        <servlet-class>ece356.VisitationChangelogDetailsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -151,6 +179,34 @@
     <servlet-mapping>
         <servlet-name>FutureAppointmentsServlet</servlet-name>
         <url-pattern>/FutureAppointmentsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditVisitations</servlet-name>
+        <url-pattern>/EditVisitations</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditVisitationRecordsInsertServlet</servlet-name>
+        <url-pattern>/EditVisitationRecordsInsertServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditVisitationRecordInsertServlet</servlet-name>
+        <url-pattern>/EditVisitationRecordInsertServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdatePatientInfoServlet</servlet-name>
+        <url-pattern>/UpdatePatientInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HealthRecordServlet</servlet-name>
+        <url-pattern>/HealthRecordServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VisitationChangelogServlet</servlet-name>
+        <url-pattern>/VisitationChangelogServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VisitationChangelogDetailsServlet</servlet-name>
+        <url-pattern>/VisitationChangelogDetailsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
