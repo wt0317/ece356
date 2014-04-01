@@ -1,29 +1,34 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package ece356;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.sql.Date;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author FireChemist
  */
-public class AddVisitationRecordInsertServlet extends HttpServlet {
+public class EditVisitationRecordInsertServlet extends HttpServlet {
 
+    
+    
     public int getID(HttpServletRequest request, HttpServletResponse response, Connection con, String selectCriteria, String table, String column, String search)
             throws SQLException, ServletException, IOException {
         PreparedStatement stmt = null;
@@ -56,11 +61,10 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
     public Timestamp getTimestamp(HttpServletRequest request, String name) {
         Timestamp timestamp;
         String test = request.getParameter(name).replace("T", " ");
-        String test2 = test.concat(":00");
-        timestamp = Timestamp.valueOf(test2);
+        timestamp = Timestamp.valueOf(test);
         return timestamp;
     }
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -72,10 +76,11 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+     
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        String url = "/addVisitationRecord.jsp";
+        String url = "/editVisitation.jsp";
         List<Integer> listPatientID = new ArrayList<Integer>();
         PreparedStatement getPatientID = null;
         PreparedStatement getProcedureID = null;
@@ -132,6 +137,12 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                 //No result
                 if (empty) {
                     request.setAttribute("error", "Invalid");
+                    request.setAttribute("name", request.getParameter("name"));
+                    request.setAttribute("listPatientID", listPatientID);
+                    request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
+                    request.setAttribute("startTime", request.getParameter("startTime"));
+                    request.setAttribute("endTime", request.getParameter("endTime"));
+                    request.setAttribute("freeformComments", request.getParameter("freeformComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
