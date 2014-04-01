@@ -86,14 +86,15 @@ public class VisitationDAO {
         try {
             con = DBAO.getConnection();
 
-            String query = "SELECT dir.name as doctorName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name "
+            String query = "SELECT CONCAT_WS(',', v.doctor, v.patient, v.start_time) as pkey, dir.name as doctorName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name "
                     + "FROM Visitations v, Procedures p, Diagnoses d, Prescriptions pr, Surgeries s, Directory dir, Directory dir2 "
                     + "WHERE (v.doctor = dir.username "
                     + "AND v.procedure_id = p.procedure_id "
                     + "AND v.diagnosis_id = d.diagnosis_id "
                     + "AND v.prescription_id = pr.prescription_id "
                     + "AND v.surgery_id = s.surgery_id AND v.created_by = dir2.username AND "
-                    + "v.patient = ?)";
+                    + "v.patient = ?)"
+                    + "ORDER BY v.doctor,v.patient,v.start_time desc,v.creation_time desc, v.time_scheduled DESC";
 
             stmt = con.prepareStatement(query);
             stmt.setInt(1, username);
@@ -102,7 +103,9 @@ public class VisitationDAO {
 
             //Assign column names to output table        
             for (int index = 1; index <= rsmd.getColumnCount(); index++) {
-
+                if (index == 2)
+                    continue;
+                
                 //Custom column name name
                 if (index == 1) {
                     columnNames.add("Doctor");
@@ -117,6 +120,8 @@ public class VisitationDAO {
                     columnNames.add(columnName);
                 }
             }
+            
+            String pkey = null;
 
             while (rs.next()) {
                 Visitation record = new Visitation();
@@ -130,7 +135,16 @@ public class VisitationDAO {
                 record.setCreationTime(rs.getTimestamp("creation_time"));
                 record.setCreatedName(rs.getString("createdName"));
                 record.setSurgeryName(rs.getString("surgery_name"));
-                visitation.add(record);
+                if (pkey == null) {
+                    pkey = rs.getString("pkey");
+                    visitation.add(record);
+                    continue;
+                }
+                if (!rs.getString("pkey").equals(pkey)) {
+//                    make new visitation record
+                    pkey = rs.getString("pkey");
+                    visitation.add(record);
+                }
                 count++;
             }
 
@@ -159,7 +173,7 @@ public class VisitationDAO {
         try {
             con = DBAO.getConnection();
 
-            String query = "SELECT dir.name as patientName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name, comments, revision_comments "
+            String query = "SELECT CONCAT_WS(',', v.doctor, v.patient, v.start_time) as pkey, dir.name as patientName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name, comments, revision_comments "
                     + "FROM Visitations as v, Procedures p, Diagnoses d, Prescriptions pr, Surgeries s, Directory dir, Directory dir2, Permissions perm "
                     + "WHERE (v.procedure_id = p.procedure_id "
                     + "AND v.diagnosis_id = d.diagnosis_id "
@@ -172,16 +186,19 @@ public class VisitationDAO {
                     + "AND perm.accessibility = 1 "
                     + "AND perm.enabled = 1 "
                     + "AND v.doctor = ?) "
-                    + "ORDER BY v.time_scheduled DESC";
+                    + "ORDER BY v.doctor,v.patient,v.start_time desc,v.creation_time desc, v.time_scheduled DESC";
 
             stmt = con.prepareStatement(query);
             stmt.setInt(1, username);
             rs = stmt.executeQuery();
             rsmd = rs.getMetaData();
 
+            String pkey = null;
+            
             //Assign column names to output table        
             for (int index = 1; index <= rsmd.getColumnCount(); index++) {
-
+                if (index==2)
+                    continue;
                 //Custom column name name
                 if (index == 1) {
                     columnNames.add("Patient");
@@ -211,7 +228,19 @@ public class VisitationDAO {
                 record.setSurgeryName(rs.getString("surgery_name"));
                 record.setComments(rs.getString("comments"));
                 record.setRevisionComments(rs.getString("revision_comments"));
-                visitation.add(record);
+                
+                
+                if (pkey == null) {
+                    pkey = rs.getString("pkey");
+                    visitation.add(record);
+                    continue;
+                }
+                if (!rs.getString("pkey").equals(pkey)) {
+//                    make new visitation record
+                    pkey = rs.getString("pkey");
+                    visitation.add(record);
+                }
+                
                 count++;
             }
 
@@ -263,7 +292,7 @@ public class VisitationDAO {
 
         try {
             con = DBAO.getConnection();
-            String query = "SELECT dir.name as patientName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name, comments, revision_comments "
+            String query = "SELECT CONCAT_WS(',', v.doctor, v.patient, v.start_time) as pkey, dir.name as patientName, time_scheduled, start_time, end_time, creation_time, dir2.name as createdName, procedure_name, diagnosis_name, prescription_name, surgery_name, comments, revision_comments "
                     + "FROM Visitations as v, Procedures p, Diagnoses d, Prescriptions pr, Surgeries s, Directory dir, Directory dir2, Permissions perm "
                     + "WHERE (v.procedure_id = p.procedure_id "
                     + "AND v.diagnosis_id = d.diagnosis_id "
@@ -276,6 +305,7 @@ public class VisitationDAO {
                     + "AND perm.accessibility = 1 "
                     + "AND perm.enabled = 1 "
                     + "AND v.doctor = ? ";
+                    
             //New additions
             // "AND v.patient = ? ";  //Caution this should be an int
             //"AND v.diagnosis_id = ? "; //Caution this should be an int
@@ -333,7 +363,8 @@ public class VisitationDAO {
                 query = query.concat(" AND '" + timeCreation1 + "' <= v.creation_time" + " AND  v.creation_time <= '" + timeCreation2 + "'");
             }
 
-            query = query.concat(" ) ORDER BY time_scheduled DESC");
+            query = query.concat(" ) ORDER BY v.doctor,v.patient,v.start_time desc,v.creation_time desc, v.time_scheduled DESC");
+
             stmt = con.prepareStatement(query);
             stmt.setInt(1, username);
             //stmt.setInt(2, diagnosisID);
@@ -347,7 +378,9 @@ public class VisitationDAO {
 
             //Assign column names to output table        
             for (int index = 1; index <= rsmd.getColumnCount(); index++) {
-
+                if (index == 2) {
+                    continue;
+                }
                 //Custom column name name
                 if (index == 1) {
                     columnNames.add("Patient");
@@ -362,6 +395,8 @@ public class VisitationDAO {
                     columnNames.add(columnName);
                 }
             }
+            
+            String pkey = null;
 
             while (rs.next()) {
                 Visitation record = new Visitation();
@@ -377,7 +412,16 @@ public class VisitationDAO {
                 record.setSurgeryName(rs.getString("surgery_name"));
                 record.setComments(rs.getString("comments"));
                 record.setRevisionComments(rs.getString("revision_comments"));
-                visitation.add(record);
+                if (pkey == null) {
+                    pkey = rs.getString("pkey");
+                    visitation.add(record);
+                    continue;
+                }
+                if (!rs.getString("pkey").equals(pkey)) {
+//                    make new visitation record
+                    pkey = rs.getString("pkey");
+                    visitation.add(record);
+                }
                 count++;
                 System.out.println("Result!!!");
                 
