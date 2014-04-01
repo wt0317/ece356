@@ -61,7 +61,21 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
     public Timestamp getTimestamp(HttpServletRequest request, String name) {
         Timestamp timestamp;
         String test = request.getParameter(name).replace("T", " ");
-        timestamp = Timestamp.valueOf(test);
+        String test2 = "";
+        int flag = -1;
+        
+        System.out.println(test);
+        System.out.println("Length: " + test.length());
+        
+        if (test.length() == 16) {
+            test2 = test.concat(":00");
+            flag=0;
+        }
+        
+        if(flag == -1)
+            timestamp = Timestamp.valueOf(test);
+        else 
+            timestamp = Timestamp.valueOf(test2);
         return timestamp;
     }
     
@@ -187,7 +201,7 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                         listPatientID.get(0).intValue(),
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
-                        request.getParameter("freeformComments"), "");
+                        request.getParameter("freeformComments"), request.getParameter("revisionComments"));
 
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
@@ -234,7 +248,7 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                         Integer.valueOf(request.getParameter("username")),
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
-                        request.getParameter("freeformComments"), "");
+                        request.getParameter("freeformComments"), request.getParameter("revisionComments"));
 
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
