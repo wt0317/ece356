@@ -11,7 +11,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -47,11 +49,22 @@ public class LookupPatientServlet extends HttpServlet {
                     + "FROM Patients U, Directory P, Directory D WHERE U.username = P.username AND U.default_doctor = D.username";
             PreparedStatement getPatientsStmt = con.prepareStatement(getPatientsQuery);
             ResultSet rs = getPatientsStmt.executeQuery();
-            while (rs.next()) {
+            while (rs.next()) {                
                 Doctor d = new Doctor(rs.getInt("default_doctor"), rs.getString("doctor_name"));
                 Patient p = new Patient(rs.getInt("username"), rs.getString("health_card"), rs.getString("social_insurance_number"),
                                         rs.getInt("number_of_visits"), d, rs.getString("current_health"), rs.getString("comment"));
                 p.setName(rs.getString("patient_name"));
+                
+                String getLastVisitQuery = "SELECT time_scheduled FROM Visitations WHERE patient=? ORDER BY time_scheduled DESC LIMIT 1";
+                PreparedStatement getLastVisitStmt = con.prepareStatement(getLastVisitQuery);
+                getLastVisitStmt.setInt(1, rs.getInt("username"));
+                ResultSet rs1 = getLastVisitStmt.executeQuery();
+                if (rs1.next()) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                    Date lastVisit = format.parse(rs1.getString("time_scheduled"));
+                    p.setLastVisit(lastVisit.getTime());
+                }
+                
                 listPatients.add(p);
             }
             request.setAttribute("listPatients", listPatients);

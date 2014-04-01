@@ -20,9 +20,11 @@
         <script type="text/javascript">
             var rows = [];
             function appendRow(json) {
+                if (json.lastVisit === 0)
+                    delete json.lastVisit;
                 json.doctor = json.defaultDoctor.name;
                 json.nameFormat = "<a href=GetPatientInfoServlet?username=" + json.username + ">{0}</a>"
-                json.doctorFormat = "<a href=GetDoctorInfoServlet?username=" + json.defaultDoctor.username + ">{0}</a>"
+//                json.doctorFormat = "<a href=GetDoctorInfoServlet?username=" + json.defaultDoctor.username + ">{0}</a>"
                 delete json.defaultDoctor;
                 rows.push(json);
             }
@@ -43,6 +45,9 @@
                         },
                         number: {
                             decimals: 1   //Sets decimal precision for float types
+                        },
+                        date: {
+                            format: 'yyyy/MM/dd', //See formats here
                         }
                     }
                 }).data('WATable');  //This step reaches into the html data property to get the actual WATable object. Important if you want a reference to it as we want here.
@@ -53,7 +58,6 @@
 
             //Generates some data. This step is of course normally done by your web server.
             function getData() {
-
                 //First define the columns
                 var cols = {
                     username: {
@@ -96,6 +100,11 @@
                         index: 8,
                         type: "string", //Don't forget dates are expressed in milliseconds
                         friendly: "Comment"
+                    },
+                    lastVisit: {
+                        index: 9,
+                        type: "date", //Don't forget dates are expressed in milliseconds
+                        friendly: "Last Visit"
                     }
                 };
 
@@ -114,7 +123,7 @@
     </jsp:attribute>
     <jsp:attribute name="onload"> 
         <c:forEach items="${listPatients}" var="p">
-            appendRow(<c:out value="${p.toJSON()}" />);
+            appendRow(${p.toJSON()});
         </c:forEach>
         makeTable();
     </jsp:attribute>

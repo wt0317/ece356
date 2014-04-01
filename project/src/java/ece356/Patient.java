@@ -28,6 +28,7 @@ public class Patient {
         // attributes not part of Patients table
         private String name;
         private List<Permission> permissions;
+        private long lastVisit;
 	
 	public Patient(){
 		
@@ -105,6 +106,13 @@ public class Patient {
                 permissions = new ArrayList<Permission>();
             
             permissions.add(permission);
+        }
+        
+        public long getLastVisit() {
+            return lastVisit;
+        }
+        public void setLastVisit(long lastVisit) {
+            this.lastVisit = lastVisit;
         }
         
         public String toJSON() {
