@@ -84,6 +84,14 @@
         <servlet-name>EditVisitationRecordInsertServlet</servlet-name>
         <servlet-class>ece356.EditVisitationRecordInsertServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdatePatientInfoServlet</servlet-name>
+        <servlet-class>ece356.UpdatePatientInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HealthRecordServlet</servlet-name>
+        <servlet-class>ece356.HealthRecordServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -167,6 +175,14 @@
     <servlet-mapping>
         <servlet-name>EditVisitationRecordInsertServlet</servlet-name>
         <url-pattern>/EditVisitationRecordInsertServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdatePatientInfoServlet</servlet-name>
+        <url-pattern>/UpdatePatientInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HealthRecordServlet</servlet-name>
+        <url-pattern>/HealthRecordServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

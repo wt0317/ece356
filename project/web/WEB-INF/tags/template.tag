@@ -97,6 +97,7 @@
                 /*  PATIENT MENU */
                 else if (role.equals("Patient"))      {                        
                         out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print(" <li><a href=\"HealthRecordServlet\">Health Record</a></li>");
                         out.print("<br>");
                         out.print(" <li><a href=\"\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
