@@ -56,39 +56,44 @@
 
                 //First define the columns
                 var cols = {
-                    name: {
+                    username: {
                         index: 1, //The order this column should appear in the table
-                        type: "string", //The type. Possible are string, number, bool, date(in milliseconds).
-                        friendly: "Name",  //Name that will be used in header. Can also be any html as shown here.
+                        type: "number", //The type. Possible are string, number, bool, date(in milliseconds).
+                        friendly: "Patient #",  //Name that will be used in header. Can also be any html as shown here.
                         sortOrder: "asc" //Data will initially be sorted by this column. Possible are "asc" or "desc"
                     },
+                    name: {
+                        index: 2, //The order this column should appear in the table
+                        type: "string", //The type. Possible are string, number, bool, date(in milliseconds).
+                        friendly: "Name",  //Name that will be used in header. Can also be any html as shown here.
+                    },
                     healthCard: {
-                        index: 2,
+                        index: 3,
                         type: "string",
                         friendly: "Health Card"
                     },
                     sin: {
-                        index: 3,
+                        index: 4,
                         type: "string",
                         friendly: "Social Insurance Number"
                     },
                     numOfVisits: {
-                        index: 4,
+                        index: 5,
                         type: "number",
                         friendly: "Number of Visits"
                     },
                     doctor: {
-                        index: 5,
+                        index: 6,
                         type: "string",
                         friendly: "Default Doctor"
                     },
                     currentHealth: {
-                        index: 6,
+                        index: 7,
                         type: "string",
                         friendly: "Current Health"
                     },
                     comment: {
-                        index: 7,
+                        index: 8,
                         type: "string", //Don't forget dates are expressed in milliseconds
                         friendly: "Comment"
                     }
