@@ -68,14 +68,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="comment" class="col-md-1 control-label">Comment</label> 
-                            <div class="col-md-12">
-                                <textarea name="comment" id="comment" class="comments form-control" disabled>${p.getComment()}</textarea>
-                            </div>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
