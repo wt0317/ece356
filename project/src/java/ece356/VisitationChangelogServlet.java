@@ -42,15 +42,51 @@ public class VisitationChangelogServlet extends HttpServlet {
         try {            
             con = DBAO.getConnection();
 
-            String getPatientsQuery = "select CONCAT_WS(',', patient, doctor, start_time) as pkey,\n" +
-                "patient,doctor,procedure_id,diagnosis_id,prescription_id,time_scheduled,\n" +
-                "start_time,end_time,creation_time,created_by,surgery_id,comments,revision_comments\n" +
-                "from Visitations order by patient,doctor,start_time desc,creation_time desc";
+            String getPatientsQuery = "select \n" +
+                "CONCAT_WS(',', doctor, patient, start_time) as pkey,\n" +
+                "patient,\n" +
+                "doctor,\n" +
+                "pat.`name` as patName,\n" +
+                "doc.`name` as docName,\n" +
+                "proc.procedure_name as procName,\n" +
+                "diag.diagnosis_name as diagName,\n" +
+                "presc.prescription_name as prescName,\n" +
+                "presc.legal as prescLegal,\n" +
+                "time_scheduled,\n" +
+                "start_time,\n" +
+                "end_time,\n" +
+                "creation_time,\n" +
+                "crea.`name` as creaName,\n" +
+                "surg.surgery_name as surgName,\n" +
+                "comments,\n" +
+                "revision_comments\n" +
+                "from Visitations visit,Directory pat,Directory doc,Directory crea,Procedures proc,Diagnoses diag,Prescriptions presc,Surgeries surg\n" +
+                "where pat.username=patient\n" +
+                "and doc.username=doctor\n" +
+                "and crea.username=created_by\n" +
+                "and proc.procedure_id=visit.procedure_id\n" +
+                "and diag.diagnosis_id=visit.diagnosis_id\n" +
+                "and presc.prescription_id=visit.prescription_id\n" +
+                "and surg.surgery_id=visit.surgery_id\n" +
+                "order by doctor,patient,start_time desc,creation_time desc";
             PreparedStatement getPatientsStmt = con.prepareStatement(getPatientsQuery);
             ResultSet rs = getPatientsStmt.executeQuery();
             String pkey = null;
             while (rs.next()) {
                 Visitation visitation = new Visitation(rs.getInt("patient"),rs.getInt("doctor"),rs.getString("start_time"));
+                visitation.setPatientName(rs.getString("patName"));
+                visitation.setDoctorName(rs.getString("docName"));
+                visitation.setProcedureName(rs.getString("procName"));
+                visitation.setDiagnosisName(rs.getString("diagName"));
+                visitation.setPrescriptionName(rs.getString("prescName"));
+                visitation.setLegal(rs.getBoolean("prescLegal"));
+                visitation.setTimeScheduled(rs.getTimestamp("time_scheduled"));
+                visitation.setEndTime(rs.getTimestamp("end_time"));
+                visitation.setCreationTime(rs.getTimestamp("creation_time"));
+                visitation.setCreatedName(rs.getString("creaName"));
+                visitation.setSurgeryName(rs.getString("surgName"));
+                visitation.setComments(rs.getString("comments"));
+                visitation.setRevisionComments(rs.getString("revision_comments"));
                 if (pkey == null) {
                     pkey = rs.getString("pkey");
                     visitations.add(visitation);

@@ -36,6 +36,7 @@ public class Visitation {
     private String creationTime;
     private String comments;
     private String revisionComments;
+    private boolean legal;
     
     List<Visitation> changelog;
 
@@ -222,8 +223,18 @@ public class Visitation {
         return this.changelog;
     }
     
-    public String getPKey() {
-        return String.format("%d,%d,%s", this.patient, this.doctor, this.startTime);
+    public int numChanges() {
+        if (this.changelog == null)
+            return 0;
+        return this.changelog.size();
+    }
+    
+    public boolean isLegal() {
+        return legal;
+    }
+
+    public void setLegal(boolean legal) {
+        this.legal = legal;
     }
     
     public String toJSON() {
