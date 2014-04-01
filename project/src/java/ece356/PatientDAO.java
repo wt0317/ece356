@@ -1,4 +1,3 @@
-
 package ece356;
 
 import java.sql.*;
@@ -11,24 +10,24 @@ public class PatientDAO {
     public static final String user = "sql332230";
     public static final String pwd = "mJ7!yB9!";
 
-     public static void insertPatient(int username, String healthCard, String sin, String doctor, String health, String comments)
+    public static void insertPatient(int username, String healthCard, String sin, String doctor, String health, String comments)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
         try {
             con = DBAO.getConnection();
-            
+
             String insertPatient = "INSERT INTO Patients"
                     + "(username, health_card, social_insurance_number, default_doctor, current_health, comment) VALUES"
-                    + "(?,?,?,?,?,?)";                
-            stmt = con.prepareStatement(insertPatient);                
+                    + "(?,?,?,?,?,?)";
+            stmt = con.prepareStatement(insertPatient);
             stmt.setInt(1, username);
             stmt.setString(2, healthCard);
             stmt.setString(3, sin);
             stmt.setString(4, doctor);
             stmt.setString(5, health);
             stmt.setString(6, comments);
-            
+
             stmt.executeUpdate();
         } finally {
             if (stmt != null) {
@@ -47,15 +46,15 @@ public class PatientDAO {
         ResultSet rs = null;
         List<String> patientList = new ArrayList<String>();
         try {
-                   
+
             //con = DriverManager.getConnection(url, user, pwd);  
             con = DBAO.getConnection();
             PreparedStatement pst = con.prepareStatement("SELECT username FROM Patients;");
-            rs = pst.executeQuery();  
-            
+            rs = pst.executeQuery();
+
             while (rs.next()) {
-                patientList.add(rs.getString("username"));   
-            } 
+                patientList.add(rs.getString("username"));
+            }
             return patientList;
 
         } finally {
@@ -69,22 +68,23 @@ public class PatientDAO {
                 rs.close();
             }
         }
-        
+
     }
-      public static String getName(int userid)
+
+    public static String getName(int userid)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
         String name = null;
         try {
-            
+
             //con = DriverManager.getConnection(url, user, pwd);  
             con = DBAO.getConnection();
             PreparedStatement pst = con.prepareStatement("SELECT d.name FROM Directory as d WHERE d.username = '" + userid + "'");
-            rs = pst.executeQuery();  
-            if (rs.next()){
-                name = rs.getString("name");   
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                name = rs.getString("name");
             }
             return name;
         } finally {
@@ -95,7 +95,37 @@ public class PatientDAO {
                 con.close();
             }
         }
+    }
+
+    //When adding a visitation record
+    public static void updateNumberVisits(int username) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        int numberVisits = -1;
         
-        
+        try {
+            con = DBAO.getConnection();
+            stmt = con.prepareStatement("SELECT number_of_visits FROM Patients WHERE username = ?");
+            stmt.setInt(1, username);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                numberVisits = rs.getInt("number_of_visits");
+            }
+  
+            numberVisits += 1;
+            stmt = con.prepareStatement("UPDATE Patients SET number_of_visits = ? WHERE username = ?");
+            stmt.setInt(1, numberVisits);
+            stmt.setInt(2, username);
+            stmt.executeUpdate();
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
     }
 }

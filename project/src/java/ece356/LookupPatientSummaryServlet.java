@@ -51,6 +51,7 @@ public class LookupPatientSummaryServlet extends HttpServlet {
         ResultSet rs2;
         String visitationQuery;
         String numberOfVisitsQuery;
+        int userid;
 
         try {
             con = DBAO.getConnection();
@@ -59,10 +60,10 @@ public class LookupPatientSummaryServlet extends HttpServlet {
             if (!request.getParameterMap().containsKey("username")) {
                 String patientQuery
                         = "SELECT username FROM Directory "
-                        + "WHERE name = ? and role = 'patient'";
+                        + "WHERE name LIKE ? and role = 'patient'";
 
                 getPatientID = con.prepareStatement(patientQuery);
-                getPatientID.setString(1, request.getParameter("name"));
+                getPatientID.setString(1, "%" + request.getParameter("name") + "%");
                 rs1 = getPatientID.executeQuery();
 
                 //There is at least one result
@@ -106,7 +107,8 @@ public class LookupPatientSummaryServlet extends HttpServlet {
                 numberOfVisits = con.prepareStatement(numberOfVisitsQuery);
                 numberOfVisits.setInt(1, listPatientID.get(0));
                 rs2 = numberOfVisits.executeQuery();
-
+                
+                userid = listPatientID.get(0);
             } //Lookup patient by username
             else {
 
@@ -126,6 +128,8 @@ public class LookupPatientSummaryServlet extends HttpServlet {
                 numberOfVisits = con.prepareStatement(numberOfVisitsQuery);
                 numberOfVisits.setInt(1, Integer.parseInt(request.getParameter("username")));
                 rs2 = numberOfVisits.executeQuery();
+                
+                userid = Integer.parseInt(request.getParameter("username"));
             }
 
             while (rs1.next()) {
@@ -144,6 +148,7 @@ public class LookupPatientSummaryServlet extends HttpServlet {
             request.setAttribute("status", "Valid");
             request.setAttribute("patientResults", patientResults);
             request.setAttribute("countVisits", countVisits);
+            request.setAttribute("resultName", PatientDAO.getName(userid));
 
         } catch (Exception e) {
             request.setAttribute("exception", e);

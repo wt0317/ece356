@@ -182,7 +182,7 @@ public class AddVisitationRecordInsertServlet extends HttpServlet {
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
                         request.getParameter("freeformComments"), "");
-
+  
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
                 getServletContext().getRequestDispatcher(url).forward(request, response);
