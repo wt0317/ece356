@@ -52,85 +52,56 @@ public class LookupPatientSummaryServlet extends HttpServlet {
         String visitationQuery;
         String numberOfVisitsQuery;
         int userid;
+        int doctorid = Integer.parseInt(request.getParameter("doctor"));
+        int patientid = Integer.parseInt(request.getParameter("username"));
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
 
         try {
             con = DBAO.getConnection();
-
-            //Lookup patient by name
-            if (!request.getParameterMap().containsKey("username")) {
-                String patientQuery
-                        = "SELECT username FROM Directory "
-                        + "WHERE name LIKE ? and role = 'patient'";
-
-                getPatientID = con.prepareStatement(patientQuery);
-                getPatientID.setString(1, "%" + request.getParameter("name") + "%");
-                rs1 = getPatientID.executeQuery();
-
-                //There is at least one result
-                while (rs1.next()) {
-                    empty = false;
-                    countPatient++;
-                    listPatientID.add(rs1.getInt("username"));
-                }
-
-                //Force user to input patient ID
-                if (countPatient > 1) {
-                    request.setAttribute("error", "Duplicate");
-                    request.setAttribute("name", request.getParameter("name"));
-                    request.setAttribute("listPatientID", listPatientID);
-                    getServletContext().getRequestDispatcher(url).forward(request, response);
-                    return;
-                }
-
-                //No result
-                if (empty) {
-                    request.setAttribute("error", "Invalid");
-                    getServletContext().getRequestDispatcher(url).forward(request, response);
-                    return;
-                }
-
-                //Good to display result (Diagnosis/result, Drugs Prescribed)
-                visitationQuery
-                        = "SELECT diagnosis_id, diagnosis_name, "
-                        + "prescription_id, prescription_name FROM "
-                        + "Visitations NATURAL JOIN Prescriptions "
-                        + "NATURAL JOIN Diagnoses WHERE patient = ?";
-
-                patientSummary = con.prepareStatement(visitationQuery);
-                assert (listPatientID.size() == 1);
-                patientSummary.setInt(1, listPatientID.get(0));
-                rs1 = patientSummary.executeQuery();
-
-                numberOfVisitsQuery
-                        = "SELECT COUNT(*) AS total "
-                        + "FROM Visitations WHERE patient = ?";
-                numberOfVisits = con.prepareStatement(numberOfVisitsQuery);
-                numberOfVisits.setInt(1, listPatientID.get(0));
-                rs2 = numberOfVisits.executeQuery();
-                
-                userid = listPatientID.get(0);
-            } //Lookup patient by username
-            else {
-
-                //Good to display result (Diagnosis/result, Drugs Prescribed)
-                visitationQuery
-                        = "SELECT diagnosis_id, diagnosis_name, "
-                        + "prescription_id, prescription_name FROM "
-                        + "Visitations NATURAL JOIN Prescriptions "
-                        + "NATURAL JOIN Diagnoses WHERE patient = ?";
-
-                patientSummary = con.prepareStatement(visitationQuery);
-                patientSummary.setInt(1, Integer.parseInt(request.getParameter("username")));
-                rs1 = patientSummary.executeQuery();
-
-                numberOfVisitsQuery = "SELECT COUNT(*) AS total "
-                        + "FROM Visitations WHERE patient = ?";
-                numberOfVisits = con.prepareStatement(numberOfVisitsQuery);
-                numberOfVisits.setInt(1, Integer.parseInt(request.getParameter("username")));
-                rs2 = numberOfVisits.executeQuery();
-                
-                userid = Integer.parseInt(request.getParameter("username"));
+            
+            if(startDate != null && endDate != null && startDate != "" && endDate != ""){
+              request.setAttribute("startDate", startDate);
+              request.setAttribute("endDate", endDate);
+              numberOfVisitsQuery 
+                      = "SELECT COUNT(*) AS total FROM Visitations "
+                      + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? AND start_time >= '"+startDate+" 00:00:00' AND end_time <= '"+endDate+" 00:00:00' )";
+            
+              visitationQuery
+                    = "SELECT diagnosis_id, diagnosis_name, "
+                    + "prescription_id, prescription_name FROM "
+                    + "Visitations NATURAL JOIN Prescriptions "
+                    + "NATURAL JOIN Diagnoses "
+                    + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? AND start_time >= '"+startDate+" 00:00:00' AND end_time <= '"+endDate+" 00:00:00' )";
             }
+            else{
+              numberOfVisitsQuery 
+                      = "SELECT COUNT(*) AS total FROM Visitations "
+                      + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? )";
+            
+              visitationQuery
+                    = "SELECT diagnosis_id, diagnosis_name, "
+                    + "prescription_id, prescription_name FROM "
+                    + "Visitations NATURAL JOIN Prescriptions "
+                    + "NATURAL JOIN Diagnoses "
+                    + "WHERE start_time in (SELECT DISTINCT start_time FROM Visitations WHERE doctor = ? AND patient = ? )";
+            }
+
+            //Good to display result (Diagnosis/result, Drugs Prescribed)
+            
+
+            patientSummary = con.prepareStatement(visitationQuery);
+            patientSummary.setInt(1, doctorid);
+            patientSummary.setInt(2, patientid);
+            rs1 = patientSummary.executeQuery();
+
+            numberOfVisits = con.prepareStatement(numberOfVisitsQuery);
+            numberOfVisits.setInt(1, doctorid);
+            numberOfVisits.setInt(2, patientid);
+            rs2 = numberOfVisits.executeQuery();
+
+            userid = Integer.parseInt(request.getParameter("username"));
+            
 
             while (rs1.next()) {
                 PatientSummary ps = new PatientSummary();
@@ -148,7 +119,7 @@ public class LookupPatientSummaryServlet extends HttpServlet {
             request.setAttribute("status", "Valid");
             request.setAttribute("patientResults", patientResults);
             request.setAttribute("countVisits", countVisits);
-            request.setAttribute("resultName", PatientDAO.getName(userid));
+            request.setAttribute("resultName", userid);
 
         } catch (Exception e) {
             request.setAttribute("exception", e);

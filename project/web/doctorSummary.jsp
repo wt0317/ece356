@@ -70,7 +70,9 @@
                     <tbody>
                         <c:forEach items="${listDoctorSummary}" var="data">
                             <tr>
-                                <td> <c:out value="${data.getUsername()}"/></td>
+                                <td>
+                                    <a href='LookupPatientSummaryServlet?username=<c:out value="${data.getUsername()}"/>&startDate=<c:out value="${startDate}"/>&endDate=<c:out value="${endDate}"/>&doctor=<c:out value="${doctor}"/>'><c:out value="${data.getUsername()}" /></a>
+                                </td>
                                 <td> <c:out value="${data.getPatientCount()}"/></td>
                             </tr>
                         </c:forEach>
