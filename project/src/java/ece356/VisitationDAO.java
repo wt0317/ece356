@@ -64,9 +64,6 @@ public class VisitationDAO {
             stmt.setString(13, revision_comments);
             stmt.executeUpdate();
 
-            //Update patient's number of visits in Patients table
-            PatientDAO.updateNumberVisits(patient);
-
         } finally {
             if (stmt != null) {
                 stmt.close();

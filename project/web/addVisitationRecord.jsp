@@ -102,7 +102,7 @@
                 <div class="col-sm-10">
                     <select name="procedure" class="form-control" required>
                         <c:forEach items="${procedures}" var="procedure">
-                            <option> <c:out value="${procedure}" />
+                            <option value="${procedure}" ${procedure == procedureName ? 'selected' : ''}>${procedure}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -112,7 +112,7 @@
                 <div class="col-sm-10">
                     <select name="diagnosis" class="form-control" required>
                         <c:forEach items="${diagnoses}" var="diagnosis">
-                            <option> <c:out value="${diagnosis}" />
+                            <option value="${diagnosis}" ${diagnosis == diagnosisName ? 'selected' : ''}>${diagnosis}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -122,7 +122,7 @@
                 <div class="col-sm-10">
                     <select name="prescription" class="form-control" required>
                         <c:forEach items="${prescriptions}" var="prescription">
-                            <option> <c:out value="${prescription}" />
+                            <option value="${prescription}" ${prescription == prescriptionName ? 'selected' : ''}>${prescription}</option>
                             </c:forEach>
                     </select>
                 </div>
@@ -132,7 +132,7 @@
                 <div class="col-sm-10">
                     <select name="surgery" class="form-control" required>
                         <c:forEach items="${surgeries}" var="surgery">
-                            <option> <c:out value="${surgery}" />
+                            <option value="${surgery}" ${surgery == surgeryName ? 'selected' : ''}>${surgery}</option>
                             </c:forEach>
                     </select>
                 </div>
