@@ -262,6 +262,7 @@ public class VisitationDAO {
         List<Visitation> visitation = new ArrayList<Visitation>();
         List<String> columnNames = new ArrayList<String>();
         int count = 0;
+        
 
         try {
             con = DBAO.getConnection();
@@ -381,6 +382,8 @@ public class VisitationDAO {
                 record.setRevisionComments(rs.getString("revision_comments"));
                 visitation.add(record);
                 count++;
+                System.out.println("Result!!!");
+                
             }
 
             VisitationDAOResult visitationDAOResult = new VisitationDAOResult(visitation, columnNames, count);

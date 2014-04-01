@@ -53,6 +53,7 @@
                                 <c:forEach items="${columnNames}" var="attribute">
                                     <th><c:out value="${attribute}"/></th>
                                     </c:forEach>
+                                    <th> Action </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,6 +71,7 @@
                                     <td> <c:out value="${data.surgeryName}" /></td>
                                     <td> <c:out value="${data.comments}" /></td>
                                     <td> <c:out value="${data.revisionComments}" /></td>
+                                    <td> <a href="EditVisitations?doctorUsername=${userObject.getUsername()}&startTime=${data.startTime}&creationTime=${data.creationTime}"> Edit </a> </td>
                                 </tr>
                             </c:forEach>
                         </tbody>

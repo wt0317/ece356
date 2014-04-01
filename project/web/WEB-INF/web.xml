@@ -73,6 +73,18 @@
         <servlet-class>ece356.UpdateAssignmentsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>EditVisitations</servlet-name>
+        <servlet-class>ece356.EditVisitations</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditVisitationRecordsInsertServlet</servlet-name>
+        <servlet-class>ece356.EditVisitationRecordInsertServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditVisitationRecordInsertServlet</servlet-name>
+        <servlet-class>ece356.EditVisitationRecordInsertServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>UpdatePatientInfoServlet</servlet-name>
         <servlet-class>ece356.UpdatePatientInfoServlet</servlet-class>
     </servlet>
@@ -159,6 +171,18 @@
     <servlet-mapping>
         <servlet-name>UpdateAssignmentsServlet</servlet-name>
         <url-pattern>/UpdateAssignmentsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditVisitations</servlet-name>
+        <url-pattern>/EditVisitations</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditVisitationRecordsInsertServlet</servlet-name>
+        <url-pattern>/EditVisitationRecordsInsertServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditVisitationRecordInsertServlet</servlet-name>
+        <url-pattern>/EditVisitationRecordInsertServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UpdatePatientInfoServlet</servlet-name>
