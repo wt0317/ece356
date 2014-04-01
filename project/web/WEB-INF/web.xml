@@ -73,6 +73,10 @@
         <servlet-class>ece356.UpdateAssignmentsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>FutureAppointmentsServlet</servlet-name>
+        <servlet-class>ece356.FutureAppointmentsServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>EditVisitations</servlet-name>
         <servlet-class>ece356.EditVisitations</servlet-class>
     </servlet>
@@ -171,6 +175,10 @@
     <servlet-mapping>
         <servlet-name>UpdateAssignmentsServlet</servlet-name>
         <url-pattern>/UpdateAssignmentsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FutureAppointmentsServlet</servlet-name>
+        <url-pattern>/FutureAppointmentsServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditVisitations</servlet-name>

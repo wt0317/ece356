@@ -95,6 +95,39 @@ public class PatientDAO {
                 con.close();
             }
         }
+      }
+        
+    public static List<Appointment> getFutureAppointments(int username) 
+        throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        List<Appointment> appointments = new ArrayList<Appointment>();
+
+        try {
+            con = DBAO.getConnection();
+            String selectAppointments = "SELECT * FROM Appointments WHERE patient = '"+ username +"' AND start_time > NOW()";
+            stmt = con.prepareStatement(selectAppointments);
+            ResultSet resultAppointments = stmt.executeQuery();
+
+            while(resultAppointments.next()) {                
+                appointments.add(new Appointment(
+                    resultAppointments.getString("title"),
+                    resultAppointments.getString("start_time"),
+                    resultAppointments.getString("end_time"),
+                    resultAppointments.getInt("doctor"),
+                    resultAppointments.getInt("patient"),
+                    resultAppointments.getInt("created_by")
+                ));
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return appointments;
     }
 
     //When adding a visitation record

@@ -88,7 +88,7 @@
                 <%
                 /* DOCTOR MENU */
                 if (role.equals("Doctor"))      {
-                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print("<li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Record</a></li>");
                         out.print("<li><a href=\"LookupPatientServlet\">Lookup Patient Information</a></li>");
                         out.print("<li><a href=\"Appointments\">Manage Appointments</a></li>");
@@ -99,7 +99,7 @@
                         out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print(" <li><a href=\"HealthRecordServlet\">Health Record</a></li>");
                         out.print("<br>");
-                        out.print(" <li><a href=\"\">Future Appointments</a></li>");
+                        out.print("<li><a href=\"FutureAppointmentsServlet\">Future Appointments</a></li>");
                         out.print(" <li><a href=\"LookupVisitationRecordsServlet\">Lookup Visitation Records</a></li>");
                  }
                 /* STAFF MENU */   
@@ -112,7 +112,7 @@
                 }
                 /* FINANCE MENU */ 
                 else if (role.equals("Finance"))      {
-                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print("<li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"lookupPatientSummary.jsp\">Lookup Patient Summary</a></li>");
                         out.print("<li><a href=\"lookupDoctorSummary.jsp\">Lookup Doctor Summary</a></li>");
                         out.print("<li><a href=\"#\">Account Settings</a></li>");
