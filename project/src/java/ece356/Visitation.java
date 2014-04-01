@@ -5,7 +5,10 @@
  */
 package ece356;
 
+import com.google.gson.Gson;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -33,9 +36,17 @@ public class Visitation {
     private String creationTime;
     private String comments;
     private String revisionComments;
+    
+    List<Visitation> changelog;
 
     public Visitation() {
 
+    }
+    
+    public Visitation (int patient, int doctor, String startTime) {
+        this.patient = patient;
+        this.doctor = doctor;
+        this.startTime = startTime;
     }
 
     public void setPatient(int patient) {
@@ -197,5 +208,27 @@ public class Visitation {
     public String getRevisionComments() {
         return revisionComments;
     }
+    
+    public void addChangelog(Visitation record) {
+        if (changelog == null) {
+            changelog = new ArrayList<Visitation>();
+        }
+        changelog.add(record);
+    }
+    public List<Visitation> getChangelog() {
+        if (this.changelog == null) {
+            return new ArrayList<Visitation>();
+        }
+        return this.changelog;
+    }
+    
+    public String getPKey() {
+        return String.format("%d,%d,%s", this.patient, this.doctor, this.startTime);
+    }
+    
+    public String toJSON() {
+            Gson gson = new Gson();
+            return gson.toJson(this);
+        }
 
 }
