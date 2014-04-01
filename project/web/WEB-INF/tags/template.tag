@@ -122,6 +122,11 @@
                         out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
                         out.print("<li><a href=\"CreateAccountServlet\">Create Account</a></li>");
                 }
+                /* LEGAL MENU */
+                else if (role.equals("Legal"))      {
+                        out.print(" <li><a href=\"updateInfo.jsp\">Account Settings</a></li>");
+                        out.print("<li><a href=\"VisitationChangelogServlet\">Visitation Records Chagenlog</a></li>");
+                }
                 %>
                 </ul>
             </div>

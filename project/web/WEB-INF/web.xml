@@ -92,6 +92,14 @@
         <servlet-name>HealthRecordServlet</servlet-name>
         <servlet-class>ece356.HealthRecordServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VisitationChangelogServlet</servlet-name>
+        <servlet-class>ece356.VisitationChangelogServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VisitationChangelogDetailsServlet</servlet-name>
+        <servlet-class>ece356.VisitationChangelogDetailsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -183,6 +191,14 @@
     <servlet-mapping>
         <servlet-name>HealthRecordServlet</servlet-name>
         <url-pattern>/HealthRecordServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VisitationChangelogServlet</servlet-name>
+        <url-pattern>/VisitationChangelogServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VisitationChangelogDetailsServlet</servlet-name>
+        <url-pattern>/VisitationChangelogDetailsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
