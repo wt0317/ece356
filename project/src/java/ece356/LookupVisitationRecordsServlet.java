@@ -46,7 +46,6 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
             //request.setAttribute("errorMessage", errorMessage1);
             //url = "/searchVisitationRecords.jsp";
             //getServletContext().getRequstDispatcher(url).forward(request, response);
-            System.out.println("HIT!");
             return 1;
         }
         if (!request.getParameter(end).equals("") && request.getParameter(start).equals("")) {
@@ -172,37 +171,29 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
                     //Get patient name
                     if (!request.getParameter("patientName").equals("")) {
                         patientName = request.getParameter("patientName");
-                        System.out.println(patientName);
                     }
 
                     if (!request.getParameter("patientUsername").equals("")) {
                         patientUsername = Integer.parseInt(request.getParameter("patientUsername"));
-                        System.out.println(patientUsername);
                     }
 
                     if (!request.getParameter("diagnosisName").equals("Any")) {
                         diagnosisID = getID(request, response, "diagnosis_id", "Diagnoses", "diagnosis_name", request.getParameter("diagnosisName"));
-                        System.out.println("Diagnosis ID: " + diagnosisID);
                     }
                     if (!request.getParameter("procedureName").equals("Any")) {
                         procedureID = getID(request, response, "procedure_id", "Procedures", "procedure_name", request.getParameter("procedureName"));
-                        System.out.println("Procedure ID: " + procedureID);
                     }
                     if (!request.getParameter("prescriptionName").equals("Any")) {
                         prescriptionID = getID(request, response, "prescription_id", "Prescriptions", "prescription_name", request.getParameter("prescriptionName"));
-                        System.out.println("Prescription ID: " + prescriptionID);
                     }
                     if (!request.getParameter("surgeryName").equals("Any")) {
                         surgeryID = getID(request, response, "surgery_id", "Surgeries", "surgery_name", request.getParameter("surgeryName"));
-                        System.out.println("Surgery ID: " + surgeryID);
                     }
                     if (!request.getParameter("comments").equals("")) {
                         comments = request.getParameter("comments");
-                        System.out.println(comments);
                     }
                     if (!request.getParameter("revisionComments").equals("")) {
                         revisionComments = request.getParameter("revisionComments");
-                        System.out.println(revisionComments);
                     }
 
                     //TIMESTAMP ERROR CHECKING
@@ -220,7 +211,6 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
                         url = "/searchVisitationRecords.jsp";
                         request.setAttribute("error", "true");
                         request.setAttribute("errorMessage", "Date range incorrect.");
-                        System.out.println("Error reached!");
                         getServletContext().getRequestDispatcher(url).forward(request, response);
                         return;
                     }
@@ -229,53 +219,22 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
                     if (!request.getParameter("timeScheduled1").equals("") && !request.getParameter("timeScheduled2").equals("")) {
                         timeScheduled1 = getTimestamp(request, "timeScheduled1");
                         timeScheduled2 = getTimestamp(request, "timeScheduled2");
-                        System.out.println(1);
                     }
 
                     if (!request.getParameter("timeEnd1").equals("") && !request.getParameter("timeEnd2").equals("")) {
                         timeEnd1 = getTimestamp(request, "timeEnd1");
                         timeEnd2 = getTimestamp(request, "timeEnd2");
-                        System.out.println(2);
                     }
 
                     if (!request.getParameter("timeStart1").equals("") && !request.getParameter("timeStart2").equals("")) {
                         timeStart1 = getTimestamp(request, "timeStart1");
                         timeStart2 = getTimestamp(request, "timeStart2");
-                        System.out.println(3);
                     }
 
                     if (!request.getParameter("timeCreation1").equals("") && !request.getParameter("timeCreation2").equals("")) {
                         timeCreation1 = getTimestamp(request, "timeCreation1");
                         timeCreation2 = getTimestamp(request, "timeCreation2");
-                        System.out.println(4);
                     }
-
-                    System.out.println("ABC");
-                    if (timeScheduled1 != null) {
-                        System.out.println(timeScheduled1.toString());
-                    }
-                    if (timeScheduled2 != null) {
-                        System.out.println(timeScheduled2.toString());
-                    }
-                    if (timeStart1 != null) {
-                        System.out.println(timeStart1.toString());
-                    }
-                    if (timeStart2 != null) {
-                        System.out.println(timeStart2.toString());
-                    }
-                    if (timeEnd1 != null) {
-                        System.out.println(timeEnd1.toString());
-                    }
-                    if (timeEnd2 != null) {
-                        System.out.println(timeEnd2.toString());
-                    }
-                    if (timeCreation1 != null) {
-                        System.out.println(timeCreation1.toString());
-                    }
-                    if (timeCreation2 != null) {
-                        System.out.println(timeCreation2.toString());
-                    }
-                    System.out.println("Done2");
 
                     visitationDAOResult = VisitationDAO.getPatientVisitationRecordsForDoctorSEARCH(
                             username,
@@ -296,7 +255,6 @@ public class LookupVisitationRecordsServlet extends HttpServlet {
                             timeCreation1,
                             timeCreation2, request, response
                     );
-                    System.out.println("Done3");
                 } //List all patients
                 else {
                     visitationDAOResult = VisitationDAO.getPatientVisitationRecordsForDoctor(username);
