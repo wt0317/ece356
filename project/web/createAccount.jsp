@@ -44,6 +44,7 @@
                     <option>Doctor</option>
                     <option>Staff</option>
                     <option>Finance</option>
+                    <option>Legal</option>
                 </c:if>
               </select>
             </div>
