@@ -79,7 +79,7 @@
                 
                     <label for="disabledTextInput" class="col-sm-2 control-label">Start Time</label>
                     <div class="col-sm-10">
-                        <input type="datetime-local" id=disabledTextInput class="form-control" name="startTime" value="${startTime}" required>
+                        <input type="datetime-local" id=disabledTextInput class="form-control" name="startTime" value="${startTime}" readonly>
                     </div>
                 
             </div>
@@ -139,7 +139,7 @@
             <div class="form-group">
                 <label for="revisionComments" class="col-sm-2 control-label">Revision Comments</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" name="revisionComments" id="freeformComments" cols="80" rows="4" >${revisionComments}</textarea>
+                    <textarea class="form-control" name="revisionComments" id="revisionComments" cols="80" rows="4" >${revisionComments}</textarea>
                 </div>
             </div>
             <div class="form-group">

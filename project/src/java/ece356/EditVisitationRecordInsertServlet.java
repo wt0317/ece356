@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ece356;
 
 import java.io.IOException;
@@ -27,8 +26,6 @@ import javax.servlet.http.HttpSession;
  */
 public class EditVisitationRecordInsertServlet extends HttpServlet {
 
-    
-    
     public int getID(HttpServletRequest request, HttpServletResponse response, Connection con, String selectCriteria, String table, String column, String search)
             throws SQLException, ServletException, IOException {
         PreparedStatement stmt = null;
@@ -61,10 +58,25 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
     public Timestamp getTimestamp(HttpServletRequest request, String name) {
         Timestamp timestamp;
         String test = request.getParameter(name).replace("T", " ");
-        timestamp = Timestamp.valueOf(test);
+        String test2 = "";
+        int flag = -1;
+
+        System.out.println(test);
+        System.out.println("Length: " + test.length());
+
+        if (test.length() == 16) {
+            test2 = test.concat(":00");
+            flag = 0;
+        }
+
+        if (flag == -1) {
+            timestamp = Timestamp.valueOf(test);
+        } else {
+            timestamp = Timestamp.valueOf(test2);
+        }
         return timestamp;
     }
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -76,7 +88,7 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -129,7 +141,12 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
                     request.setAttribute("startTime", request.getParameter("startTime"));
                     request.setAttribute("endTime", request.getParameter("endTime"));
+                    request.setAttribute("procedureName", request.getParameter("procedure"));
+                    request.setAttribute("diagnosisName", request.getParameter("diagnosis"));
+                    request.setAttribute("prescriptionName", request.getParameter("prescription"));
+                    request.setAttribute("surgeryName", request.getParameter("surgery"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -137,12 +154,16 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                 //No result
                 if (empty) {
                     request.setAttribute("error", "Invalid");
-                    request.setAttribute("name", request.getParameter("name"));
                     request.setAttribute("listPatientID", listPatientID);
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
                     request.setAttribute("startTime", request.getParameter("startTime"));
                     request.setAttribute("endTime", request.getParameter("endTime"));
+                    request.setAttribute("procedureName", request.getParameter("procedure"));
+                    request.setAttribute("diagnosisName", request.getParameter("diagnosis"));
+                    request.setAttribute("prescriptionName", request.getParameter("prescription"));
+                    request.setAttribute("surgeryName", request.getParameter("surgery"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -175,8 +196,15 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                 if (startTime.getTime() >= endTime.getTime()) {
                     request.setAttribute("error", "invalidEndTime");
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
+                    request.setAttribute("startTime", request.getParameter("startTime"));
+                    request.setAttribute("endTime", request.getParameter("endTime"));
                     request.setAttribute("name", request.getParameter("name"));
+                    request.setAttribute("procedureName", request.getParameter("procedure"));
+                    request.setAttribute("diagnosisName", request.getParameter("diagnosis"));
+                    request.setAttribute("prescriptionName", request.getParameter("prescription"));
+                    request.setAttribute("surgeryName", request.getParameter("surgery"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -187,7 +215,7 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                         listPatientID.get(0).intValue(),
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
-                        request.getParameter("freeformComments"), "");
+                        request.getParameter("freeformComments"), request.getParameter("revisionComments"));
 
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
@@ -223,8 +251,15 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                 if (startTime.getTime() >= endTime.getTime()) {
                     request.setAttribute("error", "invalidEndTime");
                     request.setAttribute("timeScheduled", request.getParameter("timeScheduled"));
+                    request.setAttribute("startTime", request.getParameter("startTime"));
+                    request.setAttribute("endTime", request.getParameter("endTime"));
                     request.setAttribute("name", request.getParameter("name"));
                     request.setAttribute("freeformComments", request.getParameter("freeformComments"));
+                    request.setAttribute("procedureName", request.getParameter("procedure"));
+                    request.setAttribute("diagnosisName", request.getParameter("diagnosis"));
+                    request.setAttribute("prescriptionName", request.getParameter("prescription"));
+                    request.setAttribute("surgeryName", request.getParameter("surgery"));
+                    request.setAttribute("revisionComments", request.getParameter("revisionComments"));
                     getServletContext().getRequestDispatcher(url).forward(request, response);
                     return;
                 }
@@ -234,7 +269,7 @@ public class EditVisitationRecordInsertServlet extends HttpServlet {
                         Integer.valueOf(request.getParameter("username")),
                         doctorUsername, procedureID, diagnosisID, prescriptionID,
                         timeScheduled, startTime, endTime, doctorUsername, surgeryID,
-                        request.getParameter("freeformComments"), "");
+                        request.getParameter("freeformComments"), request.getParameter("revisionComments"));
 
                 request.setAttribute("success", "Added visitation record!");
                 url = "/lookupVisitationRecord.jsp";
