@@ -62,8 +62,11 @@ public class VisitationDAO {
             stmt.setInt(11, surgery_id);
             stmt.setString(12, comments);
             stmt.setString(13, revision_comments);
-
             stmt.executeUpdate();
+
+            //Update patient's number of visits in Patients table
+            PatientDAO.updateNumberVisits(patient);
+
         } finally {
             if (stmt != null) {
                 stmt.close();
@@ -332,20 +335,16 @@ public class VisitationDAO {
                 query = query.concat(" AND '" + timeCreation1 + "' <= v.creation_time" + " AND  v.creation_time <= '" + timeCreation2 + "'");
             }
 
-            query = query.concat(" )");
+            query = query.concat(" ) ORDER BY time_scheduled DESC");
             stmt = con.prepareStatement(query);
-            System.out.println("return2");
             stmt.setInt(1, username);
-            System.out.println(query);
             //stmt.setInt(2, diagnosisID);
-            System.out.println("return3");
             //Get and set diagnosis_id
 
             //Get procedure_id
             //Get prescription_id
             //Get surgery_id
             rs = stmt.executeQuery();
-            System.out.println("return4");
             rsmd = rs.getMetaData();
 
             //Assign column names to output table        
@@ -439,7 +438,7 @@ public class VisitationDAO {
                     + "AND perm.employee = v.doctor "
                     + "AND v.doctor IN (" //list of doctors in staff->doctor relationship in Staff Assignment
                     + "SELECT " //Select list of doctors that are related to this staff member 
-                    + "doctor from Staff_Assignments WHERE staff = ? AND enabled = 1))";
+                    + "doctor from Staff_Assignments WHERE staff = ? AND enabled = 1)) ORDER BY time_scheduled DESC";
 
             stmt = con.prepareStatement(query);
             stmt.setInt(1, username);   //Set perm.employee to staff username
